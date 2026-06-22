@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from services.llm_service import analyze_note
+from backend.services.llm_service import analyze_note
 
 app = FastAPI()
 
