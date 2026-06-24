@@ -5,66 +5,55 @@ function Home() {
   const [cardIndex, setCardIndex] = useState(0)
 
   const nextCard = () => {
-    if (cardIndex < cards.length - 1) {
-      setCardIndex(cardIndex + 1)
-    }
+    if (cardIndex < cards.length - 1) setCardIndex(cardIndex + 1)
   }
 
   const prevCard = () => {
-    if (cardIndex > 0) {
-      setCardIndex(cardIndex - 1)
-    }
+    if (cardIndex > 0) setCardIndex(cardIndex - 1)
   }
 
   const currentCard = cards[cardIndex]
 
   return (
     <div className="min-h-screen bg-black text-white pb-24">
-      <div className="max-w-md mx-auto px-4 pt-4">
+      <div className="max-w-md mx-auto px-4 pt-3">
 
-        {/* Topic Tabs */}
-        <div className="flex gap-3 overflow-x-auto mb-4">
-          <button className="bg-white text-black px-4 py-2 rounded-full">
-            Logistic
-          </button>
-          <button className="bg-gray-800 px-4 py-2 rounded-full">SVM</button>
-          <button className="bg-gray-800 px-4 py-2 rounded-full">Trees</button>
+        {/* Topics */}
+        <div className="flex gap-5 overflow-x-auto mb-3 text-sm">
+          <span className="text-blue-500 font-bold">Logistic</span>
+          <span className="text-gray-400">SVM</span>
+          <span className="text-gray-400">Trees</span>
+          <span className="text-gray-400">Random Forest</span>
         </div>
 
-        {/* Progress */}
-        <div className="text-right mb-3 text-gray-400">
+        <div className="text-right text-gray-500 text-sm mb-2">
           {cardIndex + 1} / {cards.length}
         </div>
 
-        {/* Main Card */}
-        <div className="bg-white text-black rounded-3xl overflow-hidden shadow-xl">
-          <div className="h-64 bg-gray-300 flex items-center justify-center text-lg">
-            Diagram Placeholder
+        <div className="bg-white text-black rounded-3xl overflow-hidden min-h-[760px]">
+          
+          {/* Image Area = 30% */}
+          <div className="h-56 bg-gray-300 flex items-center justify-center">
+            Diagram
           </div>
 
-          <div className="p-6">
-            <h2 className="text-3xl font-bold mb-4">
+          {/* Save Button */}
+          <div className="flex justify-end px-5 pt-3">
+            <button className="text-gray-500 text-xl">🔖</button>
+          </div>
+
+          <div className="px-5 pb-5">
+            <h2 className="text-2xl font-bold mb-2">
               {currentCard.title}
             </h2>
 
-            <p className="text-gray-700 text-lg leading-relaxed">
+            <p className="text-[17px] leading-7 text-gray-800">
               {currentCard.summary}
             </p>
-
-            <div className="mt-8 flex justify-between">
-              <button className="text-blue-600 font-semibold">
-                Dive Deeper
-              </button>
-
-              <button className="text-green-600 font-semibold">
-                Quick Check
-              </button>
-            </div>
           </div>
         </div>
 
-        {/* Navigation Buttons */}
-        <div className="flex justify-between mt-6">
+        <div className="flex justify-between mt-4">
           <button
             onClick={prevCard}
             className="bg-gray-800 px-6 py-3 rounded-xl"
