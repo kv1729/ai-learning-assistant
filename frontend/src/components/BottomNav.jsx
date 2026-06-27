@@ -1,30 +1,30 @@
 function BottomNav({ activeScreen, setActiveScreen }) {
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800">
-      <div className="max-w-md mx-auto flex justify-around py-4 text-white">
-        <button
-          onClick={() => setActiveScreen("explore")}
-          className={activeScreen === "explore" ? "font-bold" : "text-gray-500"}
-        >
-          🧭
-        </button>
+    <div className="h-16 bg-black border-t border-gray-800 flex justify-around items-center text-white">
+      
+      <button
+        onClick={() => setActiveScreen("explore")}
+        className={activeScreen === "explore" ? "text-purple-400 text-2xl" : "text-gray-500 text-2xl"}
+      >
+        🧭
+      </button>
 
-        <button
-          onClick={() => setActiveScreen("home")}
-          className={activeScreen === "home" ? "font-bold" : "text-gray-500"}
-        >
-          🏠
-        </button>
+      <button
+        onClick={() => setActiveScreen("home")}
+        className={activeScreen === "home" ? "text-purple-400 text-2xl" : "text-gray-500 text-2xl"}
+      >
+        🏠
+      </button>
 
-        <button
-          onClick={() => setActiveScreen("profile")}
-          className={activeScreen === "profile" ? "font-bold" : "text-gray-500"}
-        >
-          👤
-        </button>
-      </div>
+      <button
+        onClick={() => setActiveScreen("profile")}
+        className={activeScreen === "profile" ? "text-purple-400 text-2xl" : "text-gray-500 text-2xl"}
+      >
+        👤
+      </button>
+
     </div>
-  )
+  );
 }
 
-export default BottomNav
+export default BottomNav;

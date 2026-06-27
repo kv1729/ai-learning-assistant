@@ -19,8 +19,8 @@ function Home() {
 
   useEffect(() => {
     const handleKeyPress = (event) => {
-      if (event.key === "ArrowUp") nextCard();
-      if (event.key === "ArrowDown") prevCard();
+      if (event.key === "ArrowRight") nextCard();
+      if (event.key === "ArrowLeft") prevCard();
     };
 
     window.addEventListener("keydown", handleKeyPress);
