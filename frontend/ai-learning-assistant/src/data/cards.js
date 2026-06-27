@@ -4,26 +4,25 @@ const cards = [
   {
     id: 1,
     topic: "Logistic Regression",
-    title: "Introduction",
+    title: "Why Logistic Regression Matters",
     image: sigmoidImage,
+
     summary:
-      "Logistic Regression is a supervised machine learning algorithm used for classification tasks. Unlike linear regression, it predicts probabilities rather than continuous values. It helps determine the likelihood that an input belongs to a specific category, making it useful for spam detection, fraud detection, and medical diagnosis.",
-  },
-  {
-    id: 2,
-    topic: "Logistic Regression",
-    title: "Sigmoid Function",
-    image: sigmoidImage,
-    summary:
-      "The sigmoid function maps any real-valued number into a value between 0 and 1. This transformation enables logistic regression to interpret outputs as probabilities. Higher values indicate stronger confidence toward class 1, while lower values indicate stronger confidence toward class 0.",
-  },
-  {
-    id: 3,
-    topic: "Logistic Regression",
-    title: "Decision Boundary",
-    image: sigmoidImage,
-    summary:
-      "The decision boundary separates classes in feature space. Logistic regression uses a linear boundary for binary classification. Inputs on one side are classified as class 0, while inputs on the other side belong to class 1.",
+      "Logistic Regression is one of the most widely used machine learning algorithms for binary classification problems—situations where the outcome belongs to one of two categories. Examples include detecting spam emails, identifying fraudulent transactions, or predicting whether a patient has a disease. Instead of predicting continuous values like Linear Regression, Logistic Regression predicts probabilities between 0 and 1.",
+
+    detailedExplanation:
+      "Many real-world problems involve making binary decisions: Is this email spam? Is this transaction fraudulent? Does this patient have diabetes? Logistic Regression solves these problems by predicting the probability that an input belongs to a class. For example, a model output of 0.91 means high confidence in class 1, while 0.08 suggests high confidence in class 0. A threshold, usually 0.5, converts probability into final prediction. Logistic Regression remains popular because it is simple, fast, interpretable, and highly effective for classification tasks.",
+
+    quickCheck: {
+      question: "What type of problem is Logistic Regression primarily used for?",
+      options: [
+        "Clustering",
+        "Classification",
+        "Regression",
+        "Dimensionality Reduction",
+      ],
+      answer: "Classification",
+    },
   },
 ];
 
