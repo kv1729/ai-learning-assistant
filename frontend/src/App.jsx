@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BottomNav from "./components/BottomNav";
-import cards from "./data/cards";
 import DetailScreen from "./screens/DetailScreen";
 import HomeScreen from "./screens/HomeScreen";
 import QuickCheckScreen from "./screens/QuickCheckScreen";
@@ -32,9 +31,54 @@ function PlaceholderScreen({ title, detail, onBack }) {
 }
 
 function App() {
+  const [cards, setCards] = useState([]);
+  const [topic, setTopic] = useState("");
+  const [loading, setLoading] = useState(true);
+
   const [activeTab, setActiveTab] = useState("home");
   const [currentScreen, setCurrentScreen] = useState("home");
+
+  useEffect(() => {
+    async function loadCards() {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/cards");
+
+        if (!response.ok) {
+          throw new Error(`HTTP Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        console.log("========== API RESPONSE ==========");
+        console.log(data);
+        console.log("=================================");
+
+        setTopic(data.topic);
+        setCards(data.cards);
+      } catch (error) {
+        console.error("Failed to load cards:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadCards();
+  }, []);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  if (loading) {
+    if (!loading && cards.length === 0) {
+      return (
+        <div className="flex min-h-screen items-center justify-center bg-[#050816] text-white">
+          No learning cards found.
+        </div>
+      );
+    }
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#050816] text-white">
+        Loading learning cards...
+      </div>
+    );
+  }
 
   const currentCard = cards[currentCardIndex] ?? cards[0];
 
@@ -97,6 +141,7 @@ function App() {
 
     return (
       <HomeScreen
+        topic={topic}
         card={currentCard}
         currentIndex={currentCardIndex}
         totalCards={cards.length}

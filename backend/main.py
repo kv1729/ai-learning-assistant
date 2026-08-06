@@ -1,27 +1,16 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
-from backend.services.llm_service import analyze_note
+from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+from api.cards import router as cards_router
 
+app = FastAPI(title="AI Learning Assistant")
 
-class Note(BaseModel):
-    text: str
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-
-@app.get("/")
-async def home():
-    return {
-        "message": "AI Learning Assistant Running"
-    }
-
-
-@app.post("/note")
-async def create_note(note: Note):
-
-    analysis = analyze_note(note.text)
-
-    return {
-        "original_note": note.text,
-        "analysis": analysis
-    }
+app.include_router(cards_router, prefix="/api")

@@ -1,0 +1,23 @@
+{
+  "topic": "Logistic Regression",
+  "cards": [
+    {
+      "id": 1,
+      "title": "Why Logistic Regression Matters",
+      "image": "/cards/sigmoid.png",
+      "summary": "Logistic Regression is one of the most widely used machine learning algorithms for binary classification problems. It predicts probabilities instead of continuous values and is used in spam detection, fraud detection, and disease prediction.",
+      "detailedExplanation": "Many real-world problems require making a yes/no decision. Logistic Regression predicts the probability that an input belongs to a class. A threshold, usually 0.5, converts the probability into a final prediction.",
+      "quickCheck": {
+        "question": "What type of problem does Logistic Regression solve?",
+        "options": [
+          "Classification",
+          "Regression",
+          "Clustering",
+          "Dimensionality Reduction"
+        ],
+        "answer": "Classification",
+        "explanation": "Logistic Regression is used for binary classification problems."
+      }
+    }
+  ]
+}

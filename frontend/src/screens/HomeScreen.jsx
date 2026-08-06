@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import LearningCard from "../components/LearningCard";
 
 function HomeScreen({
+  topic,
   card,
   currentIndex,
   totalCards,
@@ -11,7 +12,12 @@ function HomeScreen({
   onPrevCard,
 }) {
   const [touchStartX, setTouchStartX] = useState(null);
-  const [activeTopic, setActiveTopic] = useState("Logistic Regression");
+  const [activeTopic, setActiveTopic] = useState(topic || "Logistic Regression");
+  useEffect(() => {
+    if (topic) {
+      setActiveTopic(topic);
+    }
+  }, [topic]);
   const topicTabs = ["Logistic Regression", "SVM", "Trees", "KNN", "Naive Bayes"];
 
   useEffect(() => {
