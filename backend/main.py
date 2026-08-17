@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.cards import router as cards_router
+from backend.routes.curriculum_route import router as curriculum_router
 
 app = FastAPI(title="AI Learning Assistant")
 
@@ -14,3 +15,4 @@ app.add_middleware(
 )
 
 app.include_router(cards_router, prefix="/api")
+app.include_router(curriculum_router, prefix="/api")

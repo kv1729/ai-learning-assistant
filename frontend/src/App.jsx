@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import BottomNav from "./components/BottomNav";
 import DetailScreen from "./screens/DetailScreen";
+import Explore from "./screens/Explore";
 import HomeScreen from "./screens/HomeScreen";
 import QuickCheckScreen from "./screens/QuickCheckScreen";
 
@@ -120,13 +121,7 @@ function App() {
     }
 
     if (currentScreen === "explore") {
-      return (
-        <PlaceholderScreen
-          title="Explore"
-          detail="More learning paths and topic collections will appear here soon."
-          onBack={handleBackFromFlow}
-        />
-      );
+      return <Explore onBack={handleBackFromFlow} />;
     }
 
     if (currentScreen === "profile") {
