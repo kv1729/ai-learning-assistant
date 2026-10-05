@@ -7,8 +7,8 @@ Status values: `Not started` / `In progress` / `Done` / `Blocked (reason)`.
 
 | # | Stage | Status | Started | Finished |
 |---|---|---|---|---|
-| 0 | Repo review, domain model & UI contract | In progress | 2026-10-05 | |
-| 1 | Mobile UI with mock data | Not started | | |
+| 0 | Repo review, domain model & UI contract | Done | 2026-10-05 | 2026-10-05 |
+| 1 | Mobile UI with mock data | In progress | 2026-10-05 | |
 | 2 | FastAPI + PostgreSQL serving mock content | Not started | | |
 | 3 | LLM curriculum generation | Not started | | |
 | 4 | Lazy card generation | Not started | | |
@@ -24,6 +24,8 @@ Status values: `Not started` / `In progress` / `Done` / `Blocked (reason)`.
 ---
 
 ## Stage 0 — Repo review, domain model & UI contract
+
+**Outcome:** approved 2026-10-05. Deliverables in `docs/stage-0/`.
 
 **Goal:** Agree on what we are building before writing application code.
 

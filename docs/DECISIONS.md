@@ -40,3 +40,20 @@ Each entry: date, stage, decision, reason.
 - Stage list consolidated into one numbering in `STAGES.md` (0–11, with 7a/7b); deployment moved early (Stage 6) for a live demo.
 - Previous planning docs moved, not deleted, to `docs/legacy/`: `AGENTS.v0.md`, `ROADMAP.v0.md`, `Roadmap.docs.v0.md`, `Master_Plan.v1.md`.
 - Provider abstraction is introduced in Stage 3 at the user's request (reverses the earlier "introduce later" guidance); kept to a thin interface, not a framework.
+
+## 2026-10-05 — Stage 0 — Domain model and UI
+
+Details in `docs/stage-0/`.
+
+| ID | Decision | Reason |
+|---|---|---|
+| — | `CurriculumNode` (position in a tree) is separate from `Concept` (canonical, shared by `concept_key`); cards belong to the concept | Makes the global per-concept cache structural |
+| — | Six fixed facets per concept: why_it_matters, intuition, how_it_works, worked_example, pitfalls, compare | Consistent feed; simple evals |
+| — | Quick check uses `answer_index`, not repeated answer text | Removes a common class of invalid LLM output |
+| — | `snake_case` across JSON, Python and SQL; one error shape `{error: {code, message, retryable}}` | Explicit, uniform API contract |
+| — | Generation is async from the client's view: `content_status` + polling | Free-model calls take 10–30 s |
+| U1 | Theme follows the system, light + dark via design tokens, one accent colour, no gradients | User choice |
+| D1 | Explore-in-Depth detail generated lazily per card on first open | Smaller calls suit free models; no wasted tokens |
+| D2 | Visual types: KaTeX formula, Mermaid (lazy-loaded), icon fallback; no raw LLM SVG | Avoids injecting untrusted markup |
+| — | Old `frontend/` and `backend/` move to `legacy/`; the five empty `docs/*` files move to `docs/legacy/` | Side-by-side reference; nothing deleted |
+| — | Proposed Stage 1 frontend dependencies: `react-router` (Back button/URLs), `katex`, `mermaid`, `react-markdown` + `remark-math` + `rehype-katex` (detail body), `lucide-react` (icons) | Each replaces a hand-rolled or broken piece of the prototype |
