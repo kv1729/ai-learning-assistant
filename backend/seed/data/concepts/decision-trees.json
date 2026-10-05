@@ -1,0 +1,150 @@
+{
+  "concept_key": "decision-trees",
+  "name": "Decision Trees",
+  "cards": [
+    {
+      "facet": "why_it_matters",
+      "title": "A model you can read like a flowchart",
+      "summary": "A decision tree predicts by asking a sequence of yes/no questions about the features: is income above 50k, is the account older than two years, and so on, until it reaches a leaf with an answer. Because the result is literally a flowchart, anyone can follow why a prediction was made. Trees handle numeric and categorical data, need no feature scaling, and capture interactions automatically. On their own they overfit easily, but they are the building block of random forests and gradient boosting, the strongest general-purpose models for tabular data today.",
+      "key_takeaway": "Decision trees are interpretable flowcharts of feature questions and the foundation of the best tabular-data ensembles.",
+      "visual": {
+        "type": "mermaid",
+        "content": "graph TD\n  A{Income > 50k?} -->|yes| B{Debt ratio < 0.4?}\n  A -->|no| C[Reject]\n  B -->|yes| D[Approve]\n  B -->|no| E[Review]",
+        "caption": "A tiny loan-approval tree.",
+        "alt_text": "Decision tree: income over 50k then debt ratio under 0.4 leads to approve, otherwise reject or review"
+      },
+      "quick_check": {
+        "question": "Which property makes decision trees especially easy to explain to non-experts?",
+        "options": [
+          "They always have the highest accuracy",
+          "Each prediction follows a readable path of yes/no questions",
+          "They use no features at all",
+          "They output calibrated probabilities by default"
+        ],
+        "answer_index": 1,
+        "explanation": "A prediction is a path from the root to a leaf, and each step is a simple question about one feature. That path is a human-readable explanation."
+      },
+      "detail": null
+    },
+    {
+      "facet": "intuition",
+      "title": "Splitting until the groups are pure",
+      "summary": "A tree is grown greedily from the top. At each node the algorithm tries every feature and every threshold, and keeps the split that makes the two resulting groups as pure as possible, meaning each group is dominated by one class. It then repeats the process inside each group. Growth stops when a group is pure, too small, or the tree reaches a maximum depth. Predictions are simple: follow the questions to a leaf and output its majority class, or its average value for regression. The tree never revisits earlier choices, which keeps training fast but not optimal.",
+      "key_takeaway": "Trees grow greedily by choosing, at each node, the split that most increases purity.",
+      "visual": {
+        "type": "icon",
+        "content": "git-fork",
+        "caption": null,
+        "alt_text": "Branching icon"
+      },
+      "quick_check": {
+        "question": "How does a decision tree choose each split during training?",
+        "options": [
+          "Randomly, then keeps the tree with the best accuracy",
+          "Greedily, picking the feature and threshold that best increase purity at that node",
+          "By solving one global optimization over all possible trees",
+          "By asking the user which feature matters most"
+        ],
+        "answer_index": 1,
+        "explanation": "Finding the globally optimal tree is computationally intractable, so standard algorithms (CART, ID3, C4.5) choose the locally best split at each node."
+      },
+      "detail": null
+    },
+    {
+      "facet": "how_it_works",
+      "title": "Measuring purity with Gini and entropy",
+      "summary": "To compare candidate splits, trees need a number for impurity. Gini impurity is one minus the sum of squared class proportions: a node with only one class scores 0, and a 50/50 binary node scores 0.5. Entropy measures the same idea in bits: 0 for pure, 1 for a 50/50 split. A split's quality is the parent impurity minus the size-weighted impurity of its children, called information gain when entropy is used. Gini is the default in scikit-learn because it is cheaper to compute, and in practice the two criteria usually choose very similar splits.",
+      "key_takeaway": "Gini and entropy both score impurity; the best split maximizes the drop in weighted impurity.",
+      "visual": {
+        "type": "formula",
+        "content": "G = 1 - \\sum_{k} p_k^2 \\qquad H = -\\sum_{k} p_k \\log_2 p_k",
+        "caption": "Gini impurity and entropy for class proportions pₖ.",
+        "alt_text": "Gini equals one minus sum of p k squared; entropy equals minus sum of p k log base 2 of p k"
+      },
+      "quick_check": {
+        "question": "What is the Gini impurity of a node containing 50% class A and 50% class B?",
+        "options": [
+          "0",
+          "0.25",
+          "0.5",
+          "1"
+        ],
+        "answer_index": 2,
+        "explanation": "G = 1 − (0.5² + 0.5²) = 1 − 0.5 = 0.5, the maximum for two classes. A pure node would have G = 0."
+      },
+      "detail": null
+    },
+    {
+      "facet": "worked_example",
+      "title": "Choosing the first split by hand",
+      "summary": "Ten customers: 5 churn and 5 stay, so the root's Gini is 0.5. Split on 'contract is monthly'. The monthly group has 4 churners and 1 stayer, Gini 1 − (0.8² + 0.2²) = 0.32. The yearly group has 1 churner and 4 stayers, also 0.32. The weighted impurity after the split is 0.5 × 0.32 + 0.5 × 0.32 = 0.32, a gain of 0.18. If splitting on 'age over 40' produced groups of 3/2 and 2/3, each with Gini 0.48, the gain would be only 0.02. The tree picks contract type.",
+      "key_takeaway": "Compare splits by parent impurity minus the size-weighted impurity of the children.",
+      "visual": {
+        "type": "formula",
+        "content": "\\Delta G = 0.5 - (0.5 \\cdot 0.32 + 0.5 \\cdot 0.32) = 0.18",
+        "caption": "Gini gain for the 'monthly contract' split.",
+        "alt_text": "Gini gain equals 0.5 minus weighted child impurity 0.32, which is 0.18"
+      },
+      "quick_check": {
+        "question": "A split produces two equal-sized groups, each with Gini 0.48. The parent's Gini is 0.5. What is the gain?",
+        "options": [
+          "0.48",
+          "0.02",
+          "0.18",
+          "0.98"
+        ],
+        "answer_index": 1,
+        "explanation": "Weighted child impurity is 0.5 × 0.48 + 0.5 × 0.48 = 0.48, so the gain is 0.5 − 0.48 = 0.02, a weak split."
+      },
+      "detail": null
+    },
+    {
+      "facet": "pitfalls",
+      "title": "Where single trees go wrong",
+      "summary": "Left unchecked, a tree keeps splitting until every leaf is pure, memorizing noise in the training data. It then performs well on training data and poorly on new data, the classic case of high variance. Trees are also unstable: changing a few training rows can produce a completely different tree. Their boundaries are axis-aligned steps, so a simple diagonal pattern needs many splits. Limit depth, require a minimum number of samples per leaf, or prune the tree, and validate the settings. Better still, combine many trees in a random forest or gradient boosting.",
+      "key_takeaway": "Single trees overfit and are unstable; constrain or prune them, or use ensembles.",
+      "visual": {
+        "type": "icon",
+        "content": "triangle-alert",
+        "caption": null,
+        "alt_text": "Warning icon"
+      },
+      "quick_check": {
+        "question": "A fully grown tree has 100% training accuracy but 70% test accuracy. What is the most likely problem?",
+        "options": [
+          "Underfitting",
+          "Overfitting: the tree memorized noise in the training data",
+          "The features were not scaled",
+          "The Gini criterion was used instead of entropy"
+        ],
+        "answer_index": 1,
+        "explanation": "A large gap between training and test performance signals high variance. Limiting max depth, setting min samples per leaf or pruning reduces it. Trees do not need feature scaling."
+      },
+      "detail": null
+    },
+    {
+      "facet": "compare",
+      "title": "Trees vs. forests, boosting and linear models",
+      "summary": "A single tree is interpretable but unstable. A random forest trains hundreds of trees on bootstrap samples with random feature subsets and averages them, cutting variance dramatically. Gradient boosting builds shallow trees one after another, each correcting the errors of the ensemble so far; libraries such as XGBoost and LightGBM often top tabular benchmarks. Compared with logistic regression, trees capture non-linear interactions without feature engineering, but produce step-shaped boundaries and coarser probabilities. Use a single tree when you need a readable model, and an ensemble when accuracy matters most.",
+      "key_takeaway": "Forests average trees to reduce variance; boosting adds trees to reduce bias; single trees win on interpretability.",
+      "visual": {
+        "type": "mermaid",
+        "content": "graph LR\n  T[Single tree] -->|average many, bootstrap| RF[Random forest]\n  T -->|add sequentially, fix errors| GB[Gradient boosting]\n  T -->|linear alternative| LR[Logistic Regression]",
+        "caption": "From one tree to ensembles.",
+        "alt_text": "Diagram: single tree leads to random forest and gradient boosting, with logistic regression as linear alternative"
+      },
+      "quick_check": {
+        "question": "How does a random forest mainly improve on a single decision tree?",
+        "options": [
+          "It uses a deeper single tree",
+          "It averages many decorrelated trees, reducing variance",
+          "It removes the need for training data",
+          "It converts the tree into a linear model"
+        ],
+        "answer_index": 1,
+        "explanation": "Each tree sees a bootstrap sample and random feature subsets, so their errors are partly independent. Averaging them reduces variance without increasing bias much."
+      },
+      "detail": null
+    }
+  ]
+}

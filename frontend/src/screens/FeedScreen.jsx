@@ -1,5 +1,5 @@
 import { ChevronRight } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router";
 import * as api from "../api/client.js";
 import CardPager from "../components/CardPager.jsx";
@@ -18,6 +18,9 @@ export default function FeedScreen() {
   const navigate = useNavigate();
   const { learner, toggleSave, markCardSeen, markConceptCompleted, setResumePosition } = useLearner();
   const feed = useAsync(() => api.getFeed(nodeId), nodeId);
+  // A rejected generation request (e.g. rate limit, or unavailable before Stage 4),
+  // remembered per concept so the screen shows it instead of retrying in a loop.
+  const [requestError, setRequestError] = useState(null); // { conceptId, error }
 
   const concept = feed.data?.concept;
   const cards = feed.data?.cards ?? [];
@@ -30,20 +33,21 @@ export default function FeedScreen() {
   // Lazy generation: start it if needed, then poll until it settles.
   useEffect(() => {
     const status = feed.data?.concept.content_status;
-    if (status === "not_generated") {
-      api.generateConcept(feed.data.concept.id).then(feed.reload, feed.reload);
+    const id = feed.data?.concept.id;
+    if (status === "not_generated" && requestError?.conceptId !== id) {
+      api.generateConcept(id).then(feed.reload, (error) => setRequestError({ conceptId: id, error }));
     } else if (status === "generating") {
       const timer = setTimeout(feed.reload, POLL_INTERVAL_MS);
       return () => clearTimeout(timer);
     }
-  }, [feed.data, feed.reload]);
+  }, [feed.data, feed.reload, requestError]);
 
   // Prefetch: once this concept is ready, quietly start generating the next one.
   useEffect(() => {
     if (feed.data?.concept.content_status !== "ready") return;
     const tabs = feed.data.tabs;
     const next = tabs[tabs.findIndex((t) => t.node_id === feed.data.node.id) + 1];
-    if (next?.content_status === "not_generated") api.generateConcept(next.concept_id);
+    if (next?.content_status === "not_generated") api.generateConcept(next.concept_id).catch(() => {});
   }, [feed.data]);
 
   // Progress: record the card being viewed and where to resume.
@@ -71,7 +75,11 @@ export default function FeedScreen() {
   const goToPosition = (newIndex) => navigate(feedPath(nodeId, newIndex + 1), { replace: true });
   const openTab = (tab) => navigate(feedPath(tab.node_id, nextPositionFor(learner, tab.concept_id)), { replace: true });
 
-  const retryGeneration = () => api.generateConcept(concept.id).then(feed.reload, feed.reload);
+  const retryGeneration = () => {
+    if (requestError) setRequestError(null); // the generation effect tries again
+    else api.generateConcept(concept.id).then(feed.reload, (error) => setRequestError({ conceptId: concept.id, error }));
+  };
+  const rejected = requestError && requestError.conceptId === concept?.id ? requestError.error : null;
 
   const renderItem = (i) => {
     if (i === cards.length) {
@@ -106,8 +114,8 @@ export default function FeedScreen() {
   let body;
   if (!feed.data) {
     body = <SkeletonCard />;
-  } else if (concept.content_status === "failed") {
-    const error = concept.generation_error;
+  } else if (rejected || concept.content_status === "failed") {
+    const error = rejected ?? concept.generation_error;
     body = (
       <ErrorState
         title={`Couldn't write ${concept.name}`}

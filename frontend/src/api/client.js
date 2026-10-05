@@ -1,5 +1,5 @@
-// The only module screens import for data. In Stage 1 it re-exports the
-// in-browser mock; in Stage 2 these functions become HTTP calls to FastAPI
-// with the same names and return shapes.
-export * from "./mockApi.js";
+// The only module screens import for data: content from the FastAPI backend,
+// learner state from the browser (until Stage 5 moves it server-side).
+export * from "./contentApi.js";
+export * from "./learnerApi.js";
 export { ApiError } from "./errors.js";

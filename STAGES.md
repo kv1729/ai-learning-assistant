@@ -9,7 +9,7 @@ Status values: `Not started` / `In progress` / `Done` / `Blocked (reason)`.
 |---|---|---|---|---|
 | 0 | Repo review, domain model & UI contract | Done | 2026-10-05 | 2026-10-05 |
 | 1 | Mobile UI with mock data | Done | 2026-10-05 | 2026-10-05 |
-| 2 | FastAPI + PostgreSQL serving mock content | Not started | | |
+| 2 | FastAPI + PostgreSQL serving mock content | Done | 2026-10-05 | 2026-10-05 |
 | 3 | LLM curriculum generation | Not started | | |
 | 4 | Lazy card generation | Not started | | |
 | 5 | Learning state | Not started | | |
@@ -59,6 +59,10 @@ mock-data check and a browser walkthrough at 390×844 (light/dark) and desktop w
 - User signs off on the UI baseline.
 
 ## Stage 2 — FastAPI + PostgreSQL serving mock content
+
+**Outcome:** approved by the user 2026-10-05. Validated with 28 backend tests, ruff,
+`alembic check`, migrate + seed on a fresh database, frontend lint/build and a browser
+walkthrough against the real API.
 
 **Goal:** Frontend reads everything from the API; data lives in PostgreSQL.
 

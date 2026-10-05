@@ -34,3 +34,9 @@ Thumbs.db
 # Logs
 
 *.log
+
+# Python (Stage 2 backend)
+__pycache__/
+.venv/
+.pytest_cache/
+.ruff_cache/

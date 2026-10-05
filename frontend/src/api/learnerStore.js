@@ -1,7 +1,8 @@
-// Learner state for the mock backend, kept in localStorage so progress survives
-// reloads during UI review. Stage 5 replaces this with database-backed endpoints.
+// Learner state, kept in localStorage until Stage 5 moves it to the backend.
+// Survives reloads; each browser has its own.
 
-const STORAGE_KEY = "ala.learner.v1";
+// v2: IDs are database UUIDs from Stage 2 (v1 held Stage 1 mock IDs and is left untouched).
+const STORAGE_KEY = "ala.learner.v2";
 
 function emptyState() {
   return {

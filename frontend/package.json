@@ -7,7 +7,6 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "check:mock": "node scripts/validate-mock-data.js",
     "preview": "vite preview"
   },
   "dependencies": {

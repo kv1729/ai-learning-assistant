@@ -74,3 +74,23 @@ Details in `docs/stage-0/`.
 | Added `remark-gfm` | Markdown tables in detail content |
 | `npm run check:mock` validates mock content against the Stage 0 contract (facets, word counts, answer_index, tree rules) | Same rules become backend validation in Stages 3–4 |
 | Backend not moved yet; `legacy/frontend` holds the prototype UI | Stage 1 is frontend-only; moving `backend/` would break its virtualenv — do it in Stage 2 |
+
+## 2026-10-05 — Stage 2 — FastAPI + PostgreSQL
+
+| Decision | Reason |
+|---|---|
+| uv + `pyproject.toml` + `uv.lock`, Python 3.13 | User choice; reproducible installs, mature wheels on Windows |
+| Sync SQLAlchemy 2.0 with psycopg 3; plain `def` routes | User choice; simplest to read and test; FastAPI runs them in a threadpool |
+| Card value objects (`visual`, `quick_check`, `detail`, `sources`) stored as JSONB on `cards` | Always read with the card; validated by Pydantic before writing; no join tables needed |
+| `content_status` is a string column with a CHECK constraint | Readable, and easy to extend without a Postgres enum migration |
+| Content validation lives in `app/content.py` (Pydantic field constraints = schema, validators = business rules) and replaces the frontend `check:mock` script | One validator for seed data now and LLM output in Stages 3–4 |
+| Seed IDs are `uuid5(namespace, key)`; `seed.load` uses merge, so it is idempotent | Stable IDs across reloads; safe to re-run |
+| `concept_key` is the single concept identifier in seed data | Curriculum and content files reference concepts the same way |
+| Generation and curriculum creation return `501` with codes `generation_unavailable` / `not_available` until Stages 3–4 | Explicit contract instead of fake behavior; the UI shows the message |
+| Feed remembers a rejected generation request per concept instead of retrying | Prevents request loops; retry is user-initiated |
+| Learner state stays in `localStorage` (key bumped to `ala.learner.v2` for UUIDs; v1 left untouched) | Learner endpoints are Stage 5 |
+| Vite dev proxy `/api` → `:8000`; CORS origins configurable | One origin in development |
+| Tests use a separate `ala_test` database, created by the compose init script | Tests never touch development data |
+| `httpx2` instead of `httpx` for the test client | Starlette deprecates `httpx` for `TestClient` |
+| Prototype backend moved to `legacy/backend`; its ignored virtualenv `.ai_learning_env` left in `backend/`, unused | Nothing deleted without approval |
+| Backend is an installable package (hatchling, editable install via `uv sync`); `.env` located relative to `app/config.py` | `uvicorn app.main:app` failed with `No module named 'app'` when started outside `backend/` |

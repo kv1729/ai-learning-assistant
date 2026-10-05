@@ -44,9 +44,10 @@ the agent builds, the developer studies the implementation. So:
 ## Repository layout
 
 ```text
-frontend/        Stage 1 rebuild: React + Vite mobile app on mock data (see frontend/README.md)
-backend/         prototype FastAPI backend (to be replaced in Stage 2)
-legacy/frontend  prototype UI, kept for reference
+frontend/        React + Vite mobile app (see frontend/README.md)
+backend/         FastAPI + PostgreSQL API, migrations, seed, tests (see backend/README.md)
+docker-compose.yml  local PostgreSQL
+legacy/          prototype frontend and backend, kept for reference
 docs/stage-0/    review, domain model/API contract, UI proposal
 docs/legacy/     superseded plans
 ```
