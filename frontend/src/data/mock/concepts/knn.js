@@ -1,0 +1,137 @@
+import { makeConcept } from "../makeConcept.js";
+
+const r = String.raw;
+
+export default makeConcept({
+  id: "concept-knn",
+  concept_key: "k-nearest-neighbors",
+  name: "KNN",
+  cards: [
+    {
+      title: "Predicting by asking the neighbors",
+      summary:
+        "k-nearest neighbors is the simplest classifier that works surprisingly often. To label a new point, find the k most similar training examples and let them vote. There is no training phase beyond storing the data, so the model adapts instantly when new labelled examples arrive. KNN makes no assumption about the shape of the boundary, which lets it capture complex patterns given enough data. The same idea powers recommendation ('users like you also liked'), anomaly detection and the retrieval step in modern AI systems, where nearest-neighbor search over embeddings finds relevant documents.",
+      key_takeaway: "KNN labels a point by the majority vote of its k most similar training examples, with no real training step.",
+      visual: { type: "icon", content: "users", caption: null, alt_text: "Group of people icon representing neighbors" },
+      quick_check: {
+        question: "What happens during the 'training' phase of KNN?",
+        options: [
+          "It fits weights with gradient descent",
+          "It simply stores the training examples",
+          "It builds a tree of yes/no questions",
+          "It computes support vectors",
+        ],
+        answer_index: 1,
+        explanation:
+          "KNN is a lazy learner: all the work happens at prediction time, when distances to the stored examples are computed.",
+      },
+    },
+    {
+      title: "Similar inputs, similar outputs",
+      summary:
+        "KNN rests on one assumption: points that are close in feature space tend to share labels. Picture each training example as a dot on a map colored by its class. A new point looks around, finds its k closest dots and adopts the most common color. With k = 1 the boundary hugs every training point, including noise. Larger k smooths the boundary by averaging over more neighbors, at the risk of blurring genuine small regions. For regression the idea is the same, but the prediction is the average of the neighbors' values instead of a vote.",
+      key_takeaway: "Small k gives jagged, noise-sensitive boundaries; large k gives smoother but blurrier ones.",
+      visual: { type: "icon", content: "circle-dot", caption: null, alt_text: "Circle with a dot representing a point and its neighborhood" },
+      quick_check: {
+        question: "What typically happens to the KNN decision boundary as k increases?",
+        options: [
+          "It becomes more jagged",
+          "It becomes smoother",
+          "It becomes perfectly linear",
+          "It stops depending on the data",
+        ],
+        answer_index: 1,
+        explanation:
+          "Each prediction averages over more neighbors, so individual noisy points matter less and the boundary smooths out. Very large k approaches always predicting the majority class.",
+      },
+    },
+    {
+      title: "Distances decide everything",
+      summary:
+        "The whole model is a distance function plus a vote. Euclidean distance, the straight-line distance, is the default. Manhattan distance sums absolute differences and is less dominated by a single large gap. Cosine similarity compares directions rather than magnitudes, which suits text and embedding vectors. Because distances mix all features together, scaling is essential: a feature measured in thousands swamps one measured in fractions. Votes can also be weighted by inverse distance, so closer neighbors count more. Prediction is the expensive part, so large datasets use index structures such as KD-trees or approximate nearest-neighbor libraries.",
+      key_takeaway: "KNN is only as good as its distance metric and feature scaling.",
+      visual: {
+        type: "formula",
+        content: r`d(\mathbf{x}, \mathbf{x}') = \sqrt{\sum_{j=1}^{d}(x_j - x'_j)^2}`,
+        caption: "Euclidean distance between two points.",
+        alt_text: "Euclidean distance equals square root of the sum of squared feature differences",
+      },
+      quick_check: {
+        question: "Why must features usually be scaled before using KNN?",
+        options: [
+          "KNN only accepts integers",
+          "Features with large ranges would dominate the distance",
+          "Scaling reduces k automatically",
+          "It turns KNN into a linear model",
+        ],
+        answer_index: 1,
+        explanation:
+          "Distances add up differences across features. Without scaling, income in dollars would dwarf age in years and the neighbors would be chosen almost entirely by income.",
+      },
+    },
+    {
+      title: "Classifying one fruit with k = 3",
+      summary:
+        "A fruit is described by weight in hundreds of grams and a sweetness score. The new fruit is at (1.5, 6). Its three nearest training fruits are an apple at (1.4, 6.5), distance about 0.51; an apple at (1.7, 5.8), distance about 0.28; and an orange at (1.6, 5.0), distance about 1.0. Two of the three neighbors are apples, so with k = 3 the fruit is labelled apple. With k = 1 it would also be an apple, since the closest neighbor is the apple at distance 0.28. Distance weighting would strengthen the apple vote further.",
+      key_takeaway: "Compute distances, take the k smallest, and vote; distance weighting gives closer neighbors more say.",
+      visual: {
+        type: "formula",
+        content: r`d\big((1.5, 6), (1.7, 5.8)\big) = \sqrt{0.2^2 + 0.2^2} \approx 0.28`,
+        caption: "Distance to the closest neighbor.",
+        alt_text: "Distance between 1.5,6 and 1.7,5.8 is square root of 0.04 plus 0.04, about 0.28",
+      },
+      quick_check: {
+        question: "With k = 3, neighbors are apple (0.28), apple (0.51) and orange (1.0). What is the prediction?",
+        options: ["Orange", "Apple", "A tie", "Cannot be decided without k = 5"],
+        answer_index: 1,
+        explanation: "Two of the three nearest neighbors are apples, so the majority vote gives apple.",
+      },
+    },
+    {
+      title: "Where KNN goes wrong",
+      summary:
+        "KNN suffers badly from the curse of dimensionality: in hundreds of dimensions, distances between random points become nearly equal, so 'nearest' stops meaning 'similar'. Unscaled or irrelevant features distort distances in the same way. Prediction is slow and memory-hungry because every query compares against stored data. Imbalanced classes bias the vote toward the majority class. Choosing k matters: too small overfits, too large underfits, so pick it with cross-validation and prefer odd values for binary problems to avoid ties. Reducing dimensions or learning embeddings first often rescues KNN.",
+      key_takeaway: "KNN degrades in high dimensions and with unscaled or irrelevant features; choose k by validation.",
+      visual: { type: "icon", content: "triangle-alert", caption: null, alt_text: "Warning icon" },
+      quick_check: {
+        question: "Why does KNN often perform poorly with hundreds of raw features?",
+        options: [
+          "It cannot store that many features",
+          "Distances become nearly uniform, so nearest neighbors are not truly similar",
+          "It automatically ignores all but one feature",
+          "k must equal the number of features",
+        ],
+        answer_index: 1,
+        explanation:
+          "In high dimensions, the gap between the nearest and farthest points shrinks relative to the distances themselves, so the neighbor ranking carries little information.",
+      },
+    },
+    {
+      title: "KNN vs. SVMs, trees and vector search",
+      summary:
+        "KNN keeps every training point; an RBF SVM is like a selective KNN that keeps only the support vectors and learns how much each should count. Decision trees also partition space by similarity, but learn which features matter, while plain KNN treats all features equally. KNN beats parametric models when the boundary is irregular and data is plentiful in low dimensions. Today its biggest role is retrieval: approximate nearest-neighbor search over learned embeddings, using libraries such as FAISS or pgvector, is the engine behind semantic search and retrieval-augmented generation.",
+      key_takeaway: "KNN is the simplest similarity method; its modern descendant is nearest-neighbor search over embeddings.",
+      visual: {
+        type: "mermaid",
+        content: `graph LR
+  KNN[KNN] -->|keeps only support vectors| SVM[RBF SVM]
+  KNN -->|learns which features matter| DT[Decision Trees]
+  KNN -->|on embeddings| VS[Vector search / RAG]`,
+        caption: "KNN and its relatives.",
+        alt_text: "Diagram relating KNN to RBF SVM, decision trees and vector search",
+      },
+      quick_check: {
+        question: "Which modern AI technique is essentially nearest-neighbor search?",
+        options: [
+          "Gradient boosting",
+          "Retrieving relevant documents by embedding similarity",
+          "Backpropagation",
+          "Dropout",
+        ],
+        answer_index: 1,
+        explanation:
+          "Semantic search embeds the query and returns the documents whose embeddings are nearest to it, usually with approximate nearest-neighbor indexes.",
+      },
+    },
+  ],
+});

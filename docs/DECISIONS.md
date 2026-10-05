@@ -57,3 +57,20 @@ Details in `docs/stage-0/`.
 | D2 | Visual types: KaTeX formula, Mermaid (lazy-loaded), icon fallback; no raw LLM SVG | Avoids injecting untrusted markup |
 | — | Old `frontend/` and `backend/` move to `legacy/`; the five empty `docs/*` files move to `docs/legacy/` | Side-by-side reference; nothing deleted |
 | — | Proposed Stage 1 frontend dependencies: `react-router` (Back button/URLs), `katex`, `mermaid`, `react-markdown` + `remark-math` + `rehype-katex` (detail body), `lucide-react` (icons) | Each replaces a hand-rolled or broken piece of the prototype |
+
+## 2026-10-05 — Stage 1 — Mobile UI with mock data
+
+| Decision | Reason |
+|---|---|
+| Screens get data only through `src/api/client.js`, which re-exports an in-browser mock (`mockApi.js`) with the same function names/shapes as the planned endpoints | Stage 2 swaps the mock for HTTP without touching screens |
+| Mock simulates latency, lazy generation, prefetch, a rate-limit failure + retry and missing content | Every loading/error state is reviewable before any AI exists |
+| Learner state (saves, answers, seen cards, resume) lives in `localStorage` behind the mock API | Survives reloads during review; replaced by DB endpoints in Stage 5 |
+| URL routes per screen (`/learn/:nodeId/:position[/detail|/check]`); card swipes replace history, pushed screens push | Phone Back button and refresh behave |
+| Detail and Quick Check are full-screen (no bottom nav) | Focused reading/answering |
+| Completion card after card 6; swiping past it opens the next concept | Clear end of a concept and natural flow |
+| Home opens at the resume position, else the first concept with content | Never lands on an empty/failed state |
+| Tapping a card's visual opens Explore in Depth, where diagrams get more room | Tall diagrams are small inside the card |
+| KaTeX pinned to 0.16 to dedupe with `rehype-katex`/`mermaid`; Detail screen and Mermaid lazy-loaded | Main bundle 1.12 MB → 689 kB (215 kB gzip) |
+| Added `remark-gfm` | Markdown tables in detail content |
+| `npm run check:mock` validates mock content against the Stage 0 contract (facets, word counts, answer_index, tree rules) | Same rules become backend validation in Stages 3–4 |
+| Backend not moved yet; `legacy/frontend` holds the prototype UI | Stage 1 is frontend-only; moving `backend/` would break its virtualenv — do it in Stage 2 |

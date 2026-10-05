@@ -43,5 +43,12 @@ the agent builds, the developer studies the implementation. So:
 
 ## Repository layout
 
-Being rebuilt on the `rebuild` branch. The previous prototype is tagged `prototype-v0`.
-The layout will be documented here at the end of Stage 1 and Stage 2.
+```text
+frontend/        Stage 1 rebuild: React + Vite mobile app on mock data (see frontend/README.md)
+backend/         prototype FastAPI backend (to be replaced in Stage 2)
+legacy/frontend  prototype UI, kept for reference
+docs/stage-0/    review, domain model/API contract, UI proposal
+docs/legacy/     superseded plans
+```
+
+The previous prototype is also tagged `prototype-v0`.

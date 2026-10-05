@@ -1,0 +1,281 @@
+import { makeConcept } from "../makeConcept.js";
+
+const r = String.raw;
+
+export default makeConcept({
+  id: "concept-svm",
+  concept_key: "support-vector-machines",
+  name: "SVM",
+  cards: [
+    {
+      title: "Drawing the safest possible boundary",
+      summary:
+        "When two classes can be separated by a line, infinitely many lines do the job. Support vector machines pick the one with the widest margin, the largest gap to the nearest points of either class. A wide margin leaves room for noise, so the boundary tends to generalize better to new data. SVMs were the state of the art for text classification, handwriting recognition and bioinformatics before deep learning, and they remain strong when you have many features but only hundreds or thousands of examples. With kernels, the same idea extends to curved boundaries without ever building the curved features explicitly.",
+      key_takeaway:
+        "An SVM chooses the separating boundary with the largest margin, which tends to generalize well, especially with many features and modest data.",
+      visual: { type: "icon", content: "split", caption: null, alt_text: "Icon of a path splitting in two" },
+      quick_check: {
+        question: "Among all lines that separate two classes perfectly, which one does an SVM choose?",
+        options: [
+          "The one that passes through the class means",
+          "The one with the largest distance to the nearest points of either class",
+          "The one found first by gradient descent",
+          "The one with the smallest weights, regardless of the data",
+        ],
+        answer_index: 1,
+        explanation:
+          "The SVM maximizes the margin, the distance from the boundary to the closest training points. Those closest points are the support vectors.",
+      },
+      detail: {
+        body_markdown: r`## The problem: many boundaries fit
+
+Imagine two clouds of points that a straight line can separate. A perceptron or plain logistic regression will find *a* separating line, but which one depends on initialization and optimization details. Some of those lines pass very close to training points; a slightly different new point would be misclassified.
+
+## The SVM answer: maximize the margin
+
+A support vector machine chooses the boundary that is **as far as possible from both classes**. The distance from the boundary to the nearest points is called the **margin**, and the nearest points themselves are the **support vectors**. Only they determine the solution: you could delete every other training point and get the same boundary.
+
+## Why a wide margin helps
+
+Statistical learning theory links a larger margin to a lower bound on generalization error. Intuitively, a boundary with lots of clearance is robust to small perturbations of the data, measurement noise and slightly different test distributions.
+
+## Where SVMs shine
+
+- **High-dimensional, modest-size data**, such as text represented by tens of thousands of word features, or gene-expression data with thousands of genes but few patients.
+- **Clear margins** between classes.
+- **Non-linear problems of moderate size**, using kernels (covered on the "how it works" card).
+
+## Where they struggle
+
+- Very large datasets: kernel SVM training scales roughly between quadratic and cubic in the number of examples, so millions of rows are impractical. Linear SVMs remain fast.
+- Heavily overlapping classes and noisy labels, unless the soft-margin parameter C is tuned.
+- No native probabilities: outputs are distances from the boundary, which need calibration (for example Platt scaling) to become probabilities.
+
+## Historical note
+
+From the late 1990s until around 2012, SVMs with carefully engineered features were the default high-accuracy classifier in many fields. Deep learning replaced them for images, audio and raw text, but the margin idea lives on in losses such as the hinge loss and in contrastive learning.`,
+        misconceptions: [
+          "SVMs do not use every training point to define the boundary; only the support vectors matter.",
+          "SVM scores are not probabilities; they are signed distances that need calibration.",
+        ],
+        related_concepts: ["Logistic Regression", "Cross-Validation"],
+        takeaway: "SVMs trade probabilistic outputs for a maximally robust boundary defined by a handful of critical points.",
+      },
+    },
+    {
+      title: "Only the closest points matter",
+      summary:
+        "Picture the boundary as the center line of the widest street you can lay between the two classes. The street's edges touch a few training points on each side; those are the support vectors. Every other point is irrelevant: move or delete it and the street stays where it is, as long as it does not cross an edge. Real data overlaps, so the soft-margin SVM lets some points sit inside the street or on the wrong side, paying a penalty for each. The parameter C sets the price: high C means a narrow street with few violations, low C a wider street that tolerates more mistakes.",
+      key_takeaway:
+        "Support vectors alone define the boundary, and C trades margin width against training errors.",
+      visual: {
+        type: "mermaid",
+        content: `graph LR
+  A[Class A points] --- SVA((support vectors A))
+  SVA ---|margin| B{{boundary}}
+  B ---|margin| SVB((support vectors B))
+  SVB --- C[Class B points]`,
+        caption: "The boundary sits in the middle of the widest margin.",
+        alt_text: "Diagram of class A and class B separated by a boundary with margins touching support vectors",
+      },
+      quick_check: {
+        question: "What happens to a soft-margin SVM when you greatly increase C?",
+        options: [
+          "The margin gets wider and more violations are allowed",
+          "The margin gets narrower and training errors are penalized more",
+          "The kernel changes from linear to RBF",
+          "Nothing, C only affects training speed",
+        ],
+        answer_index: 1,
+        explanation:
+          "C is the cost of each margin violation. A large C makes violations expensive, so the SVM narrows the margin to fit the training data more closely, which can overfit.",
+      },
+      detail: {
+        body_markdown: r`## The street analogy
+
+Draw the decision boundary as the center line of a street. The SVM wants the **widest street** that keeps all class A points on one side and all class B points on the other. The curbs of the street touch the closest points of each class: the **support vectors**.
+
+## Why most points do not matter
+
+Points far from the street exert no influence. If you move one of them, but not across a curb, the optimal street does not change. This makes SVMs memory-efficient at prediction time and explains their name: the solution is *supported* by a few vectors.
+
+## Soft margins for real data
+
+Real datasets are rarely perfectly separable: there is noise, mislabelled points and genuine overlap. The **soft-margin** SVM introduces a slack variable $\xi_i \ge 0$ for each point measuring how far it violates its curb. The optimization becomes
+
+$$
+\min_{\mathbf{w}, b, \xi}\; \frac{1}{2}\lVert\mathbf{w}\rVert^2 + C\sum_{i}\xi_i
+$$
+
+subject to $y_i(\mathbf{w}^\top\mathbf{x}_i + b) \ge 1 - \xi_i$.
+
+## The role of C
+
+- **Large C**: violations are expensive. The street narrows to classify training points correctly. Low bias, high variance, risk of overfitting outliers.
+- **Small C**: violations are cheap. The street widens and ignores a few awkward points. Higher bias, lower variance.
+
+C is almost always tuned with cross-validation, typically over a log scale such as 0.01, 0.1, 1, 10, 100.
+
+## Why $\lVert\mathbf{w}\rVert$ appears
+
+The margin width equals $2 / \lVert\mathbf{w}\rVert$. Maximizing the margin is therefore the same as minimizing $\lVert\mathbf{w}\rVert^2$, which is why the SVM objective looks like an L2-regularized model with a special loss.
+
+## Hinge loss view
+
+The constraints can be folded into a single loss: $\max(0, 1 - y_i f(\mathbf{x}_i))$, the **hinge loss**. Points beyond their curb cost nothing; points inside the street or on the wrong side cost linearly. Compare this with log-loss in logistic regression, which never quite reaches zero.`,
+        misconceptions: [
+          "A larger margin is not always better on training data; it is a bias–variance trade-off controlled by C.",
+          "Outliers far on the correct side of the boundary do not affect an SVM at all.",
+        ],
+        related_concepts: ["Logistic Regression", "Bias–Variance Trade-off"],
+        takeaway: "SVMs minimize ‖w‖² plus C times the violations: margin width versus training errors.",
+      },
+    },
+    {
+      title: "Hinge loss and the kernel trick",
+      summary:
+        "A linear SVM minimizes ½‖w‖² plus C times the hinge loss, max(0, 1 − y·f(x)). Points safely beyond the margin cost nothing; points inside it or misclassified cost linearly. For curved boundaries, SVMs use the kernel trick. The training problem can be written so that data appears only in dot products between pairs of points. Replace that dot product with a kernel function, such as the RBF kernel exp(−γ‖x − x′‖²), and the SVM behaves as if the data were mapped into a much higher-dimensional space where a straight boundary exists, without ever computing that mapping.",
+      key_takeaway:
+        "Hinge loss ignores well-classified points, and kernels let a linear method learn non-linear boundaries by swapping the dot product.",
+      visual: {
+        type: "formula",
+        content: r`K(\mathbf{x}, \mathbf{x}') = \exp\!\left(-\gamma \lVert \mathbf{x} - \mathbf{x}' \rVert^2\right)`,
+        caption: "The RBF (Gaussian) kernel measures similarity between two points.",
+        alt_text: "RBF kernel: K of x and x prime equals exp of minus gamma times squared distance",
+      },
+      quick_check: {
+        question: "What does the kernel trick avoid computing?",
+        options: [
+          "The labels of the training data",
+          "The explicit high-dimensional feature mapping of each point",
+          "The support vectors",
+          "The margin",
+        ],
+        answer_index: 1,
+        explanation:
+          "Kernels compute dot products in a high-dimensional space directly from the original inputs, so the mapped features are never built. For the RBF kernel that space is infinite-dimensional.",
+      },
+      detail: {
+        body_markdown: r`## The linear SVM objective
+
+$$
+\min_{\mathbf{w}, b}\; \frac{1}{2}\lVert\mathbf{w}\rVert^2 + C\sum_{i=1}^{n}\max\big(0,\; 1 - y_i(\mathbf{w}^\top\mathbf{x}_i + b)\big)
+$$
+
+Labels are $y_i \in \{-1, +1\}$. The first term widens the margin; the second is the **hinge loss**.
+
+## Reading the hinge loss
+
+Let $m_i = y_i f(\mathbf{x}_i)$ be the signed margin of point $i$.
+
+- $m_i \ge 1$: correctly classified and outside the street, loss 0.
+- $0 < m_i < 1$: correct but inside the street, small loss.
+- $m_i < 0$: misclassified, loss grows linearly.
+
+Because correctly classified, distant points have exactly zero loss, they have zero gradient and do not influence the solution. That is the support-vector property in loss form.
+
+## The dual problem and dot products
+
+Using Lagrange multipliers, the SVM can be rewritten in its **dual** form, where the prediction for a new point is
+
+$$
+f(\mathbf{x}) = \sum_{i \in SV} \alpha_i y_i\, \mathbf{x}_i^\top\mathbf{x} + b
+$$
+
+Only support vectors have $\alpha_i > 0$. Crucially, data appears **only through dot products** $\mathbf{x}_i^\top\mathbf{x}$.
+
+## The kernel trick
+
+Suppose we map inputs through a feature map $\phi(\mathbf{x})$ into a richer space where the classes are linearly separable. We would need $\phi(\mathbf{x}_i)^\top\phi(\mathbf{x})$. A **kernel** computes that value directly:
+
+$$
+K(\mathbf{x}_i, \mathbf{x}) = \phi(\mathbf{x}_i)^\top\phi(\mathbf{x})
+$$
+
+Common kernels:
+
+- **Polynomial**: $K = (\mathbf{x}^\top\mathbf{x}' + c)^d$, all feature interactions up to degree $d$.
+- **RBF (Gaussian)**: $K = \exp(-\gamma\lVert\mathbf{x} - \mathbf{x}'\rVert^2)$, an infinite-dimensional feature space; similarity decays with distance.
+
+## Tuning an RBF SVM
+
+$\gamma$ controls how far each support vector's influence reaches. Large $\gamma$ gives very local, wiggly boundaries (overfitting); small $\gamma$ gives smooth, almost linear ones. Tune $C$ and $\gamma$ together with a grid search and cross-validation, and always **standardize features first**, because the RBF kernel depends on raw distances.
+
+## Cost
+
+Kernel SVMs need pairwise kernel values, so training time grows roughly between $n^2$ and $n^3$. Above roughly 100,000 examples, prefer linear SVMs, kernel approximations, or tree ensembles.`,
+        misconceptions: [
+          "The kernel trick does not make SVMs fast; it makes non-linear boundaries possible while costing pairwise comparisons.",
+          "Any similarity function is not automatically a valid kernel; it must correspond to a dot product (be positive semi-definite).",
+        ],
+        related_concepts: ["KNN", "Cross-Validation"],
+        takeaway: "Hinge loss defines the support vectors; kernels replace dot products to bend the boundary without building new features.",
+      },
+    },
+    {
+      title: "Separating two points in 2-D",
+      summary:
+        "Take two training points: a positive one at (2, 2) and a negative one at (0, 0). The maximum-margin boundary is the perpendicular bisector of the segment between them, the line x₁ + x₂ = 2. In SVM form, w = (0.5, 0.5) and b = −1, so f(x) = 0.5x₁ + 0.5x₂ − 1. Check: f(2, 2) = 1 and f(0, 0) = −1, exactly on the margins. The margin width is 2 / ‖w‖ = 2 / 0.707 ≈ 2.83, which equals the distance between the two points. A new point at (3, 0) scores f = 0.5, so it is classified as positive.",
+      key_takeaway:
+        "With two points, the SVM boundary is their perpendicular bisector, and the margin width equals 2 / ‖w‖.",
+      visual: {
+        type: "formula",
+        content: r`f(\mathbf{x}) = 0.5x_1 + 0.5x_2 - 1,\quad \text{margin} = \frac{2}{\lVert\mathbf{w}\rVert} \approx 2.83`,
+        caption: "The fitted SVM for two points.",
+        alt_text: "f of x equals 0.5 x1 plus 0.5 x2 minus 1, margin equals 2 over norm of w, about 2.83",
+      },
+      quick_check: {
+        question: "For f(x) = 0.5x₁ + 0.5x₂ − 1, how is the new point (3, 0) classified?",
+        options: ["Negative, because f(3, 0) = −0.5", "Positive, because f(3, 0) = 0.5", "On the boundary", "It cannot be classified"],
+        answer_index: 1,
+        explanation: "f(3, 0) = 0.5 × 3 + 0.5 × 0 − 1 = 0.5, which is positive, so the point is classified as the positive class.",
+      },
+    },
+    {
+      title: "Where SVMs go wrong",
+      summary:
+        "SVMs are sensitive to feature scale: the margin is measured in raw distance, so one feature in thousands drowns out another in fractions. Always standardize first. Default hyperparameters are rarely good; C and, for the RBF kernel, gamma must be tuned together with cross-validation, and a poor pair can mean severe underfitting or a boundary that memorizes the training set. Kernel SVMs scale badly, becoming impractical beyond about a hundred thousand rows. Finally, decision scores are distances, not probabilities, and treating them as probabilities without calibration leads to bad thresholds and misleading confidence.",
+      key_takeaway: "Scale features, tune C and gamma together, mind the training cost, and calibrate before using scores as probabilities.",
+      visual: { type: "icon", content: "triangle-alert", caption: null, alt_text: "Warning icon" },
+      quick_check: {
+        question: "Why should features be standardized before training an RBF SVM?",
+        options: [
+          "Standardization makes the classes linearly separable",
+          "The kernel depends on distances, so large-scale features would dominate",
+          "SVMs only accept values between 0 and 1",
+          "It reduces the number of support vectors to one",
+        ],
+        answer_index: 1,
+        explanation:
+          "The RBF kernel uses the squared Euclidean distance between points. Without scaling, a feature measured in large units dominates that distance and the others are effectively ignored.",
+      },
+    },
+    {
+      title: "SVM vs. logistic regression and friends",
+      summary:
+        "A linear SVM and logistic regression both learn a straight boundary and often reach similar accuracy. The difference is the loss: hinge loss ignores well-classified points, while log-loss lets every point pull a little and yields probabilities. Choose logistic regression when you need probabilities and interpretability, and an SVM when you have many features, a clear margin and moderate data. Against KNN, an RBF SVM is a smarter similarity method that keeps only the support vectors. Against tree ensembles, SVMs need scaling and tuning but can do better on high-dimensional sparse data such as text.",
+      key_takeaway: "Hinge versus log-loss is the core difference between linear SVMs and logistic regression; pick by whether you need probabilities.",
+      visual: {
+        type: "mermaid",
+        content: `graph LR
+  SVM[SVM] -->|same boundary type, different loss| LR[Logistic Regression]
+  SVM -->|kernel = smarter similarity| KNN[KNN]
+  SVM -->|wins on sparse high-dim data| GB[Tree ensembles]`,
+        caption: "How SVMs relate to other classifiers.",
+        alt_text: "Diagram relating SVM to logistic regression, KNN and tree ensembles",
+      },
+      quick_check: {
+        question: "What is the main difference between a linear SVM and logistic regression?",
+        options: [
+          "Only the SVM can learn a linear boundary",
+          "They minimize different losses: hinge loss versus log-loss",
+          "Logistic regression cannot be regularized",
+          "SVMs need labelled data, logistic regression does not",
+        ],
+        answer_index: 1,
+        explanation:
+          "Both produce a linear decision function. The SVM minimizes hinge loss (margin-based, no probabilities) and logistic regression minimizes log-loss (likelihood-based, probabilities).",
+      },
+    },
+  ],
+});

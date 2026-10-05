@@ -8,7 +8,7 @@ Status values: `Not started` / `In progress` / `Done` / `Blocked (reason)`.
 | # | Stage | Status | Started | Finished |
 |---|---|---|---|---|
 | 0 | Repo review, domain model & UI contract | Done | 2026-10-05 | 2026-10-05 |
-| 1 | Mobile UI with mock data | In progress | 2026-10-05 | |
+| 1 | Mobile UI with mock data | Done | 2026-10-05 | 2026-10-05 |
 | 2 | FastAPI + PostgreSQL serving mock content | Not started | | |
 | 3 | LLM curriculum generation | Not started | | |
 | 4 | Lazy card generation | Not started | | |
@@ -40,6 +40,9 @@ Status values: `Not started` / `In progress` / `Done` / `Blocked (reason)`.
 - No application code changed.
 
 ## Stage 1 — Mobile UI with mock data
+
+**Outcome:** approved by the user 2026-10-05. Validated with build, lint,
+mock-data check and a browser walkthrough at 390×844 (light/dark) and desktop width.
 
 **Goal:** The complete user flow works in the browser with deterministic local data.
 
