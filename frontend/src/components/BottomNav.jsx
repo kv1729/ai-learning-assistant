@@ -1,33 +1,36 @@
-function BottomNav({ activeTab, onTabChange }) {
-  const items = [
-    { id: "explore", label: "Explore", icon: "🔍" },
-    { id: "home", label: "Home", icon: "⌂" },
-    { id: "profile", label: "Profile", icon: "👤" },
-  ];
+import { Compass, House, User } from "lucide-react";
+import { Link, useLocation } from "react-router";
+
+const ITEMS = [
+  { to: "/explore", label: "Explore", Icon: Compass, match: (path) => path.startsWith("/explore") },
+  { to: "/", label: "Home", Icon: House, match: (path) => path === "/" || path.startsWith("/learn") },
+  { to: "/profile", label: "Profile", Icon: User, match: (path) => path.startsWith("/profile") },
+];
+
+export default function BottomNav() {
+  const { pathname } = useLocation();
 
   return (
-    <div className="bg-[#050816] px-4 py-2">
-      <div className="flex items-center justify-around">
-        {items.map((item) => {
-          const isActive = activeTab === item.id;
-
+    <nav aria-label="Main" className="shrink-0 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)]">
+      <ul className="grid grid-cols-3">
+        {ITEMS.map(({ to, label, Icon, match }) => {
+          const active = match(pathname);
           return (
-            <button
-              key={item.id}
-              type="button"
-              aria-label={item.label}
-              onClick={() => onTabChange(item.id)}
-              className={`flex h-12 w-12 items-center justify-center text-3xl transition ${
-                isActive ? "text-purple-300" : "text-slate-400"
-              }`}
-            >
-              {item.icon}
-            </button>
+            <li key={to}>
+              <Link
+                to={to}
+                aria-current={active ? "page" : undefined}
+                className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-[11.5px] font-medium ${
+                  active ? "text-accent" : "text-muted"
+                }`}
+              >
+                <Icon size={22} strokeWidth={active ? 2.25 : 1.75} aria-hidden="true" />
+                {label}
+              </Link>
+            </li>
           );
         })}
-      </div>
-    </div>
+      </ul>
+    </nav>
   );
 }
-
-export default BottomNav;

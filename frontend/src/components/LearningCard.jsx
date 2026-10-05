@@ -1,53 +1,56 @@
-import { useState } from "react";
+import { Check, X } from "lucide-react";
+import { FACET_LABELS } from "../lib/learning.js";
+import { buttonPrimary, buttonSecondary } from "../lib/ui.js";
+import SaveButton from "./SaveButton.jsx";
+import CardVisual from "./visuals/CardVisual.jsx";
 
-function LearningCard({ card, currentIndex, totalCards, onExplore, onQuickCheck }) {
-  const [saved, setSaved] = useState(false);
-
+export default function LearningCard({ card, total, saved, attempt, onToggleSave, onExplore, onQuickCheck }) {
   return (
-    <div className="relative flex h-full flex-col overflow-hidden rounded-[16px] border border-white/10 bg-slate-950 shadow-2xl">
-      <div className="mt-2 relative h-[38%] min-h-[190px] bg-slate-900">
-        <img src={card.image} alt={card.title} className="h-full w-full object-cover" />
-        <div className="absolute right-3 top-3 rounded-full bg-slate-950/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-white shadow-lg">
-          {currentIndex + 1} / {totalCards}
-        </div>
+    <article className="flex h-full flex-col" aria-label={`${card.title}, card ${card.position} of ${total}`}>
+      <div className="relative flex h-[27%] min-h-32 shrink-0 items-center justify-center bg-surface-2 px-12 py-3">
+        <button
+          type="button"
+          onClick={onExplore}
+          aria-label="Open in depth"
+          className="flex h-full w-full items-center justify-center"
+        >
+          <CardVisual visual={card.visual} />
+        </button>
+        <SaveButton saved={saved} onToggle={onToggleSave} className="absolute top-0 right-3" />
       </div>
 
-      <button
-        type="button"
-        aria-label="Save card"
-        onClick={() => setSaved((value) => !value)}
-        className={`absolute right-3 top-[calc(38%-1.5rem)] text-3xl transition ${
-          saved ? "text-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.45)]" : "text-white shadow-[0_0_12px_rgba(15,23,42,0.8)]"
-        }`}
-      >
-        🔖
-      </button>
-
-      <div className="flex flex-1 flex-col px-3 py-3 text-white">
-        <h2 className="text-2xl font-bold leading-tight">{card.title}</h2>
-
-        <p className="mt-2 flex-1 text-lg leading-relaxed text-slate-300">{card.summary}</p>
-
-        <div className="mt-4 grid grid-cols-2 gap-2">
-          <button
-            type="button"
-            onClick={onExplore}
-            className="w-full rounded-2xl bg-gradient-to-r from-purple-600 to-fuchsia-500 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:opacity-90"
-          >
-            Explore
-          </button>
-
-          <button
-            type="button"
-            onClick={onQuickCheck}
-            className="w-full rounded-2xl bg-gradient-to-r from-emerald-500 to-cyan-500 py-2.5 text-sm font-semibold text-slate-950 transition-all duration-200 hover:opacity-90"
-          >
-            Quick Check
-          </button>
-        </div>
+      <div className="flex items-center justify-between px-5 pt-3 text-[13px] font-medium text-muted">
+        <span>{FACET_LABELS[card.facet]}</span>
+        <span aria-hidden="true">
+          {card.position} / {total}
+        </span>
       </div>
-    </div>
+
+      <h2 className="px-5 pt-1 text-[22px] leading-snug font-semibold text-fg">{card.title}</h2>
+
+      <p className="min-h-0 flex-1 overflow-y-auto px-5 pt-2 text-[16px] leading-[1.55] text-fg/85">
+        {card.summary}
+      </p>
+
+      <div className="grid grid-cols-2 gap-3 px-5 pt-3 pb-4">
+        <button type="button" onClick={onExplore} className={buttonPrimary}>
+          Explore in Depth
+        </button>
+        <button type="button" onClick={onQuickCheck} className={buttonSecondary}>
+          {attempt ? (
+            <>
+              {attempt.is_correct ? (
+                <Check size={18} className="text-success" aria-hidden="true" />
+              ) : (
+                <X size={18} className="text-danger" aria-hidden="true" />
+              )}
+              Answered
+            </>
+          ) : (
+            "Quick Check"
+          )}
+        </button>
+      </div>
+    </article>
   );
 }
-
-export default LearningCard;

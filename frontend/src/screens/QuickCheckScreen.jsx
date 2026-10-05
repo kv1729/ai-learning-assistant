@@ -1,80 +1,119 @@
+import { Check, X } from "lucide-react";
 import { useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import * as api from "../api/client.js";
+import ScreenHeader from "../components/ScreenHeader.jsx";
+import { ErrorState, SkeletonText } from "../components/StatusViews.jsx";
+import { useAsync } from "../hooks/useAsync.js";
+import { feedPath } from "../lib/learning.js";
+import { buttonPrimary, buttonSecondary } from "../lib/ui.js";
+import { useLearner } from "../state/learnerContext.js";
 
-function QuickCheckScreen({ card, setCurrentScreen }) {
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [showResult, setShowResult] = useState(false);
+const LETTERS = ["A", "B", "C", "D"];
 
-  if (!card || !card.quickCheck) return null;
+function optionStyle({ answered, isAnswer, isChosen }) {
+  if (!answered) return "border-line active:bg-surface-2";
+  if (isAnswer) return "border-success bg-success-soft";
+  if (isChosen) return "border-danger bg-danger-soft";
+  return "border-line text-muted";
+}
 
-  const handleAnswerSelect = (option) => {
-    if (showResult) return;
-    setSelectedAnswer(option);
-    setShowResult(true);
+export default function QuickCheckScreen() {
+  const { nodeId, position } = useParams();
+  const navigate = useNavigate();
+  const { learner, recordQuizAttempt } = useLearner();
+  const feed = useAsync(() => api.getFeed(nodeId), nodeId);
+  const [submitting, setSubmitting] = useState(false);
+  const card = feed.data?.cards[Number(position) - 1];
+  const backTo = feedPath(nodeId, position);
+
+  if (feed.status === "error" || (feed.data && !card)) {
+    return (
+      <div className="flex h-full flex-col">
+        <ScreenHeader title="Quick Check" fallbackTo={backTo} />
+        <ErrorState title="Question not found" message={feed.error?.message ?? "This card is not available yet."} />
+      </div>
+    );
+  }
+
+  const qc = card?.quick_check;
+  const attempt = card ? learner?.attempts[card.id] : null;
+  const answered = Boolean(attempt);
+
+  const choose = async (index) => {
+    if (answered || submitting) return;
+    setSubmitting(true);
+    try {
+      await recordQuizAttempt(card.id, index);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  const isCorrect = selectedAnswer === card.quickCheck.answer;
-
   return (
-    <div className="flex h-full flex-col bg-[#050816] text-white">
-      <div className="border-b border-white/10 px-4 py-4">
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => setCurrentScreen("home")}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-3xl border border-white/10 bg-slate-900 text-lg text-white transition hover:bg-slate-800"
-          >
-            ←
-          </button>
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.35em] text-cyan-300">Quick Check</p>
-            <h2 className="text-sm font-semibold text-slate-200">Answer and learn</h2>
-          </div>
-        </div>
-      </div>
+    <div className="flex h-full flex-col">
+      <ScreenHeader title="Quick Check" subtitle={card?.title} fallbackTo={backTo} />
+      <main className="min-h-0 flex-1 overflow-y-auto px-5 pt-6 pb-8">
+        {!qc ? (
+          <SkeletonText lines={6} />
+        ) : (
+          <>
+            <h2 className="text-[20px] leading-snug font-semibold">{qc.question}</h2>
 
-      <div className="flex-1 overflow-y-auto px-4 py-5">
-        <div className="rounded-[28px] border border-white/10 bg-slate-900/80 p-5 shadow-inner">
-          <p className="text-[10px] uppercase tracking-[0.3em] text-cyan-300">Question</p>
-          <p className="mt-3 text-xl font-semibold leading-7 text-white">{card.quickCheck.question}</p>
-        </div>
+            <ul className="mt-6 flex flex-col gap-3">
+              {qc.options.map((option, index) => {
+                const isAnswer = index === qc.answer_index;
+                const isChosen = index === attempt?.selected_index;
+                return (
+                  <li key={option}>
+                    <button
+                      type="button"
+                      onClick={() => choose(index)}
+                      disabled={answered || submitting}
+                      aria-pressed={isChosen}
+                      className={`flex min-h-14 w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-[16px] leading-snug disabled:cursor-default ${optionStyle({ answered, isAnswer, isChosen })}`}
+                    >
+                      <span className="inline-flex size-7 shrink-0 items-center justify-center rounded-full border border-current text-[13px] font-semibold">
+                        {LETTERS[index]}
+                      </span>
+                      <span className="flex-1">{option}</span>
+                      {answered && isAnswer ? <Check size={20} className="text-success" aria-label="Correct answer" /> : null}
+                      {answered && isChosen && !isAnswer ? <X size={20} className="text-danger" aria-label="Your answer" /> : null}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
 
-        <div className="mt-5 space-y-3">
-          {card.quickCheck.options.map((option, index) => {
-            let classes = "w-full rounded-3xl border border-white/10 bg-slate-900 px-4 py-4 text-left text-slate-200 transition-all duration-200 hover:border-cyan-400 hover:text-white";
-
-            if (showResult && option === card.quickCheck.answer) {
-              classes = "w-full rounded-3xl border border-emerald-500 bg-emerald-500/10 px-4 py-4 text-left text-emerald-100";
-            } else if (showResult && option === selectedAnswer) {
-              classes = "w-full rounded-3xl border border-red-500 bg-red-500/10 px-4 py-4 text-left text-red-100";
-            }
-
-            return (
-              <button key={index} type="button" onClick={() => handleAnswerSelect(option)} className={classes}>
-                {option}
-              </button>
-            );
-          })}
-        </div>
-
-        {showResult ? (
-          <div className="mt-6 space-y-4">
-            <div className="rounded-[28px] border border-white/10 bg-slate-900/80 p-5 text-[15px] leading-7 text-slate-300">
-              <p className="font-semibold text-white">{isCorrect ? "Correct!" : "Not quite."}</p>
-              <p className="mt-3">{card.quickCheck.explanation}</p>
+            <div aria-live="polite">
+              {answered ? (
+                <section className="mt-6">
+                  <p className={`text-[17px] font-semibold ${attempt.is_correct ? "text-success" : "text-danger"}`}>
+                    {attempt.is_correct ? "Correct" : "Not quite"}
+                  </p>
+                  <p className="mt-2 text-[16px] leading-relaxed">{qc.explanation}</p>
+                  <div className="mt-6 flex flex-col gap-3">
+                    <button
+                      type="button"
+                      className={buttonPrimary}
+                      onClick={() => navigate(feedPath(nodeId, Number(position) + 1), { replace: true })}
+                    >
+                      Continue to next card
+                    </button>
+                    <button
+                      type="button"
+                      className={buttonSecondary}
+                      onClick={() => navigate(`${backTo}/detail`, { replace: true })}
+                    >
+                      Explore in Depth
+                    </button>
+                  </div>
+                </section>
+              ) : null}
             </div>
-
-            <button
-              type="button"
-              onClick={() => setCurrentScreen("home")}
-              className="w-full rounded-3xl bg-gradient-to-r from-cyan-500 to-blue-500 py-3 text-sm font-semibold text-slate-950 transition hover:opacity-90"
-            >
-              Continue
-            </button>
-          </div>
-        ) : null}
-      </div>
+          </>
+        )}
+      </main>
     </div>
   );
 }
-
-export default QuickCheckScreen;

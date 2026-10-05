@@ -1,0 +1,175 @@
+{
+  "key": "machine-learning",
+  "title": "Machine Learning",
+  "requested_topic": "Machine Learning",
+  "nodes": [
+    {
+      "key": "node-ml",
+      "parent_key": null,
+      "name": "Machine Learning",
+      "description": "Teaching computers to learn patterns from data.",
+      "position": 0,
+      "concept_key": null
+    },
+    {
+      "key": "node-foundations",
+      "parent_key": "node-ml",
+      "name": "Foundations",
+      "description": "Ideas every model relies on.",
+      "position": 0,
+      "concept_key": null
+    },
+    {
+      "key": "node-bias-variance",
+      "parent_key": "node-foundations",
+      "name": "Bias–Variance Trade-off",
+      "description": "Why models underfit or overfit.",
+      "position": 0,
+      "concept_key": "bias-variance"
+    },
+    {
+      "key": "node-gradient-descent",
+      "parent_key": "node-foundations",
+      "name": "Gradient Descent",
+      "description": "How most models are trained.",
+      "position": 1,
+      "concept_key": "gradient-descent"
+    },
+    {
+      "key": "node-supervised",
+      "parent_key": "node-ml",
+      "name": "Supervised Learning",
+      "description": "Learning from labelled examples.",
+      "position": 1,
+      "concept_key": null
+    },
+    {
+      "key": "node-regression",
+      "parent_key": "node-supervised",
+      "name": "Regression",
+      "description": "Predicting continuous values.",
+      "position": 0,
+      "concept_key": null
+    },
+    {
+      "key": "node-linear-regression",
+      "parent_key": "node-regression",
+      "name": "Linear Regression",
+      "description": "Fitting a line through data.",
+      "position": 0,
+      "concept_key": "linear-regression"
+    },
+    {
+      "key": "node-regularization",
+      "parent_key": "node-regression",
+      "name": "Ridge & Lasso",
+      "description": "Penalizing large weights to generalize better.",
+      "position": 1,
+      "concept_key": "regularization"
+    },
+    {
+      "key": "node-classification",
+      "parent_key": "node-supervised",
+      "name": "Classification",
+      "description": "Predicting categories.",
+      "position": 1,
+      "concept_key": null
+    },
+    {
+      "key": "node-logreg",
+      "parent_key": "node-classification",
+      "name": "Logistic Regression",
+      "description": "Linear model that outputs probabilities.",
+      "position": 0,
+      "concept_key": "logistic-regression"
+    },
+    {
+      "key": "node-svm",
+      "parent_key": "node-classification",
+      "name": "SVM",
+      "description": "Maximum-margin classifiers.",
+      "position": 1,
+      "concept_key": "support-vector-machines"
+    },
+    {
+      "key": "node-trees",
+      "parent_key": "node-classification",
+      "name": "Decision Trees",
+      "description": "Learning a flowchart of questions.",
+      "position": 2,
+      "concept_key": "decision-trees"
+    },
+    {
+      "key": "node-knn",
+      "parent_key": "node-classification",
+      "name": "KNN",
+      "description": "Classify by the nearest labelled examples.",
+      "position": 3,
+      "concept_key": "k-nearest-neighbors"
+    },
+    {
+      "key": "node-naive-bayes",
+      "parent_key": "node-classification",
+      "name": "Naive Bayes",
+      "description": "Probabilistic classifier built on Bayes' rule.",
+      "position": 4,
+      "concept_key": "naive-bayes"
+    },
+    {
+      "key": "node-unsupervised",
+      "parent_key": "node-ml",
+      "name": "Unsupervised Learning",
+      "description": "Finding structure without labels.",
+      "position": 2,
+      "concept_key": null
+    },
+    {
+      "key": "node-kmeans",
+      "parent_key": "node-unsupervised",
+      "name": "K-Means Clustering",
+      "description": "Grouping points around centroids.",
+      "position": 0,
+      "concept_key": "kmeans"
+    },
+    {
+      "key": "node-pca",
+      "parent_key": "node-unsupervised",
+      "name": "PCA",
+      "description": "Compressing data along directions of variance.",
+      "position": 1,
+      "concept_key": "pca"
+    },
+    {
+      "key": "node-evaluation",
+      "parent_key": "node-ml",
+      "name": "Model Evaluation",
+      "description": "Knowing whether a model is any good.",
+      "position": 3,
+      "concept_key": null
+    },
+    {
+      "key": "node-cross-validation",
+      "parent_key": "node-evaluation",
+      "name": "Cross-Validation",
+      "description": "Estimating performance on unseen data.",
+      "position": 0,
+      "concept_key": "cross-validation"
+    },
+    {
+      "key": "node-precision-recall",
+      "parent_key": "node-evaluation",
+      "name": "Precision & Recall",
+      "description": "Measuring errors that matter.",
+      "position": 1,
+      "concept_key": "precision-recall"
+    },
+    {
+      "key": "node-roc-auc",
+      "parent_key": "node-evaluation",
+      "name": "ROC & AUC",
+      "description": "Comparing classifiers across thresholds.",
+      "position": 2,
+      "concept_key": "roc-auc"
+    }
+  ]
+}
