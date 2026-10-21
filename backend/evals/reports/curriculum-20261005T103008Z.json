@@ -1,0 +1,333 @@
+{
+  "created_at": "2026-10-05T10:30:08.772261+00:00",
+  "prompt_version": "v1",
+  "judge_model": null,
+  "judge_prompt_version": null,
+  "requests": 11,
+  "summary": [
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "topics": 5,
+      "valid_rate": 1.0,
+      "first_try_rate": 1.0,
+      "scope_accuracy": 1.0,
+      "mean_coverage": 0.95,
+      "median_latency_ms": 41760,
+      "mean_leaves": 24.2,
+      "errors": [],
+      "judge_pass_rate": null
+    },
+    {
+      "model": "qwen/qwen3.8-27b:free",
+      "topics": 1,
+      "valid_rate": 0.0,
+      "first_try_rate": 0.0,
+      "scope_accuracy": 0.0,
+      "mean_coverage": null,
+      "median_latency_ms": null,
+      "mean_leaves": null,
+      "errors": [
+        "llm_rate_limited"
+      ],
+      "judge_pass_rate": null
+    },
+    {
+      "model": "google/gemma-4-31b-it:free",
+      "topics": 5,
+      "valid_rate": 0.0,
+      "first_try_rate": 0.0,
+      "scope_accuracy": 0.0,
+      "mean_coverage": null,
+      "median_latency_ms": null,
+      "mean_leaves": null,
+      "errors": [
+        "llm_unavailable"
+      ],
+      "judge_pass_rate": null
+    }
+  ],
+  "results": {
+    "nvidia/nemotron-3-super-120b-a12b:free": [
+      {
+        "topic": "Machine Learning",
+        "expect_in_scope": true,
+        "valid": true,
+        "first_try": true,
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3-super-120b-a12b:free",
+            "prompt_ref": "curriculum/v1",
+            "status": "ok",
+            "error_code": null,
+            "error_detail": null,
+            "response_excerpt": null,
+            "input_tokens": 604,
+            "output_tokens": 8183,
+            "latency_ms": 48300
+          }
+        ],
+        "latency_ms": 48300,
+        "output_tokens": 8183,
+        "in_scope": true,
+        "scope_correct": true,
+        "coverage": 1.0,
+        "missing": [],
+        "leaves": 26,
+        "max_depth": 2,
+        "tree": "- Machine Learning — Teaching computers to learn patterns from data.\n  - Foundations — Core mathematical and probabilistic concepts needed for ML.\n    - Vector Dot Product — Computes the sum of element‑wise products of two vectors.\n    - Matrix Multiplication — Produces a matrix by combining rows of the first with columns of the second.\n    - Eigenvalues and Eigenvectors — Values and vectors that reveal a matrix’s intrinsic scaling directions.\n    - Bayes' Theorem — Updates probability of a hypothesis given new evidence using prior knowledge.\n  - Data Preparation — Techniques to clean, transform, and prepare data for modeling.\n    - Handling Missing Values — Strategies to impute or remove absent data points in a dataset.\n    - Feature Scaling — Rescales features to a common range, improving algorithm convergence.\n    - One-Hot Encoding — Converts categorical variables into binary columns for model consumption.\n    - Principal Component Analysis (PCA) — Reduces dimensionality by projecting data onto orthogonal variance‑maximizing axes.\n  - Supervised Learning — Learning a mapping from input features to known output labels.\n    - Linear Regression — Fits a straight line to predict continuous outcomes from features.\n    - Logistic Regression — Models class probabilities using a sigmoid function on linear scores.\n    - Decision Tree — Splits data recursively by feature thresholds to form a predictive tree.\n    - Random Forest — Aggregates many decision trees to reduce variance and improve accuracy.\n    - Support Vector Machine — Finds the optimal hyperplane that maximally separates classes.\n    - Feedforward Neural Network — Layers of neurons process data forward to learn complex patterns.\n  - Unsupervised Learning — Discovering hidden patterns in data without explicit labels.\n    - k-Means Clustering — Partitions data into k clusters by minimizing intra‑cluster variance.\n    - Hierarchical Clustering — Builds a tree of clusters by iteratively merging or splitting groups.\n    - DBSCAN — Groups dense regions and marks outliers as noise based on density.\n    - Gaussian Mixture Model — Models data as a blend of multiple Gaussian distributions.\n  - Model Evaluation — Methods to assess model performance and generalization ability.\n    - k-Fold Cross-Validation — Splits data into k folds, training on k‑1 and validating on the remaining.\n    - Precision and Recall — Precision measures exactness; recall measures completeness of positive predictions.\n    - ROC AUC — Quantifies a classifier’s ability to rank positives higher than negatives.\n    - Bias-Variance Tradeoff — Describes the tension between model simplicity and sensitivity to data.\n  - Advanced Topics — Advanced techniques that extend and deploy machine learning models.\n    - Bagging — Trains models in parallel on bootstrap samples and averages their predictions.\n    - Boosting — Sequentially trains models, each correcting errors of its predecessor.\n    - Stacking — Combines multiple model predictions using a meta‑learner for improved performance.\n    - Model Deployment — Exports a trained model to a serving environment for real‑time inference."
+      },
+      {
+        "topic": "Deep Learning",
+        "expect_in_scope": true,
+        "valid": true,
+        "first_try": true,
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3-super-120b-a12b:free",
+            "prompt_ref": "curriculum/v1",
+            "status": "ok",
+            "error_code": null,
+            "error_detail": null,
+            "response_excerpt": null,
+            "input_tokens": 604,
+            "output_tokens": 6641,
+            "latency_ms": 41760
+          }
+        ],
+        "latency_ms": 41760,
+        "output_tokens": 6641,
+        "in_scope": true,
+        "scope_correct": true,
+        "coverage": 0.8,
+        "missing": [
+          [
+            "backprop"
+          ]
+        ],
+        "leaves": 20,
+        "max_depth": 2,
+        "tree": "- Deep Learning — Deep learning teaches multi-layer neural networks to learn complex patterns.\n  - Foundations of Neural Networks — Covers basic neurons, activations, and loss functions.\n    - Perceptron — A single-layer neural network that makes linear predictions.\n    - Sigmoid Activation — Smooth S-shaped function mapping inputs to values between 0 and 1.\n    - ReLU Activation — Rectified linear unit outputting zero for negative inputs, else input.\n    - Binary Cross-Entropy Loss — Loss measuring performance of classification models with two output classes.\n  - Core Architectures — Introduces key network structures like feedforward, CNN, and RNN blocks.\n    - Feedforward Neural Network — Network where information moves forward from input to output layers.\n    - Convolutional Layer — Applies filters to extract spatial features from input data.\n    - Pooling Layer — Reduces spatial dimensions while retaining important features.\n    - Residual Block — Allows gradients to bypass layers via skip connections to ease training.\n  - Training Techniques — Describes optimization, regularization, and learning rate schedules.\n    - Stochastic Gradient Descent — Updates parameters using gradient computed on a random data subset.\n    - Adam Optimizer — Adaptive learning rate method combining momentum and RMSprop benefits.\n    - Dropout — Randomly disables neurons during training to prevent overfitting.\n    - Step Decay Learning Rate — Reduces learning rate by a factor after fixed epochs.\n  - Advanced Models — Explores modern architectures such as Transformers, GANs, and self‑supervised methods.\n    - Transformer Encoder — Stack of self-attention and feedforward layers processing sequences.\n    - Generative Adversarial Network — Two networks, generator and discriminator, trained adversarially to create data.\n    - Variational Autoencoder — Encodes data to a distribution, then decodes to generate new samples.\n    - Contrastive Learning — Learns representations by pulling similar samples together and pushing dissimilar apart.\n  - Deployment & Practices — Covers model optimization, transfer learning, and deployment best practices.\n    - Model Pruning — Removes unnecessary weights or neurons to shrink model size.\n    - Quantization — Represents weights with lower-bit numbers to accelerate inference.\n    - Transfer Learning — Reuses knowledge from a pre-trained model on a new task.\n    - Fine-tuning Pre-trained Models — Adjusts a pre-trained model's weights for a specific downstream task."
+      },
+      {
+        "topic": "Natural Language Processing",
+        "expect_in_scope": true,
+        "valid": true,
+        "first_try": true,
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3-super-120b-a12b:free",
+            "prompt_ref": "curriculum/v1",
+            "status": "ok",
+            "error_code": null,
+            "error_detail": null,
+            "response_excerpt": null,
+            "input_tokens": 605,
+            "output_tokens": 9419,
+            "latency_ms": 75184
+          }
+        ],
+        "latency_ms": 75184,
+        "output_tokens": 9419,
+        "in_scope": true,
+        "scope_correct": true,
+        "coverage": 1.0,
+        "missing": [],
+        "leaves": 25,
+        "max_depth": 2,
+        "tree": "- Natural Language Processing — Study how computers understand and generate human language.\n  - Text Preprocessing — Clean and split raw text into tokens for further processing.\n    - Tokenization — Splitting text into words, subwords, or characters as discrete units.\n    - Text Normalization — Transforming text to a standard form (lowercase, removing punctuation).\n    - Stop-Word Removal — Eliminating common words that add little meaning to the text.\n  - Feature Extraction — Convert text into numerical features that models can learn from.\n    - Bag-of-Words — Representing text as unordered counts of vocabulary terms.\n    - TF-IDF — Weighting term frequency by inverse document frequency to highlight important words.\n    - N‑gram Language Model — Predicting the next word based on the previous n‑1 word sequence.\n    - Word2Vec — Learning dense vector representations of words from their contextual usage.\n    - BERT Embeddings — Contextual word embeddings generated by bidirectional transformer encoders.\n  - Core NLP Tasks — Fundamental linguistic tasks that extract structure and meaning from text.\n    - Part-of-Speech Tagging — Assigning grammatical categories (noun, verb, etc.) to each token.\n    - Named Entity Recognition — Identifying and classifying proper nouns like persons, organizations, locations.\n    - Dependency Parsing — Determining grammatical relationships between words in a sentence.\n    - Semantic Role Labeling — Labeling the predicate‑argument structure of a sentence.\n    - Sentiment Analysis — Determining whether text expresses positive, negative, or neutral emotion.\n  - Sequence Modelling — Models that capture sequential dependencies in text data.\n    - Recurrent Neural Network (RNN) — Neural networks that process sequences by maintaining a hidden state over time.\n    - Long Short-Term Memory (LSTM) — A gated RNN variant that mitigates vanishing gradients with memory cells.\n    - Gated Recurrent Unit (GRU) — A simpler gated RNN that uses update and reset gates for sequence modeling.\n    - Attention Mechanism — Weighting input elements dynamically to focus on relevant parts for prediction.\n    - Transformer Architecture — Stacked self‑attention layers enabling parallel processing of sequences.\n  - Applications and Evaluation — Real‑world NLP applications and how their performance is measured.\n    - Machine Translation — Automatically converting text from one language to another.\n    - Question Answering — Producing concise answers to natural language questions from a context.\n    - Text Summarization — Creating a short summary that preserves the key information of a document.\n    - Dialogue Systems — Building agents that can engage in coherent multi‑turn conversations.\n    - BLEU Score — Metric measuring n‑gram overlap between machine and reference translations.\n    - ROUGE Score — Metric evaluating summary quality by overlapping n‑grams and sequences.\n    - Perplexity — Measure of how well a probability model predicts a sample; lower is better."
+      },
+      {
+        "topic": "Reinforcement Learning",
+        "expect_in_scope": true,
+        "valid": true,
+        "first_try": true,
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3-super-120b-a12b:free",
+            "prompt_ref": "curriculum/v1",
+            "status": "ok",
+            "error_code": null,
+            "error_detail": null,
+            "response_excerpt": null,
+            "input_tokens": 606,
+            "output_tokens": 4603,
+            "latency_ms": 24619
+          }
+        ],
+        "latency_ms": 24619,
+        "output_tokens": 4603,
+        "in_scope": true,
+        "scope_correct": true,
+        "coverage": 1.0,
+        "missing": [],
+        "leaves": 26,
+        "max_depth": 2,
+        "tree": "- Reinforcement Learning — Study of agents learning optimal behavior through interaction with an environment.\n  - Foundations — Core concepts underlying sequential decision making in RL.\n    - Markov Decision Process — Mathematical framework for modeling decision making where outcomes are partly random.\n    - Bellman Equation — Recursive relation linking value of a state to values of successor states.\n    - Value Iteration — Iterative algorithm that computes optimal value function by Bellman backups.\n    - Policy Iteration — Alternates between policy evaluation and improvement to find optimal policy.\n  - Value-Based Methods — Methods that learn value functions to derive optimal policies.\n    - Q-Learning — Off‑policy TD learning that updates Q‑values using the max next‑state value.\n    - SARSA — On‑policy TD learning that updates Q‑values using the actual next action.\n    - Deep Q-Network — Uses deep neural networks to approximate Q‑values for high‑dimensional states.\n    - Double Q-Learning — Reduces overestimation bias by decoupling action selection from value evaluation.\n    - Dueling Network Architecture — Splits network into value and advantage streams for better Q‑value estimation.\n  - Policy Gradient Methods — Directly optimize policies using gradient ascent on expected returns.\n    - REINFORCE — Monte‑ Carlo policy gradient method that updates policies using episode returns.\n    - Actor-Critic — Combines value‑function critic with policy‑gradient actor to reduce variance.\n    - Advantage Actor-Critic (A2C) — Uses advantage function to stabilize and improve policy gradient updates.\n    - Trust Region Policy Optimization — Constrains policy updates to a trust region for stable monotonic improvement.\n    - Proximal Policy Optimization — Clips objective to limit policy changes, enabling robust and scalable training.\n  - Model-Based & Planning — Learn environment models to plan and improve sample efficiency.\n    - Dyna-Q — Combines Q‑learning with planning using a learned model of the environment.\n    - Monte Carlo Tree Search — Builds a search tree using random simulations to estimate action values.\n    - Probabilistic Dynamics Models — Learns distributions over next states to capture uncertainty in predictions.\n    - Model-Based Policy Optimization — Iteratively learns a model and optimizes policy via back‑propagation through planning.\n  - Exploration & Advanced Topics — Strategies and extensions for effective exploration and complex RL scenarios.\n    - Epsilon-Greedy — Chooses random actions with probability ε, otherwise the greedy action.\n    - Upper Confidence Bound — Selects actions balancing estimated value and uncertainty via confidence intervals.\n    - Thompson Sampling — Samples action values from posterior distributions to balance exploration and exploitation.\n    - Curiosity-Driven Exploration — Uses intrinsic motivation based on prediction error to encourage novel state visits.\n    - Multi-Agent Reinforcement Learning — Studies learning dynamics when multiple agents interact in shared environments.\n    - Hierarchical Reinforcement Learning — Decomposes tasks into higher‑level goals and lower‑level policies for efficiency.\n    - Safe Reinforcement Learning — Ensures agents satisfy constraints while learning optimal policies in uncertain environments.\n    - Offline Reinforcement Learning — Learns policies from fixed datasets without further environment interaction."
+      },
+      {
+        "topic": "French Cooking",
+        "expect_in_scope": false,
+        "valid": true,
+        "first_try": true,
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3-super-120b-a12b:free",
+            "prompt_ref": "curriculum/v1",
+            "status": "ok",
+            "error_code": null,
+            "error_detail": null,
+            "response_excerpt": null,
+            "input_tokens": 605,
+            "output_tokens": 181,
+            "latency_ms": 1325
+          }
+        ],
+        "latency_ms": 1325,
+        "output_tokens": 181,
+        "in_scope": false,
+        "scope_correct": true,
+        "reason": "French Cooking is not related to machine learning, AI, data science, or their mathematical foundations."
+      }
+    ],
+    "qwen/qwen3.8-27b:free": [
+      {
+        "topic": "Machine Learning",
+        "expect_in_scope": true,
+        "valid": false,
+        "error": "llm_rate_limited",
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "qwen/qwen3.8-27b:free",
+            "prompt_ref": "curriculum/v1",
+            "status": "provider_error",
+            "error_code": "llm_rate_limited",
+            "error_detail": "Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'qwen/qwen3.8-27b:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'ModelRun', 'is_byok': False, 'limit_source': 'upstream_provider_shared_pool', 'remedy_hint': 'Retry shortly, add your own provider key (https://openrouter.ai/settings/integrations), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing'}}, 'user_id': 'user_3FGnafcjn94slTfPxHW7DzqVP2h'}",
+            "response_excerpt": null,
+            "input_tokens": null,
+            "output_tokens": null,
+            "latency_ms": null
+          }
+        ]
+      }
+    ],
+    "google/gemma-4-31b-it:free": [
+      {
+        "topic": "Machine Learning",
+        "expect_in_scope": true,
+        "valid": false,
+        "error": "llm_unavailable",
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "google/gemma-4-31b-it:free",
+            "prompt_ref": "curriculum/v1",
+            "status": "provider_error",
+            "error_code": "llm_unavailable",
+            "error_detail": "Error code: 404 - {'error': {'message': 'No endpoints found that can handle the requested parameters. To learn more about provider routing, visit: https://openrouter.ai/docs/guides/routing/provider-selection', 'code': 404, 'metadata': {'routing_funnel': [{'step': 'Initial Endpoints', 'endpoint_count': 1}], 'failed_routing_step': 'Filter by Parameters'}}}",
+            "response_excerpt": null,
+            "input_tokens": null,
+            "output_tokens": null,
+            "latency_ms": null
+          }
+        ]
+      },
+      {
+        "topic": "Deep Learning",
+        "expect_in_scope": true,
+        "valid": false,
+        "error": "llm_unavailable",
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "google/gemma-4-31b-it:free",
+            "prompt_ref": "curriculum/v1",
+            "status": "provider_error",
+            "error_code": "llm_unavailable",
+            "error_detail": "Error code: 404 - {'error': {'message': 'No endpoints found that can handle the requested parameters. To learn more about provider routing, visit: https://openrouter.ai/docs/guides/routing/provider-selection', 'code': 404, 'metadata': {'routing_funnel': [{'step': 'Initial Endpoints', 'endpoint_count': 1}], 'failed_routing_step': 'Filter by Parameters'}}}",
+            "response_excerpt": null,
+            "input_tokens": null,
+            "output_tokens": null,
+            "latency_ms": null
+          }
+        ]
+      },
+      {
+        "topic": "Natural Language Processing",
+        "expect_in_scope": true,
+        "valid": false,
+        "error": "llm_unavailable",
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "google/gemma-4-31b-it:free",
+            "prompt_ref": "curriculum/v1",
+            "status": "provider_error",
+            "error_code": "llm_unavailable",
+            "error_detail": "Error code: 404 - {'error': {'message': 'No endpoints found that can handle the requested parameters. To learn more about provider routing, visit: https://openrouter.ai/docs/guides/routing/provider-selection', 'code': 404, 'metadata': {'routing_funnel': [{'step': 'Initial Endpoints', 'endpoint_count': 1}], 'failed_routing_step': 'Filter by Parameters'}}}",
+            "response_excerpt": null,
+            "input_tokens": null,
+            "output_tokens": null,
+            "latency_ms": null
+          }
+        ]
+      },
+      {
+        "topic": "Reinforcement Learning",
+        "expect_in_scope": true,
+        "valid": false,
+        "error": "llm_unavailable",
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "google/gemma-4-31b-it:free",
+            "prompt_ref": "curriculum/v1",
+            "status": "provider_error",
+            "error_code": "llm_unavailable",
+            "error_detail": "Error code: 404 - {'error': {'message': 'No endpoints found that can handle the requested parameters. To learn more about provider routing, visit: https://openrouter.ai/docs/guides/routing/provider-selection', 'code': 404, 'metadata': {'routing_funnel': [{'step': 'Initial Endpoints', 'endpoint_count': 1}], 'failed_routing_step': 'Filter by Parameters'}}}",
+            "response_excerpt": null,
+            "input_tokens": null,
+            "output_tokens": null,
+            "latency_ms": null
+          }
+        ]
+      },
+      {
+        "topic": "French Cooking",
+        "expect_in_scope": false,
+        "valid": false,
+        "error": "llm_unavailable",
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "google/gemma-4-31b-it:free",
+            "prompt_ref": "curriculum/v1",
+            "status": "provider_error",
+            "error_code": "llm_unavailable",
+            "error_detail": "Error code: 404 - {'error': {'message': 'No endpoints found that can handle the requested parameters. To learn more about provider routing, visit: https://openrouter.ai/docs/guides/routing/provider-selection', 'code': 404, 'metadata': {'routing_funnel': [{'step': 'Initial Endpoints', 'endpoint_count': 1}], 'failed_routing_step': 'Filter by Parameters'}}}",
+            "response_excerpt": null,
+            "input_tokens": null,
+            "output_tokens": null,
+            "latency_ms": null
+          }
+        ]
+      }
+    ]
+  }
+}

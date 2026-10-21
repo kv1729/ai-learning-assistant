@@ -93,3 +93,30 @@ class Card(Base):
     sources: Mapped[list[dict[str, Any]]] = mapped_column(JSONB, default=list)
 
     concept: Mapped[Concept] = relationship(back_populates="cards")
+
+
+class LlmCall(Base):
+    """One attempt to get output from an LLM: the basis for debugging, cost and quality tracking.
+
+    Never stores credentials. `response_excerpt` is kept only for invalid outputs.
+    """
+
+    __tablename__ = "llm_calls"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), index=True
+    )
+    purpose: Mapped[str] = mapped_column(String(40))  # e.g. "curriculum"
+    subject: Mapped[str] = mapped_column(String(200))  # e.g. the requested topic
+    attempt: Mapped[int]
+    provider: Mapped[str] = mapped_column(String(40))
+    model: Mapped[str] = mapped_column(String(200))
+    prompt_version: Mapped[str] = mapped_column(String(80))
+    status: Mapped[str] = mapped_column(String(20))  # ok | invalid_output | provider_error
+    error_code: Mapped[str | None] = mapped_column(String(40))
+    error_detail: Mapped[str | None] = mapped_column(Text)
+    response_excerpt: Mapped[str | None] = mapped_column(Text)
+    input_tokens: Mapped[int | None]
+    output_tokens: Mapped[int | None]
+    latency_ms: Mapped[int | None]

@@ -116,8 +116,3 @@ def test_generate_for_ready_concept_reports_ready(client):
 def test_generate_is_not_available_before_stage_4(client):
     node = find_node(client, "PCA")
     assert_error(client.post(f"/api/concepts/{node['concept_id']}/generate"), 501, "generation_unavailable")
-
-
-def test_create_curriculum_is_not_available_before_stage_3(client):
-    assert_error(client.post("/api/curricula", json={"topic": "Deep Learning"}), 501, "not_available")
-    assert_error(client.post("/api/curricula", json={"topic": ""}), 422, "validation_error")

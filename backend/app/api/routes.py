@@ -1,6 +1,7 @@
 """HTTP routes. Each one validates input, calls a service and returns a schema."""
 
 import uuid
+from collections.abc import Callable
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Query
@@ -8,7 +9,7 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from app.db import get_db
-from app.errors import ApiError
+from app.llm.provider import LLMProvider, get_llm_provider
 from app.schemas import (
     CardOut,
     CardSummary,
@@ -19,10 +20,18 @@ from app.schemas import (
     FeedOut,
     GenerationStatus,
 )
-from app.services import content
+from app.services import content, curricula
 
 router = APIRouter(prefix="/api")
 Db = Annotated[Session, Depends(get_db)]
+
+
+def provider_factory() -> Callable[[], LLMProvider]:
+    """The provider is created lazily, so cached answers work even without an API key."""
+    return get_llm_provider
+
+
+ProviderFactory = Annotated[Callable[[], LLMProvider], Depends(provider_factory)]
 
 
 @router.get("/health")
@@ -37,14 +46,9 @@ def list_curricula(db: Db) -> list[CurriculumSummary]:
 
 
 @router.post("/curricula", tags=["curricula"])
-def create_curriculum(request: CurriculumRequest) -> CurriculumOut:
-    # Stage 3 implements LLM curriculum generation here.
-    raise ApiError(
-        501,
-        "not_available",
-        f'Building a curriculum for "{request.topic}" with AI arrives in a later stage. '
-        "For now, explore the Machine Learning curriculum.",
-    )
+def create_curriculum(request: CurriculumRequest, db: Db, providers: ProviderFactory) -> CurriculumOut:
+    """Generate a curriculum with the LLM (or return the stored one for the same topic)."""
+    return curricula.create_curriculum(db, providers, request.topic)
 
 
 @router.get("/curricula/{curriculum_id}", tags=["curricula"])

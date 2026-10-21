@@ -94,3 +94,26 @@ Details in `docs/stage-0/`.
 | `httpx2` instead of `httpx` for the test client | Starlette deprecates `httpx` for `TestClient` |
 | Prototype backend moved to `legacy/backend`; its ignored virtualenv `.ai_learning_env` left in `backend/`, unused | Nothing deleted without approval |
 | Backend is an installable package (hatchling, editable install via `uv sync`); `.env` located relative to `app/config.py` | `uvicorn app.main:app` failed with `No module named 'app'` when started outside `backend/` |
+
+## 2026-10-05 — Stage 3 — LLM curriculum generation
+
+| Decision | Reason |
+|---|---|
+| `LLMProvider` protocol + `OpenAICompatibleProvider` (openai SDK, `max_retries=0`); provider, base URL, model, structured-output mode, timeout from env | Swap model/provider by configuration; retries are explicit in our code |
+| Free-model shortlist from OpenRouter's model list (structured-output support): `nvidia/nemotron-3-super-120b-a12b:free` (default), `qwen/qwen3.8-27b:free`, `google/gemma-4-31b-it:free` (JSON mode only) | Final choice made from eval results, not reputation |
+| Strict `json_schema` response format, plus OpenRouter `require_parameters` so requests only route to upstreams that honour it; LLM-facing models have no length/pattern keywords | Few schema keywords are supported in strict mode; limits are enforced by our validator instead |
+| Pipeline: prompt → JSON → Pydantic schema → business rules (`draft_to_spec` + shared tree rules) → one repair attempt with the validator's messages | Never trust LLM text; repairs are cheaper than failing |
+| Provider errors (rate limit, timeout, outage, auth) are not retried; mapped to 429/504/503/500 codes with `retryable` | The user decides when to retry; protects the 50/day free quota |
+| Prompts are versioned files (`prompts/<name>/<version>.md`, `$placeholders`); the version is stored on every curriculum and LLM call | Changes to prompts are traceable and comparable in evals |
+| Every attempt logged to `llm_calls` (model, prompt version, status, tokens, latency; response excerpt only for invalid output; never keys) | Debugging, cost and quality tracking |
+| Same topic (case/space-insensitive) returns the stored curriculum without an LLM call | Saves quota and latency; regeneration can be added later |
+| Leaves map to concepts by `concept_key = slugify(name)`; existing concepts are reused | Generated curricula share already-written cards (e.g. Logistic Regression) |
+| Out-of-scope topics: the model returns `in_scope: false`; API answers `422 topic_out_of_scope` | ML/AI-only scope decided in Stage 0 |
+| Generation rules: 6–40 leaves, ≤ 80 nodes, names ≤ 60 chars, no generic placeholders, no duplicate concepts | Leaves must be six-card-sized concepts |
+| Evals: 12 golden topics (10 in scope, 2 out-of-scope probes), keyword-group coverage, validity, first-try rate, scope accuracy, latency; optional LLM-judge rubric (5 pass/fail criteria); throttled to 20/min with a request budget guard | Measurable baseline within the free tier |
+| Tests run each test in a rolled-back transaction (`join_transaction_mode="create_savepoint"`) and use a scripted `FakeProvider` | Tests that write don't leak; no network or quota in CI |
+| Default model stays `nvidia/nemotron-3-super-120b-a12b:free` after evals: 100 % valid/first-try/scope; Qwen and Gemma were rate-limited upstream and Gemma lacks strict schema support | Only available free model, met all structural targets (see `docs/evals/stage-3-curriculum-baseline.md`) |
+| Node names must be unique within a generated curriculum | Eval found branches repeating their child's name |
+| LLM timeout 120 s; UI wait message "up to two minutes" | Reasoning model took up to 84 s |
+| Eval runner: per-model structured mode (`model@json_object`); stops a model after repeated identical provider errors | Fair comparison; protects the free quota |
+
