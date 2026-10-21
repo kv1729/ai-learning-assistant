@@ -117,3 +117,18 @@ Details in `docs/stage-0/`.
 | LLM timeout 120 s; UI wait message "up to two minutes" | Reasoning model took up to 84 s |
 | Eval runner: per-model structured mode (`model@json_object`); stops a model after repeated identical provider errors | Fair comparison; protects the free quota |
 
+## 2026-10-21 — Stage 4 — Lazy card generation
+
+| Decision | Reason |
+|---|---|
+| Context builder = SQL lookups (curriculum path, parent description, sibling concepts; for details also the concept's other cards and curriculum concept names) | Structured retrieval is enough here; first of the three retrieval kinds |
+| Concept cards generate asynchronously: one atomic `UPDATE … WHERE status IN (not_generated, failed) OR stale generating` claims the concept, a FastAPI background task runs the LLM, the feed polls every 2 s | Only one worker per concept even across processes; requests return immediately |
+| Failures stored on the concept (`generation_error` with `retryable`); claims older than 300 s are reclaimable (`generation_started_at`) | Retry is user-initiated; crashed workers don't block a concept forever |
+| Card detail generates synchronously on first open, guarded by an in-process single-flight per card | Short wait on one screen; double requests (StrictMode, double taps) cost one LLM call |
+| Card output validated by the shared content rules plus visual checks (icon whitelist, Mermaid `graph`/`flowchart` and size, LaTeX without `$`, balanced braces) | Catch visuals the UI would have to replace with a fallback; feed errors back in the repair attempt |
+| Default model `nvidia/nemotron-3.5-super-vl:free` (user-approved) | Previous free endpoint returns 404 upstream; successor probed working |
+| `LLM_REASONING_EFFORT=low` by default (OpenRouter `reasoning.effort`) | Card eval: 2x faster, judge accuracy 100 % vs 33 % at default (n = 4) |
+| `LLM_TIMEOUT_SECONDS=180` | Reasoning models; note keep-alives can extend total time |
+| Prefetch of the next concept stays on, switchable with `VITE_PREFETCH_NEXT=false` | Hides multi-minute generation; costs free quota |
+| Shared LLM call logging moved to `app/llm/calls.py`; eval helpers to `evals/common.py` | Reused by curricula, cards, details and both eval runners |
+

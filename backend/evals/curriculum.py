@@ -23,7 +23,6 @@ import argparse
 import json
 import statistics
 import sys
-import time
 from dataclasses import asdict
 from datetime import UTC, datetime
 from pathlib import Path
@@ -36,11 +35,11 @@ from app.llm.prompts import render_prompt
 from app.llm.provider import LLMError, LLMProvider, build_provider
 from app.llm.structured import GenerationFailed, generate_structured
 from app.services.curricula import CURRICULUM_PROMPT_VERSION, generate_curriculum_draft
+from evals.common import Throttle, ThrottledProvider
 
 EVALS_DIR = Path(__file__).resolve().parent
 REPORTS_DIR = EVALS_DIR / "reports"
 JUDGE_PROMPT_VERSION = "v1"
-SECONDS_BETWEEN_REQUESTS = 3.2  # stays under 20 requests/minute
 
 
 class Criterion(BaseModel):
@@ -80,31 +79,6 @@ def coverage(spec: CurriculumSpec, groups: list[list[str]]) -> tuple[float, list
     text = " ".join(f"{n.name} {n.description}" for n in spec.nodes).lower()
     missing = [group for group in groups if not any(keyword in text for keyword in group)]
     return (1 - len(missing) / len(groups)) if groups else 1.0, missing
-
-
-class Throttle:
-    def __init__(self) -> None:
-        self.last = 0.0
-        self.requests = 0
-
-    def wait(self) -> None:
-        delay = SECONDS_BETWEEN_REQUESTS - (time.monotonic() - self.last)
-        if delay > 0 and self.requests:
-            time.sleep(delay)
-        self.last = time.monotonic()
-
-
-class ThrottledProvider:
-    """Wraps a provider to pace and count requests."""
-
-    def __init__(self, inner: LLMProvider, throttle: Throttle):
-        self.inner, self.throttle = inner, throttle
-        self.provider, self.model = inner.provider, inner.model
-
-    def complete(self, messages, *, json_schema, schema_name):
-        self.throttle.wait()
-        self.throttle.requests += 1
-        return self.inner.complete(messages, json_schema=json_schema, schema_name=schema_name)
 
 
 def judge(provider: LLMProvider, topic: str, spec: CurriculumSpec) -> dict:

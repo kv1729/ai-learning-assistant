@@ -1,0 +1,125 @@
+{
+  "created_at": "2026-10-21T10:28:10.310111+00:00",
+  "prompt_version": "v1",
+  "judge_model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "judge_prompt_version": "v1",
+  "requests": 4,
+  "summary": [
+    {
+      "label": "nvidia/nemotron-3-super-120b-a12b:free",
+      "concepts": 2,
+      "valid_rate": 0.0,
+      "first_try_rate": 0.0,
+      "mean_coverage": null,
+      "median_latency_ms": null,
+      "median_output_tokens": null,
+      "visuals": {},
+      "answer_index_spread": {},
+      "errors": [
+        "llm_unavailable"
+      ],
+      "judge_pass_rate": null
+    },
+    {
+      "label": "nvidia/nemotron-3-super-120b-a12b:free reasoning=low",
+      "concepts": 2,
+      "valid_rate": 0.0,
+      "first_try_rate": 0.0,
+      "mean_coverage": null,
+      "median_latency_ms": null,
+      "median_output_tokens": null,
+      "visuals": {},
+      "answer_index_spread": {},
+      "errors": [
+        "llm_unavailable"
+      ],
+      "judge_pass_rate": null
+    }
+  ],
+  "results": {
+    "nvidia/nemotron-3-super-120b-a12b:free": [
+      {
+        "concept": "Gradient Descent",
+        "valid": false,
+        "error": "llm_unavailable",
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3-super-120b-a12b:free",
+            "prompt_ref": "concept_cards/v1",
+            "status": "provider_error",
+            "error_code": "llm_unavailable",
+            "error_detail": "Error code: 404 - {'error': {'message': 'Provider returned error', 'code': 404, 'metadata': {'raw': '{\"status\":404,\"title\":\"Not Found\",\"detail\":\"Function \\'ac74040f-9fc9-4c5e-ac74-279ba5161d69\\': Not found for account \\'sxpm0VR-knE2_K2__i14ZbzmXEludXpJbFGRvrvc08w\\'\"}', 'provider_name': 'Nvidia', 'is_byok': False}}, 'user_id': 'user_3FGnafcjn94slTfPxHW7DzqVP2h'}",
+            "response_excerpt": null,
+            "input_tokens": null,
+            "output_tokens": null,
+            "latency_ms": null
+          }
+        ]
+      },
+      {
+        "concept": "K-Means Clustering",
+        "valid": false,
+        "error": "llm_unavailable",
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3-super-120b-a12b:free",
+            "prompt_ref": "concept_cards/v1",
+            "status": "provider_error",
+            "error_code": "llm_unavailable",
+            "error_detail": "Error code: 404 - {'error': {'message': 'Provider returned error', 'code': 404, 'metadata': {'raw': '{\"status\":404,\"title\":\"Not Found\",\"detail\":\"Function \\'ac74040f-9fc9-4c5e-ac74-279ba5161d69\\': Not found for account \\'sxpm0VR-knE2_K2__i14ZbzmXEludXpJbFGRvrvc08w\\'\"}', 'provider_name': 'Nvidia', 'is_byok': False}}, 'user_id': 'user_3FGnafcjn94slTfPxHW7DzqVP2h'}",
+            "response_excerpt": null,
+            "input_tokens": null,
+            "output_tokens": null,
+            "latency_ms": null
+          }
+        ]
+      }
+    ],
+    "nvidia/nemotron-3-super-120b-a12b:free reasoning=low": [
+      {
+        "concept": "Gradient Descent",
+        "valid": false,
+        "error": "llm_unavailable",
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3-super-120b-a12b:free",
+            "prompt_ref": "concept_cards/v1",
+            "status": "provider_error",
+            "error_code": "llm_unavailable",
+            "error_detail": "Error code: 404 - {'error': {'message': 'Provider returned error', 'code': 404, 'metadata': {'raw': '{\"status\":404,\"title\":\"Not Found\",\"detail\":\"Function \\'ac74040f-9fc9-4c5e-ac74-279ba5161d69\\': Not found for account \\'sxpm0VR-knE2_K2__i14ZbzmXEludXpJbFGRvrvc08w\\'\"}', 'provider_name': 'Nvidia', 'is_byok': False}}, 'user_id': 'user_3FGnafcjn94slTfPxHW7DzqVP2h'}",
+            "response_excerpt": null,
+            "input_tokens": null,
+            "output_tokens": null,
+            "latency_ms": null
+          }
+        ]
+      },
+      {
+        "concept": "K-Means Clustering",
+        "valid": false,
+        "error": "llm_unavailable",
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3-super-120b-a12b:free",
+            "prompt_ref": "concept_cards/v1",
+            "status": "provider_error",
+            "error_code": "llm_unavailable",
+            "error_detail": "Error code: 404 - {'error': {'message': 'Provider returned error', 'code': 404, 'metadata': {'raw': '{\"status\":404,\"title\":\"Not Found\",\"detail\":\"Function \\'ac74040f-9fc9-4c5e-ac74-279ba5161d69\\': Not found for account \\'sxpm0VR-knE2_K2__i14ZbzmXEludXpJbFGRvrvc08w\\'\"}', 'provider_name': 'Nvidia', 'is_byok': False}}, 'user_id': 'user_3FGnafcjn94slTfPxHW7DzqVP2h'}",
+            "response_excerpt": null,
+            "input_tokens": null,
+            "output_tokens": null,
+            "latency_ms": null
+          }
+        ]
+      }
+    ]
+  }
+}

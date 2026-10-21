@@ -9,8 +9,10 @@ export const createCurriculum = (topic) => request("/curricula", { method: "POST
 
 export const getFeed = (nodeId) => request(`/nodes/${nodeId}/feed`);
 
-// Idempotent: starts generation if needed and returns { content_status }.
-export const generateConcept = (conceptId) => request(`/concepts/${conceptId}/generate`, { method: "POST" });
+// Idempotent: starts generation if needed and returns { content_status }. The node tells the
+// backend which curriculum position to use as context for the prompt.
+export const generateConcept = (conceptId, nodeId) =>
+  request(`/concepts/${conceptId}/generate${nodeId ? `?node_id=${nodeId}` : ""}`, { method: "POST" });
 
 export const getCard = (cardId) => request(`/cards/${cardId}`);
 

@@ -86,13 +86,6 @@ def test_card_detail_with_related_concept_links(client):
     assert related["SVM"] == find_node(client, "SVM")["id"]
 
 
-def test_card_detail_not_written_yet(client):
-    node = find_node(client, "Decision Trees")
-    card = client.get(f"/api/nodes/{node['id']}/feed").json()["cards"][0]
-    assert card["has_detail"] is False
-    assert_error(client.get(f"/api/cards/{card['id']}/detail"), 404, "detail_not_generated")
-
-
 def test_get_and_lookup_cards(client):
     node = find_node(client, "SVM")
     cards = client.get(f"/api/nodes/{node['id']}/feed").json()["cards"]
@@ -111,8 +104,3 @@ def test_generate_for_ready_concept_reports_ready(client):
     node = find_node(client, "SVM")
     response = client.post(f"/api/concepts/{node['concept_id']}/generate")
     assert response.json() == {"content_status": "ready"}
-
-
-def test_generate_is_not_available_before_stage_4(client):
-    node = find_node(client, "PCA")
-    assert_error(client.post(f"/api/concepts/{node['concept_id']}/generate"), 501, "generation_unavailable")

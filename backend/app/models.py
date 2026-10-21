@@ -70,6 +70,8 @@ class Concept(Base):
     content_status: Mapped[str] = mapped_column(String(20), default="not_generated")
     generation: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
     generation_error: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
+    # Set when a worker claims the concept for generation; used to detect abandoned claims.
+    generation_started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
     cards: Mapped[list["Card"]] = relationship(
         back_populates="concept", cascade="all, delete-orphan", order_by="Card.position"

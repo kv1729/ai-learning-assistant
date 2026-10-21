@@ -18,10 +18,11 @@ from sqlalchemy.orm import Session
 
 from app.content import CurriculumDraft, CurriculumSpec, draft_to_spec
 from app.errors import ApiError
+from app.llm.calls import log_attempts
 from app.llm.prompts import render_prompt
 from app.llm.provider import LLMError, LLMProvider
-from app.llm.structured import Attempt, GenerationFailed, generate_structured
-from app.models import Concept, Curriculum, CurriculumNode, LlmCall
+from app.llm.structured import GenerationFailed, generate_structured
+from app.models import Concept, Curriculum, CurriculumNode
 from app.schemas import CurriculumOut
 from app.services.content import get_curriculum
 
@@ -32,32 +33,6 @@ CURRICULUM_PROMPT_VERSION = "v1"
 
 def normalize_topic(topic: str) -> str:
     return " ".join(topic.split()).strip()
-
-
-def log_attempts(db: Session, purpose: str, subject: str, attempts: list[Attempt]) -> None:
-    for a in attempts:
-        db.add(
-            LlmCall(
-                purpose=purpose,
-                subject=subject[:200],
-                attempt=a.attempt,
-                provider=a.provider,
-                model=a.model,
-                prompt_version=a.prompt_ref,
-                status=a.status,
-                error_code=a.error_code,
-                error_detail=a.error_detail,
-                response_excerpt=a.response_excerpt,
-                input_tokens=a.input_tokens,
-                output_tokens=a.output_tokens,
-                latency_ms=a.latency_ms,
-            )
-        )
-        logger.info(
-            "llm_call purpose=%s attempt=%s model=%s prompt=%s status=%s error=%s tokens=%s/%s latency_ms=%s",
-            purpose, a.attempt, a.model, a.prompt_ref, a.status, a.error_code,
-            a.input_tokens, a.output_tokens, a.latency_ms,
-        )  # fmt: skip
 
 
 def generate_curriculum_draft(provider: LLMProvider, topic: str):

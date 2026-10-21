@@ -273,3 +273,108 @@ def draft_to_spec(draft: CurriculumDraft, requested_topic: str) -> CurriculumSpe
             "nodes": spec_nodes,
         }
     )
+
+
+# ---------- LLM-generated cards and details (Stage 4) ----------
+
+# Icon names the frontend can render (frontend/src/components/visuals/VisualIcon.jsx).
+ICON_NAMES = (
+    "brain",
+    "circle-dot",
+    "git-fork",
+    "percent",
+    "sigma",
+    "sparkles",
+    "split",
+    "target",
+    "triangle-alert",
+    "users",
+)
+MERMAID_STARTS = ("graph ", "flowchart ")
+MAX_MERMAID_LINES = 14
+
+
+class VisualDraft(StrictModel):
+    """LLM-facing visual: every field required, no schema keywords beyond types (strict mode)."""
+
+    type: Literal["formula", "mermaid", "icon"]
+    content: str
+    caption: str | None
+    alt_text: str
+
+
+class QuickCheckDraft(StrictModel):
+    question: str
+    options: list[str]
+    answer_index: int
+    explanation: str
+
+
+class CardDraft(StrictModel):
+    facet: Facet
+    title: str
+    summary: str
+    key_takeaway: str
+    visual: VisualDraft
+    quick_check: QuickCheckDraft
+
+
+class ConceptCardsDraft(StrictModel):
+    """The LLM's answer for a concept: its six cards, in facet order."""
+
+    cards: list[CardDraft]
+
+
+class DetailDraft(StrictModel):
+    """The LLM's answer for one card's Explore-in-Depth content."""
+
+    body_markdown: str
+    misconceptions: list[str]
+    related_concepts: list[str]
+    takeaway: str
+
+
+def visual_problems(visual: VisualDraft, where: str) -> list[str]:
+    """Cheap checks that catch visuals the frontend would have to replace with a fallback."""
+    content = visual.content.strip()
+    if visual.type == "icon" and content not in ICON_NAMES:
+        return [f"{where}: icon must be one of {list(ICON_NAMES)}, got '{content}'"]
+    if visual.type == "mermaid":
+        lines = [line for line in content.splitlines() if line.strip()]
+        if not content.startswith(MERMAID_STARTS):
+            return [f"{where}: mermaid must start with 'graph TD', 'graph LR' or 'flowchart'"]
+        if len(lines) > MAX_MERMAID_LINES:
+            return [f"{where}: mermaid diagram too large ({len(lines)} lines; max {MAX_MERMAID_LINES})"]
+    if visual.type == "formula":
+        if "$" in content:
+            return [f"{where}: formula must be bare LaTeX without $ delimiters"]
+        if content.count("{") != content.count("}"):
+            return [f"{where}: formula has unbalanced braces"]
+    return []
+
+
+def cards_draft_to_content(draft: ConceptCardsDraft, concept_key: str, name: str) -> ConceptContent:
+    """Validate a cards draft with the shared content rules plus generation-specific checks.
+
+    Raises ValueError/ValidationError listing the problems (fed back in a repair attempt).
+    """
+    problems: list[str] = []
+    for index, card in enumerate(draft.cards, start=1):
+        problems += visual_problems(card.visual, f"card {index} ({card.facet})")
+    titles = [card.title.strip().lower() for card in draft.cards]
+    if len(set(titles)) != len(titles):
+        problems.append("card titles must be distinct")
+    if problems:
+        raise ValueError("; ".join(problems))
+    # ConceptContent enforces: six cards in facet order, 80-130 word summaries, titles <= 60
+    # characters, 3-4 unique options with a valid answer_index, non-empty explanations.
+    return ConceptContent.model_validate(
+        {"concept_key": concept_key, "name": name, "cards": [card.model_dump() for card in draft.cards]}
+    )
+
+
+def detail_draft_to_detail(draft: DetailDraft) -> Detail:
+    """Detail enforces 300-700 words and a non-empty takeaway."""
+    if "<" in draft.body_markdown and re.search(r"<\s*(script|iframe|style)", draft.body_markdown, re.I):
+        raise ValueError("body_markdown must not contain HTML tags")
+    return Detail.model_validate(draft.model_dump())

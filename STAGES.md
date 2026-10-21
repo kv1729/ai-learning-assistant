@@ -11,7 +11,7 @@ Status values: `Not started` / `In progress` / `Done` / `Blocked (reason)`.
 | 1 | Mobile UI with mock data | Done | 2026-10-05 | 2026-10-05 |
 | 2 | FastAPI + PostgreSQL serving mock content | Done | 2026-10-05 | 2026-10-05 |
 | 3 | LLM curriculum generation | Done | 2026-10-05 | 2026-10-21 |
-| 4 | Lazy card generation | Not started | | |
+| 4 | Lazy card generation | In progress | 2026-10-21 | |
 | 5 | Learning state | Not started | | |
 | 6 | Live demo deployment | Not started | | |
 | 7a | Semantic layer over own content | Not started | | |
@@ -98,6 +98,15 @@ migration check; live model comparison and judged baseline stored
 - No credentials reachable from the frontend.
 
 ## Stage 4 — Lazy card generation
+
+**Progress (2026-10-21, paused):** implemented and tested offline: context builder, async card
+generation with a database claim and background task, lazy card detail with single-flight,
+visual validation, card evals; 65 backend tests, lint, migration check, frontend lint/build.
+Default model moved to `nvidia/nemotron-3.5-super-vl:free` (old endpoint gone) and reasoning
+effort to `low` (see `docs/evals/stage-4-cards-baseline.md`).
+To resume: (1) curriculum re-check on the new model, `uv run python -m evals.curriculum --topics 3`;
+(2) live app check: open an ungenerated concept (e.g. PCA) and one card's Explore in Depth;
+(3) user review.
 
 **Goal:** Opening a concept generates (once) and serves its card set.
 
