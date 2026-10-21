@@ -1,17 +1,18 @@
 import { ChevronRight, Search } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import * as api from "../api/client.js";
 import ProgressBar from "../components/ProgressBar.jsx";
 import { SkeletonText } from "../components/StatusViews.jsx";
 import { useAsync } from "../hooks/useAsync.js";
-import { buttonPrimary } from "../lib/ui.js";
+import { buttonPrimary, buttonSecondary } from "../lib/ui.js";
 import { useLearner } from "../state/learnerContext.js";
 
 const SUGGESTED_TOPICS = ["Deep Learning", "NLP", "Large Language Models", "Reinforcement Learning", "MLOps"];
 
 export default function ExploreScreen() {
   const { learner } = useLearner();
+  const navigate = useNavigate();
   const curricula = useAsync(() => api.getCurricula(), "curricula");
   const [topic, setTopic] = useState("");
   const [request, setRequest] = useState({ status: "idle", topic: "", error: null });
@@ -22,8 +23,10 @@ export default function ExploreScreen() {
     setTopic(trimmed);
     setRequest({ status: "building", topic: trimmed, error: null });
     try {
-      await api.createCurriculum(trimmed);
+      // Returns the stored curriculum for a topic seen before, otherwise generates one.
+      const curriculum = await api.createCurriculum(trimmed);
       setRequest({ status: "idle", topic: "", error: null });
+      navigate(`/explore/${curriculum.id}`);
     } catch (error) {
       setRequest({ status: "error", topic: trimmed, error });
     }
@@ -79,13 +82,21 @@ export default function ExploreScreen() {
       <div aria-live="polite">
         {building ? (
           <div className="mt-6 rounded-lg bg-surface-2 p-4">
-            <SkeletonText lines={4} message={`Planning a curriculum for "${request.topic}"…`} />
+            <SkeletonText
+              lines={4}
+              message={`Planning a curriculum for "${request.topic}"… this can take up to two minutes.`}
+            />
           </div>
         ) : null}
         {request.status === "error" ? (
           <div role="alert" className="mt-6 rounded-lg bg-surface-2 p-4 text-[15px] leading-relaxed">
             <p className="font-semibold">Couldn't build "{request.topic}"</p>
             <p className="mt-1 text-muted">{request.error.message}</p>
+            {request.error.retryable ? (
+              <button type="button" onClick={() => build(request.topic)} className={`${buttonSecondary} mt-3`}>
+                Try again
+              </button>
+            ) : null}
           </div>
         ) : null}
       </div>

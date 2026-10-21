@@ -10,7 +10,7 @@ Status values: `Not started` / `In progress` / `Done` / `Blocked (reason)`.
 | 0 | Repo review, domain model & UI contract | Done | 2026-10-05 | 2026-10-05 |
 | 1 | Mobile UI with mock data | Done | 2026-10-05 | 2026-10-05 |
 | 2 | FastAPI + PostgreSQL serving mock content | Done | 2026-10-05 | 2026-10-05 |
-| 3 | LLM curriculum generation | Not started | | |
+| 3 | LLM curriculum generation | Done | 2026-10-05 | 2026-10-21 |
 | 4 | Lazy card generation | Not started | | |
 | 5 | Learning state | Not started | | |
 | 6 | Live demo deployment | Not started | | |
@@ -77,6 +77,10 @@ walkthrough against the real API.
 - Frontend has no local content source; all API tests pass.
 
 ## Stage 3 — LLM curriculum generation
+
+**Outcome:** approved by the user 2026-10-21. 48 backend tests (fake provider), lint,
+migration check; live model comparison and judged baseline stored
+(`docs/evals/stage-3-curriculum-baseline.md`); live generation through the app verified.
 
 **Goal:** First real AI workflow: topic in, validated curriculum stored and displayed.
 

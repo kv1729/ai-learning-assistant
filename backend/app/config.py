@@ -1,5 +1,7 @@
 from pathlib import Path
+from typing import Literal
 
+from pydantic import AliasChoices, Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # backend/.env, found relative to this file so the current folder doesn't matter.
@@ -14,6 +16,19 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+psycopg://ala:ala@localhost:5432/ala"
     test_database_url: str = "postgresql+psycopg://ala:ala@localhost:5432/ala_test"
     cors_origins: list[str] = ["http://localhost:5173"]
+
+    # LLM provider: any OpenAI-compatible API. Defaults target OpenRouter.
+    llm_provider: str = "openrouter"
+    llm_base_url: str = "https://openrouter.ai/api/v1"
+    llm_api_key: SecretStr | None = Field(
+        default=None, validation_alias=AliasChoices("LLM_API_KEY", "OPENROUTER_API_KEY")
+    )
+    llm_model: str = "nvidia/nemotron-3-super-120b-a12b:free"
+    # json_schema: strict schema enforced by the provider; json_object: "valid JSON" only;
+    # none: rely on the prompt. Our own validation runs in every mode.
+    llm_structured_output: Literal["json_schema", "json_object", "none"] = "json_schema"
+    llm_timeout_seconds: float = 120  # free models took up to ~80 s in evals
+    llm_judge_model: str | None = None  # evals only; defaults to llm_model
 
 
 settings = Settings()

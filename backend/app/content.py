@@ -9,6 +9,7 @@ data now, LLM output from Stages 3-4. Two layers:
   (Pydantic model/field validators).
 """
 
+import re
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
@@ -170,3 +171,105 @@ def validate_tree(nodes: list[NodeSpec]) -> None:
 
     if problems:
         raise ValueError("; ".join(problems))
+
+
+# ---------- LLM-generated curricula (Stage 3) ----------
+
+GENERIC_NODE_NAMES = {
+    "introduction",
+    "overview",
+    "summary",
+    "conclusion",
+    "basics",
+    "applications",
+    "further reading",
+    "case studies",
+}
+MIN_LEAVES, MAX_LEAVES, MAX_NODES = 6, 40, 80
+
+
+class DraftNode(StrictModel):
+    """One node as the LLM returns it. All fields are required and unconstrained in the
+    schema (strict JSON-schema mode supports few keywords); limits are checked in draft_to_spec.
+    """
+
+    key: str
+    parent_key: str | None
+    name: str
+    description: str
+
+
+class CurriculumDraft(StrictModel):
+    """The LLM's answer for a curriculum request."""
+
+    in_scope: bool
+    reason: str
+    title: str
+    nodes: list[DraftNode]
+
+
+def slugify(text: str) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+    return slug or "concept"
+
+
+def draft_to_spec(draft: CurriculumDraft, requested_topic: str) -> CurriculumSpec:
+    """Convert an in-scope draft into a CurriculumSpec, enforcing generation rules.
+
+    Raises ValueError (or ValidationError) listing what is wrong, so the message can be
+    fed back to the model in a repair attempt.
+    """
+    if not draft.in_scope:
+        raise ValueError("draft is out of scope")
+    problems: list[str] = []
+    nodes = draft.nodes
+    if len(nodes) > MAX_NODES:
+        problems.append(f"too many nodes ({len(nodes)}); at most {MAX_NODES}")
+
+    has_children = {n.parent_key for n in nodes if n.parent_key is not None}
+    leaves = [n for n in nodes if n.key not in has_children and n.parent_key is not None]
+    if not MIN_LEAVES <= len(leaves) <= MAX_LEAVES:
+        problems.append(f"{len(leaves)} leaf concepts; expected {MIN_LEAVES}-{MAX_LEAVES}")
+
+    bad_names = sorted(n.key for n in nodes if not 0 < len(n.name.strip()) <= 60)
+    if bad_names:
+        problems.append(f"node names must be 1-60 characters: {bad_names}")
+
+    generic = sorted({n.name for n in nodes if n.name.strip().lower() in GENERIC_NODE_NAMES})
+    if generic:
+        problems.append(f"generic placeholder nodes are not allowed: {generic}")
+
+    # Every node name must be unique: a branch must not repeat its own child (e.g. a
+    # "Transformer" branch containing a "Transformer" leaf), and no concept may appear twice.
+    names = [slugify(n.name) for n in nodes]
+    duplicates = sorted({n.name for n in nodes if names.count(slugify(n.name)) > 1})
+    if duplicates:
+        problems.append(f"node names appear more than once (rename or merge them): {duplicates}")
+    if problems:
+        raise ValueError("; ".join(problems))
+
+    position: dict[str | None, int] = {}
+    spec_nodes = []
+    for node in nodes:
+        index = position.get(node.parent_key, 0)
+        position[node.parent_key] = index + 1
+        is_leaf = node.key not in has_children and node.parent_key is not None
+        spec_nodes.append(
+            {
+                "key": node.key,
+                "parent_key": node.parent_key,
+                "name": node.name.strip(),
+                "description": node.description.strip(),
+                "position": index,
+                "concept_key": slugify(node.name) if is_leaf else None,
+            }
+        )
+    # CurriculumSpec runs the shared tree rules (single root, parents exist, no cycles, depth).
+    return CurriculumSpec.model_validate(
+        {
+            "key": slugify(draft.title or requested_topic),
+            "title": draft.title.strip() or requested_topic,
+            "requested_topic": requested_topic,
+            "nodes": spec_nodes,
+        }
+    )

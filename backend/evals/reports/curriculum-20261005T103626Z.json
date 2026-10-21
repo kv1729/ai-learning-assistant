@@ -1,0 +1,281 @@
+{
+  "created_at": "2026-10-05T10:36:26.583484+00:00",
+  "prompt_version": "v1",
+  "judge_model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "judge_prompt_version": "v1",
+  "requests": 9,
+  "summary": [
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "topics": 5,
+      "valid_rate": 1.0,
+      "first_try_rate": 1.0,
+      "scope_accuracy": 1.0,
+      "mean_coverage": 1.0,
+      "median_latency_ms": 56821,
+      "mean_leaves": 27.8,
+      "errors": [],
+      "judge_pass_rate": {
+        "logical_progression": 1.0,
+        "appropriate_granularity": 0.75,
+        "coverage": 0.25,
+        "no_redundancy": 0.75,
+        "technically_accurate": 1.0
+      }
+    }
+  ],
+  "results": {
+    "nvidia/nemotron-3-super-120b-a12b:free": [
+      {
+        "topic": "Machine Learning",
+        "expect_in_scope": true,
+        "valid": true,
+        "first_try": true,
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3-super-120b-a12b:free",
+            "prompt_ref": "curriculum/v1",
+            "status": "ok",
+            "error_code": null,
+            "error_detail": null,
+            "response_excerpt": null,
+            "input_tokens": 604,
+            "output_tokens": 11368,
+            "latency_ms": 66144
+          }
+        ],
+        "latency_ms": 66144,
+        "output_tokens": 11368,
+        "in_scope": true,
+        "scope_correct": true,
+        "coverage": 1.0,
+        "missing": [],
+        "leaves": 30,
+        "max_depth": 3,
+        "tree": "- Machine Learning — Teaching computers to learn patterns from data.\n  - Foundations — Core mathematical and conceptual foundations for machine learning.\n    - Linear Algebra — Operations on vectors and matrices essential for ML algorithms.\n      - Vector Operations — Addition, scaling, dot product, and norm calculations on vectors.\n      - Matrix Multiplication — Multiplying matrices to transform data and compute linear maps.\n    - Probability — Fundamental probability concepts used in ML modeling and inference.\n      - Probability Distributions — Common discrete and continuous distributions for modeling uncertainty.\n      - Bayes' Theorem — Updating beliefs with evidence using Bayes' rule for inference.\n    - Optimization — Methods for minimizing loss functions to learn model parameters.\n      - Gradient Descent — Iterative algorithm that moves parameters opposite the gradient of loss.\n      - Stochastic Gradient Descent — Gradient descent using random subsets of data for faster updates.\n    - Bias-Variance Tradeoff — Balancing model simplicity and flexibility to minimize total error.\n  - Supervised Learning — Learning a mapping from inputs to known output labels.\n    - Linear Regression — Fitting a straight line to predict continuous target values.\n    - Logistic Regression — Linear model for binary classification using a sigmoid link.\n    - Decision Tree — Tree‑based model that splits data by feature thresholds.\n    - Random Forest — Ensemble of decorrelated decision trees averaging predictions.\n    - Support Vector Machine — Maximum‑margin classifier that finds optimal separating hyperplane.\n    - K-Nearest Neighbors — Instance‑based learner predicting via nearest neighbors' labels.\n    - Naive Bayes — Probabilistic classifier assuming feature independence given class.\n  - Unsupervised Learning — Discovering hidden structure in unlabeled data without target labels.\n    - K-Means Clustering — Partitioning data into K clusters by minimizing within‑cluster variance.\n    - Hierarchical Clustering — Building a tree of clusters via agglomerative or divisive merging.\n    - DBSCAN — Density‑based clustering that finds core points and expands clusters.\n    - Principal Component Analysis — Linear dimensionality reduction preserving maximal variance in data.\n  - Model Evaluation — Assessing how well a model generalizes to unseen data.\n    - Accuracy — Fraction of predictions that match the true labels.\n    - Precision-Recall F1 — Combined metric balancing precision and recall for classification.\n    - ROC AUC — Area under the ROC curve measuring tradeoff between TPR and FPR.\n    - Mean Squared Error — Average squared difference between predicted and actual values.\n  - Feature Engineering — Transforming raw data into informative inputs for ML models.\n    - Handling Missing Data — Strategies to impute or remove missing values in datasets.\n    - Feature Scaling — Standardizing or normalizing features to comparable scales.\n    - One-Hot Encoding — Converting categorical variables into binary column vectors.\n    - TF-IDF Vectorization — Weighting term frequency by inverse document frequency for text.\n  - Deep Learning & MLOps — Applying deep learning models and deploying them reliably.\n    - Convolutional Neural Network — Convolutional neural network for spatial data like images.\n    - Recurrent Neural Network — Recurrent neural network processing sequential data with memory.\n    - Transfer Learning — Reusing pretrained model weights for a new related task.\n    - Model Deployment — Packaging, serving, and monitoring ML models in production.",
+        "judge": {
+          "criteria": {
+            "logical_progression": {
+              "passed": true,
+              "reason": "Foundations precede advanced topics; sibling ordering follows a natural learning path from basic math to algorithms to evaluation and deployment."
+            },
+            "appropriate_granularity": {
+              "passed": true,
+              "reason": "Each leaf represents a focused concept that can be studied in roughly five minutes with a handful of flashcards; none is an entire field or trivially tiny."
+            },
+            "coverage": {
+              "passed": false,
+              "reason": "Key ML essentials such as cross‑validation, regularization techniques, and basic ensemble boosting are absent from the curriculum."
+            },
+            "no_redundancy": {
+              "passed": true,
+              "reason": "No concept appears twice under different names and no branch merely repeats another."
+            },
+            "technically_accurate": {
+              "passed": true,
+              "reason": "All names, groupings, and descriptions are correct; nothing is misclassified or invented."
+            }
+          },
+          "passed": 4,
+          "of": 5
+        }
+      },
+      {
+        "topic": "Deep Learning",
+        "expect_in_scope": true,
+        "valid": true,
+        "first_try": true,
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3-super-120b-a12b:free",
+            "prompt_ref": "curriculum/v1",
+            "status": "ok",
+            "error_code": null,
+            "error_detail": null,
+            "response_excerpt": null,
+            "input_tokens": 604,
+            "output_tokens": 8986,
+            "latency_ms": 51008
+          }
+        ],
+        "latency_ms": 51008,
+        "output_tokens": 8986,
+        "in_scope": true,
+        "scope_correct": true,
+        "coverage": 1.0,
+        "missing": [],
+        "leaves": 23,
+        "max_depth": 2,
+        "tree": "- Deep Learning — Teaching machines to learn hierarchical representations from data.\n  - Foundations of Neural Networks — Core concepts of neurons, activations, loss, and propagation.\n    - Artificial Neuron — A computational model mimicking a biological neuron's weighted sum and threshold.\n    - Activation Functions — Nonlinear functions that determine a neuron's output from its input.\n    - Forward Propagation — Computing network outputs layer by layer from inputs to predictions.\n    - Loss Functions — Measures the error between predicted outputs and true targets to guide learning.\n    - Backpropagation — Algorithm that computes gradients of loss w.r.t. weights using chain rule.\n  - Core Architectures — Common deep learning network designs for various data types.\n    - Feedforward Network — Layers of neurons where information moves strictly from input to output.\n    - Convolutional Neural Network — Network using convolutional layers to extract spatial features from images.\n    - Recurrent Neural Network — Network with loops allowing information persistence across sequential time steps.\n    - Transformer — Model relying on self-attention mechanisms to process sequences without recurrence.\n    - Autoencoder — Network that learns to compress data into a latent space and reconstruct it.\n  - Training Techniques — Methods for optimizing network parameters efficiently and effectively.\n    - Weight Initialization — Setting initial values for weights to improve convergence and avoid symmetry.\n    - Gradient Descent — Iterative optimization algorithm adjusting weights opposite the loss gradient.\n    - Stochastic Gradient Descent — Gradient descent using a single random sample per update for efficiency.\n    - Adam Optimizer — Adaptive learning rate optimizer combining momentum and RMSprop benefits.\n    - Learning Rate Scheduling — Strategy to adjust the learning rate during training for better convergence.\n  - Regularization and Optimization — Techniques to prevent overfitting and improve model generalization.\n    - Dropout — Randomly disabling neurons during training to reduce co‑adaptation.\n    - Batch Normalization — Normalizing layer inputs across a mini‑batch to stabilize and accelerate training.\n    - Early Stopping — Halting training when validation performance stops improving to avoid overfitting.\n    - Data Augmentation — Artificially expanding training data via transformations to improve robustness.\n  - Advanced Topics — Cutting‑edge deep learning concepts pushing the field forward.\n    - Transfer Learning — Reusing a pretrained model on a new task to reduce data and time needs.\n    - Fine-tuning — Adjusting pretrained model weights slightly for a specific downstream task.\n    - Generative Adversarial Network — Two networks, generator and discriminator, competing to produce realistic data.\n    - Self-supervised Learning — Learning useful representations from unlabeled data using pretext tasks.",
+        "judge": {
+          "criteria": {
+            "logical_progression": {
+              "passed": true,
+              "reason": "Foundations precede architectures, training, regularization, then advanced topics; sibling order moves from simple to complex concepts."
+            },
+            "appropriate_granularity": {
+              "passed": true,
+              "reason": "Each leaf is a specific concept suitable for ~5‑minute study; none is overly broad or trivial."
+            },
+            "coverage": {
+              "passed": true,
+              "reason": "Includes core DL concepts: neurons, activations, propagation, loss, backprop, major architectures, training optimizers, regularization, and key advanced topics."
+            },
+            "no_redundancy": {
+              "passed": true,
+              "reason": "No concept appears twice under different names and no branch merely repeats another."
+            },
+            "technically_accurate": {
+              "passed": true,
+              "reason": "Names, groupings, and descriptions correctly reflect standard DL terminology; no misclassifications or invented concepts."
+            }
+          },
+          "passed": 5,
+          "of": 5
+        }
+      },
+      {
+        "topic": "Natural Language Processing",
+        "expect_in_scope": true,
+        "valid": true,
+        "first_try": true,
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3-super-120b-a12b:free",
+            "prompt_ref": "curriculum/v1",
+            "status": "ok",
+            "error_code": null,
+            "error_detail": null,
+            "response_excerpt": null,
+            "input_tokens": 605,
+            "output_tokens": 13699,
+            "latency_ms": 79411
+          }
+        ],
+        "latency_ms": 79411,
+        "output_tokens": 13699,
+        "in_scope": true,
+        "scope_correct": true,
+        "coverage": 1.0,
+        "missing": [],
+        "leaves": 28,
+        "max_depth": 3,
+        "tree": "- Natural Language Processing — Teaching computers to understand and generate human language.\n  - Text Preprocessing — Techniques to clean and prepare raw text for modeling.\n    - Basic Cleaning — Initial steps: split text into tokens and normalize case.\n      - Tokenization — Split raw text into words, subwords, or symbols for processing.\n      - Lowercasing — Convert all characters to lowercase to reduce vocabulary size.\n      - Stop‑Word Removal — Eliminate common words like 'the' and 'is' that carry little meaning.\n      - HTML Stripping — Remove HTML tags and entities to obtain plain text content.\n    - Normalization — Reduce words to base forms and handle special symbols.\n      - Stemming — Heuristically cut words to their root form, e.g., 'running' → 'run'.\n      - Lemmatization — Reduce words to dictionary form using vocabulary and morphological analysis.\n      - Emoji Normalization — Map emojis to textual descriptions or unified symbols for consistency.\n  - Core Models — Fundamental models for representing and predicting language.\n    - Count‑Based Representations — Represent text using word frequencies and n‑gram statistics.\n      - Bag‑of‑Words — Represent text as an unordered count of word occurrences.\n      - TF‑IDF — Weight word counts by inverse document frequency to highlight important terms.\n      - N‑gram Language Model — Predict next word based on the previous n‑1 word sequence.\n    - Prediction‑Based Embeddings — Learn dense vector representations from large text corpora.\n      - Word2Vec — Learn word vectors by predicting surrounding words in a context window.\n      - GloVe — Factorize word‑co‑occurrence matrix to obtain global vector representations.\n      - FastText — Learn word vectors using subword information to handle rare words.\n    - Probabilistic Models — Statistical models for sequence labeling and structure prediction.\n      - Hidden Markov Model — Statistical model where hidden states generate observable sequences.\n      - Conditional Random Field — Discriminative model for labeling sequences using feature functions.\n  - Advanced Architectures — Deep learning architectures that capture sequential and contextual patterns.\n    - Recurrent Networks — Neural networks that process sequences with hidden state feedback.\n      - RNN — Process sequences step‑by‑step, maintaining a hidden state over time.\n      - LSTM — RNN variant with gates to mitigate vanishing gradients in long sequences.\n      - GRU — Simplified gated RNN that balances efficiency and performance.\n    - Attention Mechanism — Mechanism letting models weigh different parts of the input.\n      - Self‑Attention — Compute relationships between all positions in a sequence via weighted sums.\n    - Transformer — Architecture based solely on self‑attention layers for sequence transduction.\n      - Transformer — Stack of self‑attention and feed‑forward layers enabling parallel processing.\n    - Pretrained Language Models — Large language models trained on vast corpora and fine‑tuned.\n      - BERT — Bidirectional encoder from Transformers pretrained with masked language modeling.\n  - Applications and Evaluation — Real‑world NLP tasks and how their performance is measured.\n    - Information Extraction — Tasks that identify entities, tags, and syntactic relations in text.\n      - Named Entity Recognition — Identify and classify entities such as persons, organizations, and locations.\n      - Part‑of‑Speech Tagging — Assign each word a part‑of‑speech tag like noun, verb, or adjective.\n      - Dependency Parsing — Determine grammatical relations between words, forming a tree structure.\n    - Sentiment Analysis — Determine whether text expresses positive, negative, or neutral sentiment.\n      - Sentiment Analysis — Predict whether text expresses positive, negative, or neutral sentiment.\n    - Language Generation — Produce fluent text in another language or from prompts.\n      - Machine Translation — Convert text from one language to another while preserving meaning.\n    - Question Answering — Generate concise answers to natural language questions using context.\n      - Question Answering — Return a concise answer to a natural language question given context.\n    - Summarization — Create short summaries that preserve key information of longer documents.\n      - Text Summarization — Generate a short summary that captures the main points of a document.",
+        "judge": {
+          "criteria": {
+            "logical_progression": {
+              "passed": true,
+              "reason": "Foundations (preprocessing, core models) precede advanced architectures and applications; sibling ordering follows a sensible learning path."
+            },
+            "appropriate_granularity": {
+              "passed": false,
+              "reason": "Several leaves are overly trivial or duplicate parent names (e.g., Transformer, Sentiment Analysis, Question Answering, Summarization) and some leaves like Transformer are too broad for a ~5‑minute study."
+            },
+            "coverage": {
+              "passed": false,
+              "reason": "Missing essential NLP topics such as evaluation metrics (perplexity, BLEU, F1), subword tokenization (BPE, WordPiece), encoder‑decoder seq2seq architecture, and discussion of prompting/few‑shot learning."
+            },
+            "no_redundancy": {
+              "passed": false,
+              "reason": "Duplicate concepts appear under different names (Transformer node/leaf, Sentiment Analysis node/leaf, Question Answering node/leaf, Summarization node/leaf)."
+            },
+            "technically_accurate": {
+              "passed": true,
+              "reason": "All names, groupings, and descriptions are correct; no misclassifications or invented concepts."
+            }
+          },
+          "passed": 2,
+          "of": 5
+        }
+      },
+      {
+        "topic": "Reinforcement Learning",
+        "expect_in_scope": true,
+        "valid": true,
+        "first_try": true,
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3-super-120b-a12b:free",
+            "prompt_ref": "curriculum/v1",
+            "status": "ok",
+            "error_code": null,
+            "error_detail": null,
+            "response_excerpt": null,
+            "input_tokens": 606,
+            "output_tokens": 8966,
+            "latency_ms": 56821
+          }
+        ],
+        "latency_ms": 56821,
+        "output_tokens": 8966,
+        "in_scope": true,
+        "scope_correct": true,
+        "coverage": 1.0,
+        "missing": [],
+        "leaves": 30,
+        "max_depth": 3,
+        "tree": "- Reinforcement Learning — Learning optimal behavior through trial and error interactions.\n  - Foundations — Core concepts underlying RL problems.\n    - Markov Decision Process — Mathematical framework for decision making in stochastic environments.\n    - Bellman Equations — Recursive relations for value functions in MDPs.\n    - Value Function — Expected return from a state following a policy.\n    - Policy — Mapping from states to action probabilities determining behavior.\n  - Value-Based Methods — Learn value functions to derive optimal policies.\n    - Classical Value Methods — Tabular methods for estimating action values.\n      - Q-Learning — Off-policy TD learning of optimal action-value function.\n      - SARSA — On-policy TD learning updating Q-values via taken actions.\n      - Double Q-Learning — Reduces overestimation bias by decoupling action selection and evaluation.\n    - Deep Value Methods — Use neural networks to approximate Q-values at scale.\n      - Deep Q-Network — Combines Q-learning with convolutional neural networks for pixel inputs.\n      - Dueling DQN — Separates value and advantage streams to improve Q-value estimation.\n      - Prioritized Experience Replay — Samples important transitions more frequently to accelerate learning.\n  - Policy-Based Methods — Directly optimize the policy using gradient ascent on expected return.\n    - Policy Gradient — Optimizes policy parameters by following the gradient of expected reward.\n      - REINFORCE — Monte Carlo policy gradient algorithm using episode returns.\n      - Vanilla Policy Gradient — Basic policy gradient using sampled trajectories and advantage estimates.\n    - Actor-Critic Methods — Combine policy (actor) with value function (critic) for reduced variance.\n      - Actor-Critic — Uses a critic to estimate action advantages for policy updates.\n      - Proximal Policy Optimization — Clips policy updates to ensure stable and reliable learning.\n      - Trust Region Policy Optimization — Constrains policy updates to a KL divergence bound for monotonic improvement.\n      - Advantage Actor-Critic — Synchronous variant of A3C using advantage function for faster convergence.\n  - Model-Based Methods — Learn or use environment models to plan and improve policies.\n    - Planning Algorithms — Compute optimal policies using known or learned transition models.\n      - Dyna-Q — Combines real experience with simulated planning to accelerate learning.\n      - Value Iteration — Iteratively updates state values until convergence to optimal values.\n      - Policy Iteration — Alternates between policy evaluation and improvement to find optimal policy.\n    - Search Methods — Use lookahead search to guide decision making in large spaces.\n      - Monte Carlo Tree Search — Balances exploration and exploitation via simulated playouts.\n  - Exploration Strategies — Techniques to balance exploration of unknown actions with exploitation of known rewards.\n    - Epsilon-Greedy — Chooses random actions with probability ε, else the greedy action.\n    - Upper Confidence Bound — Selects actions with high upper confidence bounds on estimated value.\n    - Thompson Sampling — Samples action values from posterior distributions to guide exploration.\n    - Boltzmann Exploration — Selects actions probabilistically based on softmax of action values.\n  - Advanced Topics — Cutting‑edge RL techniques for complex, multi‑agent, and safety‑critical settings.\n    - Hierarchical RL — Learns temporally extended actions (options) to simplify long‑horizon tasks.\n    - Multi-Agent RL — Extends single‑agent RL to environments with multiple interacting learners.\n    - Centralized Critic — Uses a shared critic that observes all agents’ states and actions.\n    - Safe RL — Ensures RL policies satisfy constraints while maximizing expected reward.\n    - Meta-Reinforcement Learning — Learns to adapt quickly to new tasks via experience across a task distribution.\n    - Inverse Reinforcement Learning — Infers reward functions from observed expert behavior.",
+        "judge": {
+          "criteria": {
+            "logical_progression": {
+              "passed": true,
+              "reason": "Foundations precede value/policy/model-based methods, exploration, and advanced topics; sibling ordering within each block follows a sensible learning path."
+            },
+            "appropriate_granularity": {
+              "passed": true,
+              "reason": "Each leaf node is a specific algorithm, technique, or concept that can be covered in roughly five minutes (e.g., Q‑Learning, Dueling DQN, PPO, Thompson Sampling)."
+            },
+            "coverage": {
+              "passed": false,
+              "reason": "Important deep RL algorithms such as DDPG, TD3, SAC and distributional RL methods (C51, QR‑DQN) are missing, which are central expectations for an engineer studying RL."
+            },
+            "no_redundancy": {
+              "passed": true,
+              "reason": "No concept appears twice under different names and no branch merely repeats another."
+            },
+            "technically_accurate": {
+              "passed": true,
+              "reason": "All names, groupings, and descriptions are correct; nothing is misclassified or invented."
+            }
+          },
+          "passed": 4,
+          "of": 5
+        }
+      },
+      {
+        "topic": "French Cooking",
+        "expect_in_scope": false,
+        "valid": true,
+        "first_try": true,
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3-super-120b-a12b:free",
+            "prompt_ref": "curriculum/v1",
+            "status": "ok",
+            "error_code": null,
+            "error_detail": null,
+            "response_excerpt": null,
+            "input_tokens": 605,
+            "output_tokens": 263,
+            "latency_ms": 1544
+          }
+        ],
+        "latency_ms": 1544,
+        "output_tokens": 263,
+        "in_scope": false,
+        "scope_correct": true,
+        "reason": "French Cooking is a culinary topic unrelated to machine learning, AI, data science, or their mathematical foundations."
+      }
+    ]
+  }
+}

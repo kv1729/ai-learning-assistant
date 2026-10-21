@@ -1,0 +1,17 @@
+{
+  "description": "Golden topics for curriculum generation. must_cover: each group passes if any of its keywords appears in a node name or description (case-insensitive). expect_in_scope: whether the app should accept the topic.",
+  "topics": [
+    {"topic": "Machine Learning", "expect_in_scope": true, "must_cover": [["supervised"], ["unsupervised", "clustering"], ["evaluation", "validation", "metric"], ["regression"], ["overfitting", "regularization", "bias"]]},
+    {"topic": "Deep Learning", "expect_in_scope": true, "must_cover": [["neural network", "perceptron"], ["backprop"], ["convolution", "cnn"], ["recurrent", "rnn", "lstm"], ["transformer", "attention"]]},
+    {"topic": "Natural Language Processing", "expect_in_scope": true, "must_cover": [["token"], ["embedding", "word2vec"], ["transformer", "attention"], ["language model"]]},
+    {"topic": "Reinforcement Learning", "expect_in_scope": true, "must_cover": [["markov", "mdp"], ["q-learning", "q learning"], ["policy gradient"], ["exploration"]]},
+    {"topic": "Large Language Models", "expect_in_scope": true, "must_cover": [["transformer", "attention"], ["pretrain", "pre-train"], ["fine-tun"], ["prompt"], ["retrieval", "rag"]]},
+    {"topic": "Computer Vision", "expect_in_scope": true, "must_cover": [["convolution", "cnn"], ["detection"], ["segmentation"], ["augmentation", "transfer learning"]]},
+    {"topic": "MLOps", "expect_in_scope": true, "must_cover": [["deploy", "serving"], ["monitor", "drift"], ["version"], ["pipeline"]]},
+    {"topic": "Probability for Machine Learning", "expect_in_scope": true, "must_cover": [["bayes"], ["distribution"], ["expect", "variance"], ["maximum likelihood", "mle"]]},
+    {"topic": "Recommender Systems", "expect_in_scope": true, "must_cover": [["collaborative"], ["content-based", "content based"], ["matrix factorization"], ["cold start"]]},
+    {"topic": "Time Series Forecasting", "expect_in_scope": true, "must_cover": [["arima", "autoregress"], ["seasonal"], ["stationar"], ["backtest", "cross-validation", "validation"]]},
+    {"topic": "French Cooking", "expect_in_scope": false, "must_cover": []},
+    {"topic": "History of the Roman Empire", "expect_in_scope": false, "must_cover": []}
+  ]
+}
