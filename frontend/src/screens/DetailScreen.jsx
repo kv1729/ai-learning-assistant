@@ -51,7 +51,7 @@ export default function DetailScreen() {
 
               <div className="mt-4">
                 {detail.status === "loading" ? (
-                  <SkeletonText lines={10} message="Writing an in-depth explanation… (only the first time)" />
+                  <SkeletonText lines={10} message="Writing an in-depth explanation… the first time takes a minute or two." />
                 ) : detail.status === "error" ? (
                   <div className="rounded-lg bg-surface-2">
                     <ErrorState

@@ -58,29 +58,36 @@ class OpenAICompatibleProvider:
         model: str,
         structured_mode: StructuredMode = "json_schema",
         timeout_seconds: float = 90,
+        reasoning_effort: str | None = None,
     ):
         self.provider = provider
         self.model = model
         self.structured_mode = structured_mode
+        self.reasoning_effort = reasoning_effort
         # Retries are handled by the caller (repair attempts), not hidden in the SDK.
         self._client = openai.OpenAI(
             base_url=base_url, api_key=api_key, timeout=timeout_seconds, max_retries=0
         )
 
     def _request_options(self, json_schema: dict[str, Any] | None, schema_name: str) -> dict[str, Any]:
-        if json_schema is None or self.structured_mode == "none":
-            return {}
-        if self.structured_mode == "json_object":
-            return {"response_format": {"type": "json_object"}}
-        options: dict[str, Any] = {
-            "response_format": {
+        options: dict[str, Any] = {}
+        extra_body: dict[str, Any] = {}
+        if json_schema is not None and self.structured_mode == "json_object":
+            options["response_format"] = {"type": "json_object"}
+        elif json_schema is not None and self.structured_mode == "json_schema":
+            options["response_format"] = {
                 "type": "json_schema",
                 "json_schema": {"name": schema_name, "strict": True, "schema": json_schema},
             }
-        }
-        if self.provider == "openrouter":
-            # Only route to upstream providers that actually honour response_format.
-            options["extra_body"] = {"provider": {"require_parameters": True}}
+            if self.provider == "openrouter":
+                # Only route to upstream providers that actually honour response_format.
+                extra_body["provider"] = {"require_parameters": True}
+        if self.reasoning_effort and self.provider == "openrouter":
+            extra_body["reasoning"] = (
+                {"enabled": False} if self.reasoning_effort == "off" else {"effort": self.reasoning_effort}
+            )
+        if extra_body:
+            options["extra_body"] = extra_body
         return options
 
     def complete(
@@ -132,7 +139,9 @@ class OpenAICompatibleProvider:
 
 
 def build_provider(
-    model: str | None = None, structured_mode: StructuredMode | None = None
+    model: str | None = None,
+    structured_mode: StructuredMode | None = None,
+    reasoning_effort: str | None = None,
 ) -> OpenAICompatibleProvider:
     if settings.llm_api_key is None:
         raise LLMError(
@@ -149,6 +158,7 @@ def build_provider(
         model=model or settings.llm_model,
         structured_mode=structured_mode or settings.llm_structured_output,
         timeout_seconds=settings.llm_timeout_seconds,
+        reasoning_effort=reasoning_effort or settings.llm_reasoning_effort,
     )
 
 

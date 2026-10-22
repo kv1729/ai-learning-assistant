@@ -11,7 +11,7 @@ Status values: `Not started` / `In progress` / `Done` / `Blocked (reason)`.
 | 1 | Mobile UI with mock data | Done | 2026-10-05 | 2026-10-05 |
 | 2 | FastAPI + PostgreSQL serving mock content | Done | 2026-10-05 | 2026-10-05 |
 | 3 | LLM curriculum generation | Done | 2026-10-05 | 2026-10-21 |
-| 4 | Lazy card generation | Not started | | |
+| 4 | Lazy card generation | In progress | 2026-10-21 | |
 | 5 | Learning state | Not started | | |
 | 6 | Live demo deployment | Not started | | |
 | 7a | Semantic layer over own content | Not started | | |
@@ -99,7 +99,11 @@ migration check; live model comparison and judged baseline stored
 
 ## Stage 4 — Lazy card generation
 
-**Goal:** Opening a concept generates (once) and serves its card set.
+**Progress (2026-10-21):** implementation complete and verified. 65 backend tests, lint,
+migration check, frontend lint/build; card eval baseline and live app check recorded in
+`docs/evals/stage-4-cards-baseline.md` (first open generates and stores; reopening uses the
+database with no LLM call). Default model `nvidia/nemotron-3.5-super-vl:free`, reasoning `low`.
+Awaiting user review.
 
 **Deliverables**
 - Card generator producing ~6 facet cards + detail + quick check + visual spec per concept.

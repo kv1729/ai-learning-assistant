@@ -13,6 +13,9 @@ npm run build        # production build
 npm run lint
 ```
 
+Optional `frontend/.env.local`: `VITE_PREFETCH_NEXT=false` stops the feed from generating the
+next concept in the background (saves free LLM quota).
+
 ## Structure
 
 ```text
@@ -45,7 +48,8 @@ src/
 
 ## Content states you can see today
 
-- Logistic Regression, SVM, Decision Trees, KNN, Naive Bayes: cards ready.
-- Explore in Depth exists for all Logistic Regression cards and SVM cards 1–3; others show "not written yet".
-- Other concepts and new curricula show a clear "arrives in a later stage" message (AI generation: Stages 3–4).
+- Seeded concepts (Logistic Regression, SVM, Decision Trees, KNN, Naive Bayes) have cards.
+- Any other concept: opening it generates its six cards with the LLM (about one to two minutes,
+  once), then they are served from the database.
+- Explore in Depth is generated the first time a card's page is opened, then stored.
 - Learner progress lives in `localStorage` (`ala.learner.v2`).

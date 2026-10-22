@@ -11,7 +11,10 @@ import { useAsync } from "../hooks/useAsync.js";
 import { feedPath, nextPositionFor } from "../lib/learning.js";
 import { useLearner } from "../state/learnerContext.js";
 
-const POLL_INTERVAL_MS = 1000;
+const POLL_INTERVAL_MS = 2000;
+// Prefetching the next concept hides generation time but spends LLM quota (free tier: 50/day).
+// Disable with VITE_PREFETCH_NEXT=false in frontend/.env.local.
+const PREFETCH_NEXT = import.meta.env.VITE_PREFETCH_NEXT !== "false";
 
 export default function FeedScreen() {
   const { nodeId, position: positionParam } = useParams();
@@ -35,7 +38,7 @@ export default function FeedScreen() {
     const status = feed.data?.concept.content_status;
     const id = feed.data?.concept.id;
     if (status === "not_generated" && requestError?.conceptId !== id) {
-      api.generateConcept(id).then(feed.reload, (error) => setRequestError({ conceptId: id, error }));
+      api.generateConcept(id, feed.data.node.id).then(feed.reload, (error) => setRequestError({ conceptId: id, error }));
     } else if (status === "generating") {
       const timer = setTimeout(feed.reload, POLL_INTERVAL_MS);
       return () => clearTimeout(timer);
@@ -47,7 +50,9 @@ export default function FeedScreen() {
     if (feed.data?.concept.content_status !== "ready") return;
     const tabs = feed.data.tabs;
     const next = tabs[tabs.findIndex((t) => t.node_id === feed.data.node.id) + 1];
-    if (next?.content_status === "not_generated") api.generateConcept(next.concept_id).catch(() => {});
+    if (PREFETCH_NEXT && next?.content_status === "not_generated") {
+      api.generateConcept(next.concept_id, next.node_id).catch(() => {});
+    }
   }, [feed.data]);
 
   // Progress: record the card being viewed and where to resume.
@@ -77,7 +82,7 @@ export default function FeedScreen() {
 
   const retryGeneration = () => {
     if (requestError) setRequestError(null); // the generation effect tries again
-    else api.generateConcept(concept.id).then(feed.reload, (error) => setRequestError({ conceptId: concept.id, error }));
+    else api.generateConcept(concept.id, nodeId).then(feed.reload, (error) => setRequestError({ conceptId: concept.id, error }));
   };
   const rejected = requestError && requestError.conceptId === concept?.id ? requestError.error : null;
 
@@ -126,7 +131,7 @@ export default function FeedScreen() {
       />
     );
   } else if (!ready) {
-    body = <SkeletonCard message={`Writing ${concept.name}… this usually takes 10–30 seconds the first time.`} />;
+    body = <SkeletonCard message={`Writing ${concept.name}… the first time takes a few minutes.`} />;
   } else {
     body = (
       <CardPager

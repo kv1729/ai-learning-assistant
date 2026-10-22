@@ -2,7 +2,7 @@
 
 FastAPI + PostgreSQL (SQLAlchemy 2.0, Alembic). Python 3.13, managed with
 [uv](https://docs.astral.sh/uv/). Serves learning content and generates curricula with an
-LLM (Stage 3); card generation arrives in Stage 4.
+LLM (Stage 3) and writes each concept's cards and in-depth pages on first use (Stage 4).
 
 ## Run locally
 
@@ -37,9 +37,11 @@ credits). A stored curriculum is returned for a repeated topic, so it costs no r
 uv run python -m evals.curriculum --dry-run                      # request budget only
 uv run python -m evals.curriculum --models MODEL_A,MODEL_B --topics 5
 uv run python -m evals.curriculum --topics 5 --judge             # add the LLM-judge rubric
+uv run python -m evals.cards --concepts 4 --judge                # card generation evals
+uv run python -m evals.cards --concepts 4 --reasoning default,low   # compare reasoning effort
 ```
 
-Golden topics: `evals/golden_curricula.json`. Reports (JSON + Markdown summary):
+Golden sets: `evals/golden_curricula.json`, `evals/golden_concepts.json`. Reports (JSON + Markdown summary):
 `evals/reports/`. Every LLM attempt made by the app is also logged in the `llm_calls` table.
 
 ## Checks
@@ -62,14 +64,18 @@ app/
 ├── llm/
 │   ├── provider.py    # LLMProvider protocol + OpenAI-compatible implementation, error mapping
 │   ├── prompts.py     # loads versioned prompts from prompts/<name>/<version>.md
-│   └── structured.py  # call -> parse -> validate -> one repair attempt; records every attempt
+│   ├── structured.py  # call -> parse -> validate -> one repair attempt; records every attempt
+│   ├── calls.py       # writes every attempt to llm_calls
+│   └── singleflight.py# concurrent requests for the same key share one LLM call
 ├── schemas.py         # API response shapes
 ├── errors.py          # {error: {code, message, retryable}} for every failure
 ├── api/routes.py      # thin HTTP layer
 └── services/
     ├── content.py     # read queries and response shaping
-    └── curricula.py   # curriculum generation: cache, LLM, validation, persistence, call log
-prompts/               # versioned prompt files (curriculum, curriculum_judge)
+    ├── curricula.py   # curriculum generation: cache, LLM, validation, persistence, call log
+    ├── context.py     # context builder: curriculum path, siblings, related concepts (SQL)
+    └── generation.py  # lazy card generation (claim + background task) and lazy card detail
+prompts/               # versioned prompts: curriculum, concept_cards, card_detail and their judges
 evals/                 # golden topics, eval runner, reports
 alembic/               # migrations
 seed/                  # seed JSON + idempotent loader
@@ -86,7 +92,7 @@ db/init/               # creates the test database on first container start
 | `GET /api/curricula/{id}` | tree with `content_status` per leaf |
 | `POST /api/curricula` | `{topic}` → generated (or stored) curriculum; errors: `topic_out_of_scope` 422, `llm_rate_limited` 429, `llm_invalid_output` 502, `llm_unavailable` 503, `llm_timeout` 504, `llm_not_configured` 503 |
 | `GET /api/nodes/{id}/feed` | sibling tabs + concept + cards (without detail) |
-| `POST /api/concepts/{id}/generate` | `ready` for seeded concepts; `501 generation_unavailable` until Stage 4 |
+| `POST /api/concepts/{id}/generate?node_id=` | starts lazy card generation (idempotent, one worker per concept) and returns `generating`; poll the feed until `ready` or `failed` (`generation_error` says whether to retry) |
 | `GET /api/cards?ids=…` | card summaries for Profile / Saved |
 | `GET /api/cards/{id}` | one card |
-| `GET /api/cards/{id}/detail` | `404 detail_not_generated` when not written yet |
+| `GET /api/cards/{id}/detail` | stored detail, or generated with the LLM on first open (concurrent requests share one call) |

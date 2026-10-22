@@ -4,7 +4,7 @@ import uuid
 from collections.abc import Callable
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, BackgroundTasks, Depends, Query
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
@@ -20,7 +20,7 @@ from app.schemas import (
     FeedOut,
     GenerationStatus,
 )
-from app.services import content, curricula
+from app.services import content, curricula, generation
 
 router = APIRouter(prefix="/api")
 Db = Annotated[Session, Depends(get_db)]
@@ -62,8 +62,16 @@ def get_feed(node_id: uuid.UUID, db: Db) -> FeedOut:
 
 
 @router.post("/concepts/{concept_id}/generate", tags=["feed"])
-def generate_concept(concept_id: uuid.UUID, db: Db) -> GenerationStatus:
-    return GenerationStatus(content_status=content.request_generation(db, concept_id))
+def generate_concept(
+    concept_id: uuid.UUID,
+    db: Db,
+    providers: ProviderFactory,
+    background: BackgroundTasks,
+    node_id: uuid.UUID | None = None,
+) -> GenerationStatus:
+    """Start lazy card generation (idempotent). Poll the feed until the status settles."""
+    status = generation.request_concept_generation(db, providers, concept_id, node_id, background.add_task)
+    return GenerationStatus(content_status=status)
 
 
 @router.get("/cards", tags=["cards"])
@@ -77,5 +85,6 @@ def get_card(card_id: uuid.UUID, db: Db) -> CardOut:
 
 
 @router.get("/cards/{card_id}/detail", tags=["cards"])
-def get_card_detail(card_id: uuid.UUID, db: Db) -> DetailOut:
-    return content.get_card_detail(db, card_id)
+def get_card_detail(card_id: uuid.UUID, db: Db, providers: ProviderFactory) -> DetailOut:
+    """Explore-in-Depth content; generated with the LLM on first open, then served from the database."""
+    return content.detail_out(db, generation.ensure_card_detail(db, providers, card_id))

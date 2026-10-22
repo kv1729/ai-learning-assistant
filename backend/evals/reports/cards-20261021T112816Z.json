@@ -1,0 +1,606 @@
+{
+  "created_at": "2026-10-21T11:28:16.007583+00:00",
+  "prompt_version": "v1",
+  "judge_model": "nvidia/nemotron-3.5-super-vl:free",
+  "judge_prompt_version": "v1",
+  "requests": 15,
+  "summary": [
+    {
+      "label": "nvidia/nemotron-3.5-super-vl:free",
+      "concepts": 4,
+      "valid_rate": 0.75,
+      "first_try_rate": 0.75,
+      "mean_coverage": 0.889,
+      "median_latency_ms": 259293,
+      "median_output_tokens": 14876,
+      "visuals": {
+        "icon": 9,
+        "formula": 6,
+        "mermaid": 3
+      },
+      "answer_index_spread": {
+        "0": 3,
+        "1": 6,
+        "2": 6,
+        "3": 3
+      },
+      "errors": [
+        "llm_unavailable"
+      ],
+      "judge_pass_rate": {
+        "technically_accurate": 0.33,
+        "facet_fidelity": 1.0,
+        "worked_example_correct": 1.0,
+        "quick_checks_sound": 1.0,
+        "clear_for_engineers": 1.0,
+        "no_redundancy": 0.67
+      }
+    },
+    {
+      "label": "nvidia/nemotron-3.5-super-vl:free reasoning=low",
+      "concepts": 4,
+      "valid_rate": 1.0,
+      "first_try_rate": 1.0,
+      "mean_coverage": 1.0,
+      "median_latency_ms": 128899,
+      "median_output_tokens": 14054,
+      "visuals": {
+        "icon": 12,
+        "formula": 8,
+        "mermaid": 4
+      },
+      "answer_index_spread": {
+        "0": 6,
+        "1": 7,
+        "2": 6,
+        "3": 5
+      },
+      "errors": [],
+      "judge_pass_rate": {
+        "technically_accurate": 1.0,
+        "facet_fidelity": 1.0,
+        "worked_example_correct": 1.0,
+        "quick_checks_sound": 1.0,
+        "clear_for_engineers": 1.0,
+        "no_redundancy": 1.0
+      }
+    }
+  ],
+  "results": {
+    "nvidia/nemotron-3.5-super-vl:free": [
+      {
+        "concept": "Gradient Descent",
+        "valid": true,
+        "first_try": true,
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3.5-super-vl:free",
+            "prompt_ref": "concept_cards/v1",
+            "status": "ok",
+            "error_code": null,
+            "error_detail": null,
+            "response_excerpt": null,
+            "input_tokens": 828,
+            "output_tokens": 14876,
+            "latency_ms": 259293
+          }
+        ],
+        "latency_ms": 259293,
+        "output_tokens": 14876,
+        "coverage": 1.0,
+        "missing": [],
+        "visuals": {
+          "icon": 3,
+          "formula": 2,
+          "mermaid": 1
+        },
+        "answer_indexes": [
+          1,
+          2,
+          0,
+          3,
+          1,
+          2
+        ],
+        "summary_words": [
+          99,
+          91,
+          90,
+          91,
+          96,
+          93
+        ],
+        "cards": "[1] why_it_matters — Why Gradient Descent Trains Most ML Models\nMachine learning models learn by minimizing a loss function that measures prediction error. Gradient descent is the workhorse optimization algorithm behind linear regression, logistic regression, neural networks, and many other models. It lets engineers fit models to data without needing a closed-form solution, which is essential when models have millions of parameters. Engineers tune variants like stochastic gradient descent to balance speed and stability on large datasets. In practice, training deep networks, recommender systems, and large language models rely on gradient descent to update weights and reduce error iteratively. It is the default training loop for most supervised learning.\nTakeaway: Gradient descent is the standard iterative algorithm used to minimize loss and train most machine learning models.\nVisual: icon: target\nQuick check: Which statement best describes where gradient descent is used?\n     A. Only in linear regression\n   * B. In many models including neural networks\n     C. Only in unsupervised learning\n     D. Only during model inference\n(* = marked answer) Gradient descent trains many model types, including neural networks; it is not limited to one model family or to inference.\n\n[2] intuition — Walk Downhill Until You Reach the Bottom\nImagine standing on a foggy mountain and wanting to reach the lowest valley. You cannot see the bottom, but you can feel the slope under your feet. You take a step in the direction that goes downhill, then reassess and step again. Gradient descent does the same with model parameters: it computes the slope of the loss surface and moves each parameter a small amount in the direction that reduces loss. The step size is controlled by the learning rate. Repeating this process gradually brings the model to a low-error state.\nTakeaway: Gradient descent repeatedly moves model parameters downhill on the loss surface to reduce error.\nVisual: icon: circle-dot\nQuick check: What does the intuition of walking downhill represent?\n     A. Randomly guessing parameters\n     B. Increasing the loss each step\n   * C. Feeling the slope and stepping downhill\n     D. Jumping directly to the minimum\n(* = marked answer) Gradient descent uses the local slope to take downhill steps; it does not guess randomly or increase loss.\n\n[3] how_it_works — Update Parameters Using the Negative Gradient\nFor parameters theta and loss J(theta), gradient descent computes the gradient, the vector of partial derivatives of loss with respect to each parameter. It then updates every parameter by subtracting a learning rate times the gradient: theta equals theta minus alpha times gradient J(theta). The learning rate alpha controls step size, with larger values risking overshoot and smaller values slowing progress. Repeating these updates over many iterations drives the loss down, ideally to a minimum where the gradient is near zero. This is the core training loop for most models.\nTakeaway: Each parameter is updated by subtracting the learning rate times the gradient of the loss.\nVisual: formula: \\theta := \\theta - \\alpha \\nabla J(\\theta)\nQuick check: What is the gradient descent update rule?\n   * A. Subtract alpha times gradient from theta\n     B. Add alpha times gradient to theta\n     C. Multiply theta by the gradient\n     D. Set theta to zero\n(* = marked answer) The update rule subtracts the scaled gradient; adding would move uphill and multiplying is not gradient descent.\n\n[4] worked_example — One Step of Gradient Descent with Numbers\nConsider a simple loss L(w) equals w squared. The derivative is dL/dw equals 2w. Start at w equals 3 with learning rate alpha equals 0.1. The gradient at w equals 3 is 2 times 3, which equals 6. The update is w new equals 3 minus 0.1 times 6, giving w new equals 2.4. The loss drops from 9 at w equals 3 to 5.76 at w equals 2.4. This shows one downhill step reduced error, and repeating the update would continue toward w equals 0 where the loss is minimized.\nTakeaway: A numeric update subtracts alpha times the gradient from the current parameter.\nVisual: formula: w_{new} = 3 - 0.1 \\times (2 \\times 3) = 2.4\nQuick check: What is the updated value of w after one step?\n     A. 3.8\n     B. 8\n     C. 16\n   * D. 2.4\n(* = marked answer) The gradient is 6, the step is 0.6, so the new value is 2.4; 3.8 would result from adding instead of subtracting.\n\n[5] pitfalls — Learning Rate and Local Traps Can Fail Training\nGradient descent is sensitive to the learning rate. Too large, and updates may overshoot or diverge; too small, and training crawls or stalls. It can also get stuck in local minima or saddle points, especially in non-convex losses like neural networks. The method assumes the loss is differentiable and that the gradient points toward improvement, which may fail with discrete parameters or flat regions. Feature scaling matters because poorly scaled inputs distort the gradient. Engineers often monitor loss curves and adjust the learning rate during training. A poorly chosen rate can waste compute and prevent convergence.\nTakeaway: Poor learning rates, non-convex landscapes, and unscaled features can prevent gradient descent from converging well.\nVisual: icon: triangle-alert\nQuick check: Which statement describes a common gradient descent pitfall?\n     A. Always finds the global minimum\n   * B. Too large a learning rate can diverge\n     C. Works best with unscaled features\n     D. Needs only one iteration\n(* = marked answer) A large learning rate can cause overshoot and divergence; gradient descent does not guarantee a global minimum in non-convex problems.\n\n[6] compare — Gradient Descent Versus Bias-Variance Trade-off\nGradient descent is an optimization algorithm that finds parameters minimizing training loss. The bias-variance trade-off is a diagnostic concept about model error: high bias means underfitting, high variance means overfitting. Gradient descent does not choose model complexity; it only minimizes the objective you give it. A complex model trained with gradient descent can still overfit, while a simple model can underfit. Regularization, early stopping, and validation data bridge optimization and generalization. Understanding both helps engineers tune models that train well and generalize to unseen data. Optimization and generalization are related but distinct concerns.\nTakeaway: Gradient descent optimizes parameters, whereas bias-variance describes the error from model complexity.\nVisual: mermaid: graph TD\n    GD[Gradient Descent] --> Min[Minimizes Training Loss]\n    BV[Bias-Variance Trade-off] --> Error[Describes Generalization Error]\n    GD --> Model[Model Parameters]\n    BV --> Complexity[Model Complexity]\n    Model --> BV\n    Min --> GD\nQuick check: How do gradient descent and the bias-variance trade-off relate?\n     A. They are the same thing\n     B. Gradient descent eliminates variance\n   * C. GD optimizes parameters; bias-variance describes error\n     D. Bias-variance runs gradient descent\n(* = marked answer) Gradient descent is an optimizer, while bias-variance is a framework for understanding underfitting and overfitting; it does not run gradient descent.",
+        "judge": {
+          "criteria": {
+            "technically_accurate": {
+              "passed": false,
+              "reason": "Card 5 states \"the gradient points toward improvement,\" but for loss minimization the gradient points uphill; the negative gradient points downhill. This directional error makes the card technically inaccurate."
+            },
+            "facet_fidelity": {
+              "passed": true,
+              "reason": "Each card stays in its assigned facet—motivation, intuition, update rule, numeric example, pitfalls, and comparison—without drifting into another card's job."
+            },
+            "worked_example_correct": {
+              "passed": true,
+              "reason": "Arithmetic verified: gradient = 6, step = 0.6, w_new = 2.4, and loss falls from 9 to 5.76; all numbers are correct."
+            },
+            "quick_checks_sound": {
+              "passed": true,
+              "reason": "All six questions have exactly one correct option, the marked answer is correct, distractors are plausible, and the explanations are accurate."
+            },
+            "clear_for_engineers": {
+              "passed": true,
+              "reason": "The cards are concise, concrete, and use language accessible to software engineers new to the concept."
+            },
+            "no_redundancy": {
+              "passed": false,
+              "reason": "Cards 3 and 5 repeat the same learning-rate effects—large alpha causes overshoot/divergence and small alpha slows or stalls training—nearly verbatim."
+            }
+          },
+          "passed": 4,
+          "of": 6
+        }
+      },
+      {
+        "concept": "K-Means Clustering",
+        "valid": true,
+        "first_try": true,
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3.5-super-vl:free",
+            "prompt_ref": "concept_cards/v1",
+            "status": "ok",
+            "error_code": null,
+            "error_detail": null,
+            "response_excerpt": null,
+            "input_tokens": 831,
+            "output_tokens": 18333,
+            "latency_ms": 281685
+          }
+        ],
+        "latency_ms": 281685,
+        "output_tokens": 18333,
+        "coverage": 0.667,
+        "missing": [
+          [
+            "number of clusters",
+            "choosing k",
+            "elbow"
+          ]
+        ],
+        "visuals": {
+          "icon": 3,
+          "formula": 2,
+          "mermaid": 1
+        },
+        "answer_indexes": [
+          1,
+          2,
+          3,
+          0,
+          1,
+          2
+        ],
+        "summary_words": [
+          91,
+          95,
+          93,
+          91,
+          91,
+          90
+        ],
+        "cards": "[1] why_it_matters — Why group unlabeled data into clusters\nK-means groups unlabeled data into k clusters by finding dense regions and placing a center in each. Engineers use it for customer segmentation, document grouping, image compression, and anomaly detection before applying supervised models. Because it needs no labels, it is cheap to run on large logs or event streams. It also helps explore structure in a dataset, reduce data for downstream tasks, or build codebooks for vector quantization. The output is cluster assignments and centroids that summarize each group, and it scales well to millions of points with efficient implementations.\nTakeaway: K-means finds structure in unlabeled data without needing any labels.\nVisual: icon: target\nQuick check: What is the main advantage of K-means being unsupervised?\n     A. It requires labeled training data for every cluster.\n   * B. It can run without labeled data, making it cheap on large streams.\n     C. It always finds the true business groups in the data.\n     D. It needs fewer centroids than supervised methods.\n(* = marked answer) Unsupervised means no labels are needed, so it can be applied cheaply to large unlabeled logs; it does not guarantee true business groups.\n\n[2] intuition — Points pull toward nearby centers\nImagine points on a map and several center points you choose. Every point joins the nearest center, forming a cluster. Then each center moves to the average location of its points. You repeat assign and move until centers stop changing. The result is k groups where points inside a cluster are similar to each other and far from points in other clusters. No labels are required, so the algorithm discovers structure purely from distances between observations. It works best when clusters are compact and roughly round, and it naturally handles large tables of numeric features.\nTakeaway: Each point joins the nearest center, then centers move to the average of their points.\nVisual: icon: circle-dot\nQuick check: What happens after points are assigned to the nearest centroid?\n     A. Centroids are deleted and replaced with random points.\n     B. Labels are requested from a human annotator.\n   * C. Each centroid moves to the average of its assigned points.\n     D. The number of clusters is doubled automatically.\n(* = marked answer) The update step recomputes each centroid as the mean of its cluster; labels are never requested and centroids are not deleted.\n\n[3] how_it_works — Assign points, move centroids, repeat\nPick k and place centroids, often at random observations. Assign every observation to the nearest centroid using Euclidean distance. Recompute each centroid as the mean of all points assigned to it. Repeat assignment and update until cluster membership stops changing or an iteration limit is reached. The algorithm minimizes the within-cluster sum of squared distances, so compact clusters are favored. It converges because each step does not increase the objective, though it may stop at a local optimum rather than the best possible partition. Running multiple starts with different seeds reduces this risk.\nTakeaway: K-means alternates assigning points to the nearest centroid and recomputing centroids as cluster means.\nVisual: formula: J = \\sum_{i=1}^{k} \\sum_{x \\in C_i} ||x - \\mu_i||^2\nQuick check: What quantity does K-means try to minimize?\n     A. The distance between all pairs of points in the dataset.\n     B. The number of iterations needed to converge.\n     C. The variance between different cluster centroids.\n   * D. The sum of squared distances from points to their own centroid.\n(* = marked answer) The objective is within-cluster sum of squares; it does not minimize all pairwise distances or iteration count.\n\n[4] worked_example — Two clusters with four 2D points\nUse four points: A(1,1), B(2,1), C(4,4), D(5,4), with k=2 and initial centroids at (1,1) and (4,4). Distances put A and B with the first centroid, and C and D with the second. New means are (1.5,1) and (4.5,4). Reassigning confirms A,B stay in cluster one and C,D stay in cluster two. Final centroids are (1.5,1) and (4.5,4). The within-cluster sum of squares is 0.25 + 0.25 + 0.25 + 0.25 = 1.0. No points change clusters after this update, so the algorithm has converged to a stable final partition here now.\nTakeaway: With centroids at (1.5,1) and (4.5,4), the four points split into two stable clusters.\nVisual: formula: \\mu_1 = \\frac{(1,1)+(2,1)}{2} = (1.5, 1)\nQuick check: After the first update, what is the centroid of cluster one containing (1,1) and (2,1)?\n   * A. (1.5, 1)\n     B. (2, 1)\n     C. (1, 1.5)\n     D. (3, 2)\n(* = marked answer) The mean of x coordinates is 1.5 and the mean of y coordinates is 1; (2,1) is just one point, not the average.\n\n[5] pitfalls — K depends on initialization and scale\nK-means requires you to choose k before seeing the data, and a bad k produces meaningless clusters. Random initialization can trap the algorithm in a poor local optimum, so multiple restarts help. It assumes clusters are spherical, similar in size, and well separated; elongated or nested clusters break down. Features with larger scales dominate Euclidean distance, so standardize first. Outliers pull centroids away from dense regions, and the result depends on feature scaling. It also minimizes variance, not true labels, so clusters may not match business groups or user segments well.\nTakeaway: Bad k, poor initialization, unscaled features, and outliers can all ruin K-means results.\nVisual: icon: triangle-alert\nQuick check: Why should features be standardized before K-means?\n     A. Standardization guarantees the algorithm finds the global optimum.\n   * B. Features on larger scales dominate Euclidean distance and distort clusters.\n     C. K-means cannot run unless all features have mean zero.\n     D. Standardization removes the need to choose k.\n(* = marked answer) Euclidean distance is scale-sensitive, so large-scale features overwhelm others; standardization does not remove the need to pick k or guarantee global optimality.\n\n[6] compare — K-Means versus PCA for structure\nK-means partitions data into k groups, while PCA finds directions of maximum variance and projects data onto fewer components. Both are unsupervised, but K-means outputs cluster labels and PCA outputs components. PCA can preprocess data for K-means by removing noise or reducing dimensions, yet PCA itself does not assign clusters. K-means needs a chosen k; PCA needs a chosen number of components. Use K-means for grouping and PCA for visualization or compression. They are complementary rather than interchangeable in most machine learning pipelines. Scaling features matters for both before use.\nTakeaway: K-means partitions data into groups, while PCA reduces dimensions and does not assign clusters.\nVisual: mermaid: graph TD\n    U[Unsupervised] --> K[K-Means]\n    U --> P[PCA]\n    K --> L[Cluster labels]\n    P --> C[Components]\n    P --> R[Preprocess]\n    K --> N[k clusters]\n    P --> D[dims]\nQuick check: How does PCA differ from K-means?\n     A. PCA assigns each point to a cluster label, while K-means reduces dimensions.\n     B. K-means requires labels, while PCA works only on labeled data.\n   * C. PCA finds directions of maximum variance, while K-means partitions points into groups.\n     D. PCA always produces exactly k clusters like K-means.\n(* = marked answer) PCA is dimensionality reduction, not clustering; K-means is unsupervised and does not require labels.",
+        "judge": {
+          "criteria": {
+            "technically_accurate": {
+              "passed": false,
+              "reason": "Card 1 incorrectly states K-means works by finding dense regions; it minimizes within-cluster variance via iterative centroid updates, and density-based grouping is not part of the algorithm."
+            },
+            "facet_fidelity": {
+              "passed": true,
+              "reason": "Each card stays in its assigned role: motivation, intuition, procedure, numeric example, failure modes, and PCA comparison; no card drifts into another facet's core content."
+            },
+            "worked_example_correct": {
+              "passed": true,
+              "reason": "All arithmetic is verified: centroids (1.5,1) and (4.5,4), assignments remain stable, and WCSS = 0.25 × 4 = 1.0."
+            },
+            "quick_checks_sound": {
+              "passed": true,
+              "reason": "Every question has exactly one true option, the marked option is correct, distractors are clearly false, and explanations match the math."
+            },
+            "clear_for_engineers": {
+              "passed": true,
+              "reason": "Language is concrete (logs, event streams, features, pipelines) and concise; minor filler in card 4 does not obscure meaning."
+            },
+            "no_redundancy": {
+              "passed": true,
+              "reason": "Cards cover distinct facets; shared mentions such as scaling or no labels serve different purposes and are not repeated content."
+            }
+          },
+          "passed": 5,
+          "of": 6
+        }
+      },
+      {
+        "concept": "Backpropagation",
+        "valid": false,
+        "error": "llm_unavailable",
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3.5-super-vl:free",
+            "prompt_ref": "concept_cards/v1",
+            "status": "provider_error",
+            "error_code": "llm_unavailable",
+            "error_detail": "Error code: 502 - {'error': {'message': 'Provider returned error', 'code': 502, 'metadata': {'raw': '{\"message\":\"Failed to generate completions\",\"type\":\"Internal Server Error\",\"code\":500}', 'provider_name': 'Nvidia', 'is_byok': False}}, 'user_id': 'user_3FGnafcjn94slTfPxHW7DzqVP2h'}",
+            "response_excerpt": null,
+            "input_tokens": null,
+            "output_tokens": null,
+            "latency_ms": null
+          }
+        ]
+      },
+      {
+        "concept": "ROC & AUC",
+        "valid": true,
+        "first_try": true,
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3.5-super-vl:free",
+            "prompt_ref": "concept_cards/v1",
+            "status": "ok",
+            "error_code": null,
+            "error_detail": null,
+            "response_excerpt": null,
+            "input_tokens": 830,
+            "output_tokens": 12430,
+            "latency_ms": 116791
+          }
+        ],
+        "latency_ms": 116791,
+        "output_tokens": 12430,
+        "coverage": 1.0,
+        "missing": [],
+        "visuals": {
+          "icon": 3,
+          "formula": 2,
+          "mermaid": 1
+        },
+        "answer_indexes": [
+          1,
+          2,
+          0,
+          3,
+          1,
+          2
+        ],
+        "summary_words": [
+          106,
+          92,
+          100,
+          100,
+          105,
+          110
+        ],
+        "cards": "[1] why_it_matters — Why compare classifiers across thresholds\nMachine learning models often output scores, not final yes-no decisions. Choosing a single threshold such as 0.5 can hide how performance changes when the cost of false alarms differs from the cost of missed cases. ROC curves show the tradeoff between catching real positives and triggering false alarms at every possible threshold. AUC compresses that curve into one threshold-independent number, making it easy to compare classifiers in fraud detection, medical screening, and credit scoring. Engineers use it when the operating point is not known in advance, and when they need to explain model behavior to stakeholders who care about both missed fraud and blocked legitimate transactions.\nTakeaway: ROC and AUC let you compare binary classifiers without committing to a single decision threshold.\nVisual: icon: target\nQuick check: Why is AUC useful for comparing binary classifiers?\n     A. It tells you the exact probability that a prediction is correct.\n   * B. It summarizes performance across all thresholds with a single number.\n     C. It automatically selects the best threshold for production.\n     D. It works only when classes are perfectly balanced.\n(* = marked answer) AUC aggregates the ROC curve into one threshold-independent score, so you can rank models without picking a cutoff. It does not choose a threshold or require balanced classes.\n\n[2] intuition — The ROC curve as a threshold sweep\nThink of sliding a decision threshold from very high to very low. At a high threshold, the model predicts positive only when it is very confident, so it catches few real positives and raises few false alarms. At a low threshold, it flags almost everything, catching nearly all positives but also many negatives. Plotting the true positive rate against the false positive rate at each threshold traces the ROC curve. A curve bowing toward the top left means strong separation; a diagonal line means the model ranks no better than random guessing.\nTakeaway: Each point on the ROC curve is the performance at one threshold; the curve shows the full tradeoff.\nVisual: icon: circle-dot\nQuick check: What does a diagonal ROC curve from bottom-left to top-right indicate?\n     A. The model perfectly separates positives from negatives.\n     B. The threshold is set too high to be useful.\n   * C. The model ranks instances no better than random guessing.\n     D. The dataset has too many false negatives.\n(* = marked answer) A diagonal line means TPR equals FPR at every threshold, which is what a random classifier produces. A perfect classifier would bow toward the top-left corner.\n\n[3] how_it_works — TPR, FPR, and the ROC curve\nFor any threshold t, classify an instance as positive when its score is at least t. True positive rate is TP divided by TP plus FN, the share of actual positives recovered. False positive rate is FP divided by FP plus TN, the share of actual negatives wrongly flagged. Vary t across all observed scores, compute TPR and FPR at each step, and plot FPR on the horizontal axis and TPR on the vertical axis. Connecting the points yields the ROC curve, and AUC is the area beneath it. AUC ranges from 0 to 1, with 0.5 indicating random performance.\nTakeaway: ROC plots TPR versus FPR across thresholds; AUC summarizes the curve as one number.\nVisual: formula: TPR = \\frac{TP}{TP + FN}, \\quad FPR = \\frac{FP}{FP + TN}, \\quad AUC = \\int_{0}^{1} TPR(FPR) \\, d(FPR)\nQuick check: At a fixed threshold, what is the false positive rate?\n   * A. FP divided by FP plus TN.\n     B. TP divided by TP plus FN.\n     C. FP divided by TP plus FP.\n     D. TN divided by TN plus FN.\n(* = marked answer) False positive rate measures the share of actual negatives incorrectly flagged, so the denominator is all actual negatives, FP plus TN. Option B is the true positive rate.\n\n[4] worked_example — A tiny ROC calculation with real numbers\nSuppose a test set has five actual positives and five actual negatives. At threshold 0.7, the model gets three true positives, two false negatives, one false positive, and four true negatives. True positive rate is three divided by five, or zero point six. False positive rate is one divided by five, or zero point two. At threshold 0.3, it gets five true positives, zero false negatives, four false positives, and one true negative, giving TPR one point zero and FPR zero point eight. Together with the origin and the top-right corner, they define the polygon whose area is the AUC.\nTakeaway: With TP=3, FN=2, FP=1, TN=4, TPR is 0.6 and FPR is 0.2.\nVisual: formula: TPR = 3/5 = 0.6, \\quad FPR = 1/5 = 0.2\nQuick check: With TP=3, FN=2, FP=1, TN=4, what are TPR and FPR?\n     A. TPR 0.5, FPR 0.25\n     B. TPR 0.75, FPR 0.2\n     C. TPR 0.6, FPR 0.8\n   * D. TPR 0.6, FPR 0.2\n(* = marked answer) TPR is 3/(3+2)=0.6 and FPR is 1/(1+4)=0.2. Option C confuses FPR with the value from a different threshold.\n\n[5] pitfalls — Pitfalls of ROC and AUC\nAUC can be misleading on imbalanced data because many true negatives make the false positive rate look small even when the model misses most positives. ROC does not select a threshold for you; you must choose based on the relative cost of false positives and false negatives. AUC also averages performance across all thresholds, even regions you will never use in production. Finally, a high AUC says nothing about calibration: a model can rank positives above negatives while outputting probabilities that are systematically too high or too low. Use precision-recall curves or cost-based threshold selection when the positive class is rare or errors are asymmetric.\nTakeaway: AUC can look strong on imbalanced data and does not choose a threshold or guarantee calibrated probabilities.\nVisual: icon: triangle-alert\nQuick check: Why can AUC be overly optimistic on imbalanced data?\n     A. It ignores false positives completely.\n   * B. A large number of true negatives can make FPR look small even when many positives are missed.\n     C. It requires the classes to be exactly balanced.\n     D. It only works with calibrated probabilities.\n(* = marked answer) Because FPR divides false positives by all actual negatives, a huge pool of true negatives can drive FPR downward even if recall is poor. AUC does not ignore false positives or require balance.\n\n[6] compare — ROC & AUC versus precision-recall and cross-validation\nROC and AUC summarize ranking across thresholds, while precision and recall focus on the positive class and are usually more informative when positives are rare because precision directly penalizes false positives. Cross-validation estimates how well performance generalizes to unseen data; it does not replace ROC but gives a reliable way to average AUC over multiple folds. Use cross-validation to obtain a stable AUC, use precision-recall curves for imbalanced problems, and choose the operating threshold from business costs rather than from AUC alone. In short, cross-validation answers whether the score will hold up, precision-recall answers whether the positive class is well handled, and ROC-AUC answers how well the model ranks overall.\nTakeaway: Use cross-validation for stable AUC, precision-recall for rare positives, and business costs to pick the threshold.\nVisual: mermaid: graph TD\n  Data --> Model\n  Model --> Scores\n  Scores --> Thresholds\n  Thresholds --> ROCAUC\n  Scores --> PrecisionRecall\n  Data --> CrossValidation\n  CrossValidation --> ROCAUC\nQuick check: When are precision-recall curves generally more informative than ROC-AUC?\n     A. When you need a single number to rank models across all thresholds.\n     B. When the dataset is perfectly balanced and thresholds are unknown.\n   * C. When the positive class is rare and false positives are costly.\n     D. When you want to estimate generalization error directly.\n(* = marked answer) Precision directly accounts for false positives relative to predicted positives, which matters when positives are rare. Cross-validation, not precision-recall, estimates generalization error.",
+        "judge": {
+          "criteria": {
+            "technically_accurate": {
+              "passed": true,
+              "reason": "All formulas (TPR=TP/(TP+FN), FPR=FP/(FP+TN), AUC integral) and arithmetic are correct; card 4 values check out (3/5=0.6, 1/5=0.2, 5/5=1.0, 4/5=0.8). No invented claims."
+            },
+            "facet_fidelity": {
+              "passed": true,
+              "reason": "Each card stays in its assigned lane: motivation, threshold-sweep intuition, mechanics, numeric example, limitations, and comparison with PR/cross-validation; no card drifts into another's primary job."
+            },
+            "worked_example_correct": {
+              "passed": true,
+              "reason": "Uses concrete counts (5 positives, 5 negatives); TPR=3/(3+2)=0.6 and FPR=1/(1+4)=0.2 are correct, and the second-threshold values TPR=1.0 and FPR=0.8 are also correct."
+            },
+            "quick_checks_sound": {
+              "passed": true,
+              "reason": "Every question has exactly one correct option; marked answers B, C, A, D, B, C are correct, and explanations accurately justify why the distractors are wrong."
+            },
+            "clear_for_engineers": {
+              "passed": true,
+              "reason": "Cards are concise, use concrete numbers and formulas, and avoid filler while remaining accessible to engineers new to ROC/AUC."
+            },
+            "no_redundancy": {
+              "passed": true,
+              "reason": "Each card covers distinct content; related advice such as cost-based thresholds appears in different facets without verbatim repetition."
+            }
+          },
+          "passed": 6,
+          "of": 6
+        }
+      }
+    ],
+    "nvidia/nemotron-3.5-super-vl:free reasoning=low": [
+      {
+        "concept": "Gradient Descent",
+        "valid": true,
+        "first_try": true,
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3.5-super-vl:free",
+            "prompt_ref": "concept_cards/v1",
+            "status": "ok",
+            "error_code": null,
+            "error_detail": null,
+            "response_excerpt": null,
+            "input_tokens": 828,
+            "output_tokens": 14556,
+            "latency_ms": 134714
+          }
+        ],
+        "latency_ms": 134714,
+        "output_tokens": 14556,
+        "coverage": 1.0,
+        "missing": [],
+        "visuals": {
+          "icon": 3,
+          "formula": 2,
+          "mermaid": 1
+        },
+        "answer_indexes": [
+          1,
+          2,
+          0,
+          2,
+          1,
+          3
+        ],
+        "summary_words": [
+          96,
+          105,
+          90,
+          99,
+          97,
+          107
+        ],
+        "cards": "[1] why_it_matters — Why Gradient Descent Trains Most ML Models\nMost machine learning models are trained by finding parameter values that make predictions as accurate as possible. Gradient descent is the algorithm that does this search automatically. It is used in linear regression, logistic regression, neural networks, and many other models. Instead of guessing weights by hand, the engineer defines a loss function that measures error, and gradient descent adjusts the parameters to reduce that loss. Because it works with any differentiable loss, it scales from simple models to deep networks with millions of parameters. It is the default training method in most modern ML libraries.\nTakeaway: Gradient descent automatically finds model parameters that minimize a loss function.\nVisual: icon: target\nQuick check: What problem does gradient descent solve in model training?\n     A. It selects the best model architecture automatically\n   * B. It finds parameters that minimize a loss function\n     C. It labels unlabeled training data\n     D. It removes outliers from the dataset\n(* = marked answer) Gradient descent searches parameter space to reduce loss; it does not choose architectures, label data, or clean outliers.\n\n[2] intuition — Imagine a Hiker Descending a Mountain\nThink of model parameters as a hiker's position on a foggy mountain, where elevation is the loss. The hiker wants to reach the valley floor but can only feel the slope underfoot. At each step, the hiker measures which way is downhill and moves a short distance in that direction. Repeating this process eventually reaches a low point, even if the full map is invisible. In machine learning, the hiker is the algorithm, the mountain is the loss surface, and the valley is the best parameter setting. The step size matters: too large and the hiker may overshoot, too small and the journey takes forever.\nTakeaway: Gradient descent follows the local slope downhill to find low-loss parameters.\nVisual: icon: brain\nQuick check: What does the slope represent in the hiker intuition?\n     A. The height of the mountain\n     B. The hiker's step size\n   * C. The direction of steepest increase in loss\n     D. The final valley location\n(* = marked answer) The slope points uphill, so its negative indicates downhill; step size is separate and the valley is the destination.\n\n[3] how_it_works — The Parameter Update Rule\nGradient descent starts with initial parameters, often chosen at random. It computes the gradient of the loss with respect to each parameter, which points in the direction of steepest increase. The update moves each parameter in the opposite direction by an amount proportional to the learning rate. For a single parameter w, the new value is the old value minus the learning rate times the gradient. With multiple parameters, every parameter is updated simultaneously using its own partial derivative. This process repeats for many iterations until the loss stops improving.\nTakeaway: Each iteration moves parameters opposite the gradient scaled by the learning rate.\nVisual: formula: \\theta_{t+1} = \\theta_t - \\eta \\nabla J(\\theta_t)\nQuick check: What does the gradient point toward?\n   * A. Steepest increase in loss\n     B. Steepest decrease in loss\n     C. The global minimum\n     D. The learning rate\n(* = marked answer) The gradient points uphill, so gradient descent moves in the opposite direction; it does not directly point to the minimum.\n\n[4] worked_example — A Single Step on a Quadratic Loss\nSuppose the loss is J(w) = w² and the current parameter is w = 3. The gradient is dJ/dw = 2w, so at w = 3 the gradient equals 6. With a learning rate of 0.1, the update is w_new = 3 - 0.1 × 6 = 2.4. The old loss was 3² = 9, and the new loss is 2.4² = 5.76. Because 5.76 is less than 9, the step reduced the loss and moved toward the minimum at w = 0. This example uses one parameter, but the same update idea applies to models with many weights.\nTakeaway: A gradient step subtracts learning rate times gradient from the current parameter.\nVisual: formula: w_{new} = 3 - 0.1 \\times (2 \\times 3) = 2.4, \\quad J(2.4) = 2.4^2 = 5.76\nQuick check: What is the new parameter value after the update?\n     A. 3.6\n     B. 5.76\n   * C. 2.4\n     D. 6.0\n(* = marked answer) 3 minus 0.1 times 6 equals 2.4; 5.76 is the new loss, not the parameter.\n\n[5] pitfalls — Learning Rate and Scaling Can Break It\nA learning rate that is too large can make the loss increase or diverge instead of converge. A rate that is too small makes training extremely slow and may get stuck in a shallow local minimum. Gradient descent assumes the loss is differentiable, so it cannot directly optimize discrete objectives. It is also sensitive to feature scaling: features with very different ranges distort the loss surface and slow convergence. Poor initialization can trap the search in a bad region, especially in non-convex models like neural networks. Standardizing inputs to similar scales often fixes slow or unstable convergence.\nTakeaway: Choose a moderate learning rate and scale features to avoid divergence or slow training.\nVisual: icon: triangle-alert\nQuick check: What happens if the learning rate is too large?\n     A. Training becomes very slow\n   * B. The loss may increase or diverge\n     C. Features are standardized automatically\n     D. The gradient becomes zero\n(* = marked answer) A large step can overshoot the minimum and cause the loss to grow; slow training is caused by a rate that is too small.\n\n[6] compare — Optimization vs. Model Complexity\nGradient descent is an optimization algorithm, not a model itself. It finds parameters for a model you have already chosen, such as linear regression or a neural network. The bias-variance trade-off, by contrast, describes how model complexity affects generalization: simple models may underfit, while complex models may overfit. Unlike the normal equation, which solves linear regression in one step, gradient descent works for large datasets and deep models but requires tuning the learning rate. Stochastic gradient descent is a variant that updates parameters using one example at a time. It does not choose between high bias and high variance; that is a modeling decision separate from optimization.\nTakeaway: Gradient descent optimizes parameters, while bias-variance trade-off governs model complexity and generalization.\nVisual: mermaid: graph TD\\n    A[Gradient Descent] --> B[Finds Parameters]\\n    A --> C[Needs Learning Rate]\\n    D[Bias Variance Tradeoff] --> E[Controls Complexity]\\n    B --> F[Linear Models]\\n    B --> G[Neural Networks]\\n    D --> H[Underfit Overfit]\nQuick check: How is gradient descent different from the bias-variance trade-off?\n     A. Both are the same concept with different names\n     B. Bias-variance is only used for neural networks\n     C. Gradient descent chooses model complexity; bias-variance finds parameters\n   * D. Gradient descent finds parameters; bias-variance describes complexity and generalization\n(* = marked answer) Gradient descent is an optimization method for parameters; bias-variance is about model complexity and generalization, not parameter search.",
+        "judge": {
+          "criteria": {
+            "technically_accurate": {
+              "passed": true,
+              "reason": "All formulas, gradients, and arithmetic are correct (e.g., w=3, gradient=6, lr=0.1 yields w_new=2.4; loss drops from 9 to 5.76). Gradient direction, update rule, differentiability assumption, and pitfalls are accurately stated with nothing invented."
+            },
+            "facet_fidelity": {
+              "passed": true,
+              "reason": "Each card cleanly fulfills its assigned facet: motivation, hiker intuition, update rule, numeric example, pitfalls, and comparison vs. bias-variance/normal equation, without drifting into another card's role."
+            },
+            "worked_example_correct": {
+              "passed": true,
+              "reason": "Concrete arithmetic is correct: 3 − 0.1 × 6 = 2.4 and J(2.4) = 2.4² = 5.76, which is less than the old loss of 9."
+            },
+            "quick_checks_sound": {
+              "passed": true,
+              "reason": "All six MCQs have exactly one correct option; the starred answer matches it in every case; distractors are plausible; explanations are accurate."
+            },
+            "clear_for_engineers": {
+              "passed": true,
+              "reason": "Cards are concise and concrete, using formulas and an accessible hiker analogy appropriate for a software engineer new to ML, with no filler."
+            },
+            "no_redundancy": {
+              "passed": true,
+              "reason": "Cards cover distinct facets; related themes such as step size appear as intuition in one card and technical pitfalls in another, which is elaboration rather than repeated content."
+            }
+          },
+          "passed": 6,
+          "of": 6
+        }
+      },
+      {
+        "concept": "K-Means Clustering",
+        "valid": true,
+        "first_try": true,
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3.5-super-vl:free",
+            "prompt_ref": "concept_cards/v1",
+            "status": "ok",
+            "error_code": null,
+            "error_detail": null,
+            "response_excerpt": null,
+            "input_tokens": 831,
+            "output_tokens": 16893,
+            "latency_ms": 352158
+          }
+        ],
+        "latency_ms": 352158,
+        "output_tokens": 16893,
+        "coverage": 1.0,
+        "missing": [],
+        "visuals": {
+          "icon": 3,
+          "formula": 2,
+          "mermaid": 1
+        },
+        "answer_indexes": [
+          1,
+          3,
+          0,
+          2,
+          3,
+          0
+        ],
+        "summary_words": [
+          91,
+          91,
+          102,
+          94,
+          91,
+          99
+        ],
+        "cards": "[1] why_it_matters — Why group unlabeled data into clusters?\nK-means partitions unlabeled data into k groups by minimizing distance to cluster centers. Engineers use it for customer segmentation, anomaly detection, image compression, and grouping similar documents or logs before supervised modeling. It reveals structure without labels, reduces data size, and speeds up downstream tasks. Because it needs no target column, it is often the first exploratory step when facing a new dataset with many features and no ground truth. The choice of k and feature scaling strongly affect the results, so engineers usually try several values and standardize inputs first.\nTakeaway: K-means finds structure in unlabeled data without needing a target column.\nVisual: icon: target\nQuick check: Which of the following best describes why K-means is used before supervised modeling?\n     A. It requires labeled target values to train.\n   * B. It discovers structure in unlabeled data to guide feature engineering.\n     C. It always improves classification accuracy.\n     D. It replaces the need for feature scaling.\n(* = marked answer) K-means is unsupervised and finds groups without labels, which can inform downstream feature engineering. It does not require targets, guarantee accuracy, or remove the need for scaling.\n\n[2] intuition — Imagine points pulling toward nearby centers\nPicture scattering points on a page and placing k dots as temporary centers. Each point joins the nearest dot, forming k clusters. Then each dot moves to the average position of its points. Repeat until the dots stop moving. The result is k compact groups where members are close to their own center and far from other centers. No labels are needed; the algorithm discovers groups purely from geometry. Different starting positions can lead to different final groupings, so engineers often run the algorithm several times and keep the best outcome.\nTakeaway: Points repeatedly join the nearest centroid, and centroids move to the average of their points.\nVisual: icon: circle-dot\nQuick check: What happens after points are assigned to the nearest centroid in K-means?\n     A. The algorithm immediately stops and returns the initial centroids.\n     B. Each point is relabeled with a random cluster ID.\n     C. The centroids are moved to the median of all data points.\n   * D. Each centroid moves to the mean of the points assigned to it.\n(* = marked answer) The update step recomputes each centroid as the mean of its assigned points. The algorithm does not stop after one assignment, and it uses the mean, not the median.\n\n[3] how_it_works — Assign points, then move centroids\nChoose k, initialize centroids, then repeat two steps until convergence. In the assignment step, each point joins the cluster whose centroid is closest, usually measured by squared Euclidean distance. In the update step, each centroid becomes the mean of all points assigned to it. The process stops when assignments no longer change or centroids move less than a tolerance. The algorithm minimizes the within-cluster sum of squares, but it may stop at a local optimum rather than the best possible partition. Running from multiple starting points reduces this risk, and the final solution is the run with the lowest total within-cluster variance.\nTakeaway: K-means alternates assigning points to the nearest centroid and recomputing centroids as cluster means.\nVisual: formula: J = \\sum_{i=1}^{k} \\sum_{x \\in C_i} \\|x - \\mu_i\\|^2\nQuick check: Which quantity does K-means try to minimize?\n   * A. The sum of squared distances from points to their own cluster centroid.\n     B. The distance between every pair of points in the dataset.\n     C. The number of features in the dataset.\n     D. The distance between all centroids and the origin.\n(* = marked answer) K-means minimizes the within-cluster sum of squares. It does not minimize pairwise distances, feature count, or distance to the origin.\n\n[4] worked_example — Two clusters on a line with four points\nPoints at 1, 2, 8, and 9 on a number line with k equals 2. Start centroids at 1 and 8. Assign 1 and 2 to centroid 1, and 8 and 9 to centroid 8. Update means: (1 + 2) divided by 2 equals 1.5, and (8 + 9) divided by 2 equals 8.5. Reassign: 1 and 2 remain nearest to 1.5, while 8 and 9 remain nearest to 8.5. Centroids stop moving. Final clusters are {1, 2} and {8, 9} with centers 1.5 and 8.5. The total within-cluster sum of squares is 1.0.\nTakeaway: With centroids at 1 and 8, the means of {1, 2} and {8, 9} are 1.5 and 8.5.\nVisual: formula: \\mu_1 = \\frac{1+2}{2} = 1.5, \\quad \\mu_2 = \\frac{8+9}{2} = 8.5\nQuick check: After the first update in the worked example, what is the new centroid for the cluster containing points 1 and 2?\n     A. 8.5\n     B. 1\n   * C. 1.5\n     D. 2\n(* = marked answer) The mean of 1 and 2 is 1.5. The value 8.5 belongs to the other cluster, while 1 and 2 are the original points.\n\n[5] pitfalls — K-means can fail on shape and scale\nK-means assumes clusters are spherical, similar in size, and that k is known. It is sensitive to outliers, which pull centroids away from dense regions. Features on different scales dominate distance unless standardized. Random initialization can produce poor local minima, so multiple restarts help. It also forces every point into a cluster, even noise, and the number of clusters must be chosen in advance, often with the elbow method or silhouette score. Non-convex or elongated clusters are poorly represented, and categorical data requires encoding before Euclidean distance makes sense in practice.\nTakeaway: K-means assumes spherical, similarly sized clusters and is sensitive to outliers, scale, and initialization.\nVisual: icon: triangle-alert\nQuick check: Why should features be standardized before running K-means?\n     A. It converts categorical variables into numbers automatically.\n     B. Standardization guarantees the global optimum.\n     C. Standardization removes the need to choose k.\n   * D. Features with larger scales dominate the distance calculation.\n(* = marked answer) Distance is scale-sensitive, so features with larger ranges can dominate the centroid updates. Standardization does not choose k, guarantee the optimum, or encode categories.\n\n[6] compare — K-means versus PCA for structure\nK-means partitions data into discrete groups; PCA finds directions of maximum variance and projects data onto fewer axes. K-means outputs cluster labels for each observation; PCA outputs transformed components that are linear combinations of the original features. Both are unsupervised and can reduce complexity, but K-means groups observations while PCA summarizes features. Use K-means when you need segments; use PCA when you need visualization, noise reduction, or fewer input features for another model. PCA does not assign points to clusters, and K-means does not create new features. They are often used together, with PCA reducing dimensions before K-means runs.\nTakeaway: K-means produces cluster labels, while PCA produces principal components for dimensionality reduction.\nVisual: mermaid: graph TD\n    Data[Raw data] --> KMeans[K-means clusters]\n    Data --> PCA[PCA components]\n    KMeans --> Labels[Group labels]\n    PCA --> Projection[Lower-dimensional view]\n    Labels --> Use[Segmentation]\n    Projection --> Use[Visualization and preprocessing]\nQuick check: How does PCA differ from K-means in output?\n   * A. PCA produces principal components, while K-means produces cluster labels.\n     B. PCA assigns each point to a cluster, while K-means reduces dimensions.\n     C. PCA requires labels, while K-means does not.\n     D. PCA and K-means produce identical outputs on the same data.\n(* = marked answer) PCA outputs transformed feature components, whereas K-means outputs group assignments. Neither method requires labels, and their outputs are not identical.",
+        "judge": {
+          "criteria": {
+            "technically_accurate": {
+              "passed": true,
+              "reason": "All statements, formulas, and arithmetic are correct; K-means objective, update rule, assumptions, and PCA contrast are accurately described."
+            },
+            "facet_fidelity": {
+              "passed": true,
+              "reason": "Each card stays in its assigned lane: motivation, intuition, mechanics, numeric example, failure modes, and PCA comparison, with no drift into another card's primary job."
+            },
+            "worked_example_correct": {
+              "passed": true,
+              "reason": "Points {1,2,8,9}, k=2, initial centroids 1 and 8; means 1.5 and 8.5 are correct, assignments are stable, and within-cluster sum of squares is 0.5 + 0.5 = 1.0."
+            },
+            "quick_checks_sound": {
+              "passed": true,
+              "reason": "All six questions have exactly one correct option, the marked option matches, distractors are plausible, and explanations correctly justify the answer."
+            },
+            "clear_for_engineers": {
+              "passed": true,
+              "reason": "Cards are concise, use concrete examples and standard terminology, and avoid unnecessary filler for an engineer audience."
+            },
+            "no_redundancy": {
+              "passed": true,
+              "reason": "Each card covers a distinct facet; overlapping mentions (scaling, restarts) are contextual to different facets rather than repeated content."
+            }
+          },
+          "passed": 6,
+          "of": 6
+        }
+      },
+      {
+        "concept": "Backpropagation",
+        "valid": true,
+        "first_try": true,
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3.5-super-vl:free",
+            "prompt_ref": "concept_cards/v1",
+            "status": "ok",
+            "error_code": null,
+            "error_detail": null,
+            "response_excerpt": null,
+            "input_tokens": 841,
+            "output_tokens": 12907,
+            "latency_ms": 106959
+          }
+        ],
+        "latency_ms": 106959,
+        "output_tokens": 12907,
+        "coverage": 1.0,
+        "missing": [],
+        "visuals": {
+          "icon": 3,
+          "formula": 2,
+          "mermaid": 1
+        },
+        "answer_indexes": [
+          1,
+          0,
+          2,
+          3,
+          1,
+          0
+        ],
+        "summary_words": [
+          106,
+          100,
+          97,
+          92,
+          97,
+          94
+        ],
+        "cards": "[1] why_it_matters — Training deep networks efficiently\nBackpropagation solves the problem of training neural networks with millions or billions of parameters. Before it, estimating gradients by nudging each parameter and re-running the network would require one forward pass per parameter, which is far too slow for deep models. Backpropagation reuses intermediate values from the forward pass and applies the chain rule layer by layer, so all gradients are computed in about the cost of a few forward passes. This efficiency is what makes modern deep learning practical, from image classification to large language models. It is the core engine behind stochastic gradient descent and its variants used in virtually every deep learning framework.\nTakeaway: Backpropagation makes training large neural networks practical by computing gradients for all parameters efficiently.\nVisual: icon: target\nQuick check: Why is backpropagation used to train neural networks?\n     A. To store activations for inference\n   * B. To compute gradients for all parameters efficiently\n     C. To initialize weights before training\n     D. To choose activation functions automatically\n(* = marked answer) Backpropagation reuses forward-pass values through the chain rule to get all gradients in roughly the cost of a few forward passes; finite differences would need one pass per parameter.\n\n[2] intuition — Intuition: errors flow backward\nThink of a neural network as a factory that makes a prediction and then checks how wrong it was using a loss function. The forward pass produces the output, but the backward pass figures out which parts of the network caused the error. It works like a product recall: trace the defect back to the specific components and adjust them. Weights that contributed more to the mistake receive larger corrections, while activations shape how the error signal moves through each layer. The core idea is local sensitivity multiplied by the error arriving from later layers, passed backward step by step.\nTakeaway: Backpropagation is a backward pass that assigns responsibility for the loss to each weight so it can be updated.\nVisual: icon: brain\nQuick check: What is the core intuition of backpropagation?\n   * A. The backward pass assigns responsibility for the loss to each weight\n     B. The forward pass computes all parameter updates\n     C. Weights are updated randomly without measuring error\n     D. Only the output layer receives gradient information\n(* = marked answer) Backprop propagates error from the output back through hidden layers; the forward pass alone does not update weights.\n\n[3] how_it_works — How backpropagation works: chain rule layer by layer\nDuring the forward pass, the network computes activations layer by layer and ends with a scalar loss. In the backward pass, the gradient of the loss with respect to the output is known, and the chain rule sends this error signal backward. For each layer, the local error signal delta is the incoming gradient multiplied elementwise by the derivative of the activation. The weight gradient is then delta times the transpose of the previous layer's activations, and the bias gradient is delta itself. These gradients feed an optimizer such as stochastic gradient descent to update every parameter.\nTakeaway: Gradients flow backward through the computational graph using the chain rule, reusing forward-pass activations.\nVisual: formula: \\frac{\\partial L}{\\partial W} = \\delta \\times a^{T}, \\quad \\delta = \\frac{\\partial L}{\\partial z} \\odot \\sigma'(z)\nQuick check: How are gradients computed in backpropagation?\n     A. Each weight gradient is computed independently with no reuse of activations\n     B. Backpropagation only updates the bias terms\n   * C. Gradients are computed using the chain rule from output back to input\n     D. The backward pass starts at the input layer and moves forward\n(* = marked answer) The chain rule propagates the error signal backward while reusing forward-pass activations; gradients are not computed independently.\n\n[4] worked_example — Worked example: one neuron gradient\nSuppose a single neuron receives input x = 2.0, has weight w = 0.5 and bias b = 0.1. The weighted sum is z = 1.1, and the sigmoid activation gives a ≈ 0.7503. With target y = 1.0 and squared loss L = (a - y)², the loss is about 0.0624. To update w, first compute dL/da ≈ -0.4995, then the local slope da/dz ≈ 0.1874, giving dL/dz ≈ -0.0936. Since dz/dw = x = 2.0, the weight gradient is dL/dw ≈ -0.1872, and the bias gradient is dL/db ≈ -0.0936.\nTakeaway: A single backward pass combines the loss derivative, activation derivative, and input to get each parameter gradient.\nVisual: formula: z = w x + b = 0.5 \\times 2.0 + 0.1 = 1.1, \\quad a = \\sigma(1.1) \\approx 0.7503, \\quad L = (a - 1.0)^2 \\approx 0.0624, \\quad \\frac{\\partial L}{\\partial w} = 2(a-1.0) \\cdot \\sigma(1.1)(1-\\sigma(1.1)) \\cdot 2.0 \\approx -0.1872\nQuick check: What is the weight gradient in the worked example?\n     A. The weight gradient is positive because the prediction is below the target\n     B. The bias gradient equals the input value\n     C. The loss is approximately 0.7503\n   * D. The weight gradient is approximately -0.1872\n(* = marked answer) The gradient is negative, so gradient descent increases the weight; 0.7503 is the activation, not the loss, and the bias gradient is not the input.\n\n[5] pitfalls — Pitfalls: vanishing gradients and broken graphs\nA common mistake is assuming backpropagation trains any deep network equally well. With sigmoid activations, each layer's derivative is at most 0.25, so multiplying many of them can shrink gradients to nearly zero, leaving early layers almost unchanged. Backpropagation also requires a differentiable computational graph; operations without derivatives break the chain rule unless subgradients or approximations are used. Another error is confusing gradients with updates: backpropagation computes gradients, while the optimizer decides the actual parameter changes. Finally, the backward pass needs activations saved during the forward pass, which increases memory usage with network depth and batch size.\nTakeaway: Backpropagation can fail or slow down when gradients vanish, the graph is non-differentiable, or activations are not stored for the backward pass.\nVisual: icon: triangle-alert\nQuick check: Which statement describes a backpropagation pitfall?\n     A. Backpropagation works equally well with any activation function at any depth\n   * B. Vanishing gradients can make early layers learn extremely slowly in deep sigmoid networks\n     C. Backpropagation does not require storing any forward-pass activations\n     D. Non-differentiable operations are automatically handled by backpropagation\n(* = marked answer) Sigmoid derivatives are at most 0.25, so their product across many layers shrinks gradients; activations must be stored and non-differentiable ops need special handling.\n\n[6] compare — Compare: backpropagation vs perceptron and activations\nThe perceptron is an early linear classifier that uses a step activation and updates weights with a simple error rule, but it cannot train multi-layer networks. Backpropagation generalizes gradient-based learning to deep networks by propagating errors through every layer. Activation functions sit between these ideas: backpropagation requires them to be differentiable so gradients can flow, while the perceptron's step function has zero gradient almost everywhere and cannot be used with backpropagation. In short, the perceptron is a model, activation functions are building blocks, and backpropagation is the training algorithm that makes deep networks learn.\nTakeaway: Backpropagation generalizes gradient-based learning to multi-layer networks, unlike the perceptron rule, and requires differentiable activations unlike the step function.\nVisual: mermaid: graph TD\n    Perceptron --> StepFunction\n    ActivationFunctions --> Sigmoid\n    Backpropagation --> MultiLayerNetwork\n    MultiLayerNetwork --> GradientDescent\n    Sigmoid --> Backpropagation\n    StepFunction -.-> Backpropagation\nQuick check: How does backpropagation differ from the perceptron and activation functions?\n   * A. Backpropagation requires differentiable activations, while the perceptron step function has zero gradient almost everywhere\n     B. The perceptron rule and backpropagation are identical training algorithms\n     C. Activation functions are only used in the perceptron, not in backpropagation\n     D. Backpropagation cannot be used with multi-layer networks\n(* = marked answer) Backpropagation is a multi-layer gradient algorithm needing differentiable activations; the perceptron rule is simpler and the step function blocks gradient flow.",
+        "judge": {
+          "error": "llm_unavailable"
+        }
+      },
+      {
+        "concept": "ROC & AUC",
+        "valid": true,
+        "first_try": true,
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3.5-super-vl:free",
+            "prompt_ref": "concept_cards/v1",
+            "status": "ok",
+            "error_code": null,
+            "error_detail": null,
+            "response_excerpt": null,
+            "input_tokens": 830,
+            "output_tokens": 13553,
+            "latency_ms": 123084
+          }
+        ],
+        "latency_ms": 123084,
+        "output_tokens": 13553,
+        "coverage": 1.0,
+        "missing": [],
+        "visuals": {
+          "icon": 3,
+          "formula": 2,
+          "mermaid": 1
+        },
+        "answer_indexes": [
+          1,
+          2,
+          0,
+          3,
+          1,
+          2
+        ],
+        "summary_words": [
+          102,
+          102,
+          97,
+          101,
+          96,
+          102
+        ],
+        "cards": "[1] why_it_matters — Why compare classifiers across thresholds?\nA binary classifier usually outputs a score or probability, not just a label. Choosing a threshold turns that score into a prediction, and every threshold creates a different tradeoff between catching true positives and raising false alarms. ROC curves visualize this tradeoff across every possible threshold, while AUC compresses the curve into a single number between zero and one. This is useful in fraud detection, medical screening, and credit scoring, where the cost of errors varies and you should not commit to one operating point before comparing models. It also lets you compare two models fairly even when their best thresholds differ.\nTakeaway: ROC and AUC let you evaluate a binary classifier across every possible decision threshold instead of locking into one.\nVisual: icon: target\nQuick check: What is the main advantage of using ROC and AUC over a single threshold?\n     A. They guarantee the model will never make false predictions.\n   * B. They show performance across all thresholds and summarize it with one number.\n     C. They replace the need for a confusion matrix.\n     D. They only work with neural networks.\n(* = marked answer) ROC traces the tradeoff at every threshold and AUC condenses it into one score; they do not eliminate errors or remove the need for confusion matrices.\n\n[2] intuition — The score threshold is a sliding bar\nA classifier produces a score for each example. If the score is above the threshold you predict positive, otherwise negative. Sliding that threshold from high to low moves the operating point: a low threshold catches most positives but also flags many negatives, while a high threshold is strict and misses more positives. The ROC curve traces this sliding behavior by plotting true positive rate against false positive rate at every threshold. AUC is the area under that curve, giving one summary of separation quality independent of any chosen cutoff. A perfect separator reaches the top-left corner, while random guessing follows the diagonal.\nTakeaway: Sliding the threshold trades off catching positives against false alarms, and ROC traces that tradeoff.\nVisual: icon: circle-dot\nQuick check: What happens when you lower the classification threshold?\n     A. AUC always decreases.\n     B. The ROC curve moves below the diagonal.\n   * C. You catch more positives but also increase false alarms.\n     D. You catch fewer positives and reduce false alarms.\n(* = marked answer) Lowering the threshold labels more examples as positive, raising true positives and false positives together; it does not inherently lower AUC or push the curve below the diagonal.\n\n[3] how_it_works — TPR and FPR at every threshold\nFor each candidate threshold, count true positives, false negatives, false positives, and true negatives. True positive rate is TP divided by TP plus FN, and false positive rate is FP divided by FP plus TN. Plot FPR on the x-axis and TPR on the y-axis. Sweeping the threshold from highest to lowest traces the ROC curve from bottom-left to top-right. A perfect classifier sits at TPR one and FPR zero. A random classifier produces the diagonal line. AUC is the area beneath this curve. The area is computed by summing trapezoids between adjacent points on the curve.\nTakeaway: ROC plots TPR against FPR across thresholds; AUC is the area under that curve.\nVisual: formula: \\text{TPR} = \\frac{TP}{TP + FN}, \\quad \\text{FPR} = \\frac{FP}{FP + TN}\nQuick check: What does a random classifier produce on an ROC plot?\n   * A. The diagonal line from bottom-left to top-right.\n     B. A point at the top-left corner.\n     C. A curve with AUC greater than one.\n     D. A vertical line at FPR zero.\n(* = marked answer) Random guessing yields TPR equal to FPR at every threshold, forming the diagonal; top-left is perfect, and AUC cannot exceed one.\n\n[4] worked_example — Tiny confusion matrix and one ROC point\nImagine a model evaluated at threshold 0.5 with 40 true positives, 10 false negatives, 5 false positives, and 45 true negatives. True positive rate equals 40 divided by 50, which is 0.80. False positive rate equals 5 divided by 50, which is 0.10. This gives one ROC point at coordinates 0.10, 0.80. Repeating at other thresholds yields more points. Connecting them and computing the area under the resulting curve might give an AUC of 0.87, indicating strong class separation. If the same model at threshold 0.8 yields TPR 0.60 and FPR 0.02, that point lies much closer to the top-left corner.\nTakeaway: From TP, FN, FP, TN you compute TPR and FPR to place one point on the ROC curve.\nVisual: formula: \\text{TPR} = \\frac{40}{40 + 10} = 0.80, \\quad \\text{FPR} = \\frac{5}{5 + 45} = 0.10\nQuick check: With TP 40, FN 10, FP 5, TN 45, what are TPR and FPR?\n     A. TPR 0.50, FPR 0.50\n     B. TPR 1.00, FPR 0.00\n     C. TPR 0.10, FPR 0.80\n   * D. TPR 0.80, FPR 0.10\n(* = marked answer) TPR is 40 over 40 plus 10 equals 0.80; FPR is 5 over 5 plus 45 equals 0.10. The other options swap or invent values.\n\n[5] pitfalls — AUC can hide threshold problems\nAUC summarizes performance across every threshold, but it does not tell you which threshold to deploy. A model can have high AUC yet perform poorly at your chosen operating point. AUC also ignores class imbalance and misclassification costs, treating one false positive the same as one false negative no matter the context. If false alarms are expensive or positives are rare, check precision, recall, and the confusion matrix at your specific threshold instead of relying on AUC alone. AUC can also be overly optimistic when the negative class dominates and you care about the positive class.\nTakeaway: A high AUC does not guarantee good performance at the threshold you actually deploy.\nVisual: icon: triangle-alert\nQuick check: What is a key limitation of AUC?\n     A. It always equals zero for imbalanced data.\n   * B. It ignores the threshold you actually use and misclassification costs.\n     C. It cannot be computed for neural networks.\n     D. It requires labels to be perfectly balanced.\n(* = marked answer) AUC aggregates across thresholds and treats errors symmetrically, so it can hide poor performance at your operating point; it works for any classifier and does not require balance.\n\n[6] compare — ROC-AUC versus precision-recall and CV\nROC-AUC measures how well a model ranks positives above negatives across all thresholds. Precision and recall zoom in on the positive class and are usually more useful when positives are rare or false positives are costly. Cross-validation is not a metric but a resampling method that splits data into folds to estimate how any metric, including ROC-AUC, generalizes to unseen data. Use ROC-AUC for broad classifier comparison, precision-recall for imbalanced positive classes, and cross-validation to validate whichever metric you choose. Together they answer different questions: Can it rank? Is it good at the positive class? Will it hold up on new data?\nTakeaway: ROC-AUC compares ranking ability, precision-recall highlights the positive class, and cross-validation checks generalization.\nVisual: mermaid: graph TD\nA[ROC AUC] --> B[All thresholds]\nC[Precision Recall] --> D[Positive class]\nE[Cross Validation] --> F[Unseen data]\nA --> G[Model comparison]\nC --> G\nE --> G\nQuick check: When is precision-recall generally preferred over ROC-AUC?\n     A. When you want to avoid cross-validation.\n     B. When the model outputs only hard labels, not scores.\n   * C. When the positive class is rare and false positives are costly.\n     D. When you need a single number between zero and one.\n(* = marked answer) Precision-recall focuses on the positive class and is more informative under class imbalance or costly false positives; ROC-AUC is the single summary metric, and cross-validation is separate.",
+        "judge": {
+          "criteria": {
+            "technically_accurate": {
+              "passed": true,
+              "reason": "TPR/FPR formulas and arithmetic are correct (40/50 = 0.80; 5/50 = 0.10); ROC sweeps bottom-left to top-right, random guessing is the diagonal, perfect is top-left, and AUC is in [0,1]. No invented claims."
+            },
+            "facet_fidelity": {
+              "passed": true,
+              "reason": "Each card matches its facet: why (applications/fair cross-threshold comparison), intuition (sliding threshold/operating point), how (formulas and sweeping), worked example (one concrete point), pitfalls (threshold/cost/imbalance limits), compare (AUC vs precision-recall vs CV). No drift into another card's job."
+            },
+            "worked_example_correct": {
+              "passed": true,
+              "reason": "Uses concrete counts TP=40, FN=10, FP=5, TN=45; TPR = 40/(40+10) = 0.80 and FPR = 5/(5+45) = 0.10, giving point (FPR=0.10, TPR=0.80) consistent with FPR on x-axis and TPR on y-axis."
+            },
+            "quick_checks_sound": {
+              "passed": true,
+              "reason": "All six questions have exactly one correct option; the asterisked option is correct in every card; distractors are clearly wrong and the explanations match the marked answers."
+            },
+            "clear_for_engineers": {
+              "passed": true,
+              "reason": "Concise and concrete, using engineer-friendly framing (scores, thresholds, operating points, fraud/credit/medical examples) with no filler."
+            },
+            "no_redundancy": {
+              "passed": true,
+              "reason": "Each card covers a distinct facet with different emphasis and details; the shared core idea across why/intuition/how is expected for the facet structure and is not duplicated content."
+            }
+          },
+          "passed": 6,
+          "of": 6
+        }
+      }
+    ]
+  }
+}

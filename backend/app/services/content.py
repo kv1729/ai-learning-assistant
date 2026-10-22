@@ -9,8 +9,8 @@ import uuid
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session, selectinload
 
-from app.errors import ApiError, not_found
-from app.models import Card, Concept, Curriculum, CurriculumNode
+from app.errors import not_found
+from app.models import Card, Curriculum, CurriculumNode
 from app.schemas import (
     CardOut,
     CardSummary,
@@ -197,17 +197,9 @@ def lookup_cards(db: Session, card_ids: list[uuid.UUID]) -> list[CardSummary]:
     ]
 
 
-def get_card_detail(db: Session, card_id: uuid.UUID) -> DetailOut:
-    card = _get_card(db, card_id)
-    if card.detail is None:
-        # Stage 4 generates missing details on first request.
-        raise ApiError(
-            404,
-            "detail_not_generated",
-            "The in-depth explanation for this card hasn't been written yet. "
-            "AI generation of explanations arrives in a later stage.",
-        )
-    names = card.detail.get("related_concepts", [])
+def detail_out(db: Session, detail: dict) -> DetailOut:
+    """Shape a stored detail for the API, linking related concepts to curriculum nodes by name."""
+    names = detail.get("related_concepts", [])
     rows = db.execute(
         select(func.lower(CurriculumNode.name), CurriculumNode.id)
         .where(
@@ -220,22 +212,8 @@ def get_card_detail(db: Session, card_id: uuid.UUID) -> DetailOut:
     for name, node_id in rows:
         node_by_name.setdefault(name, node_id)
     return DetailOut(
-        body_markdown=card.detail["body_markdown"],
-        misconceptions=card.detail.get("misconceptions", []),
+        body_markdown=detail["body_markdown"],
+        misconceptions=detail.get("misconceptions", []),
         related_concepts=[RelatedConcept(name=n, node_id=node_by_name.get(n.lower())) for n in names],
-        takeaway=card.detail["takeaway"],
-    )
-
-
-def request_generation(db: Session, concept_id: uuid.UUID) -> str:
-    concept = db.get(Concept, concept_id)
-    if concept is None:
-        raise not_found("Concept not found.")
-    if concept.content_status in ("ready", "generating"):
-        return concept.content_status
-    # Stage 4 replaces this with lazy LLM generation.
-    raise ApiError(
-        501,
-        "generation_unavailable",
-        f"Cards for {concept.name} haven't been written yet. AI generation arrives in a later stage.",
+        takeaway=detail["takeaway"],
     )
