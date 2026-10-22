@@ -1,4 +1,4 @@
-# Stage 4 — Card generation eval (2026-10-21, partial)
+# Stage 4 — Card generation eval (2026-10-21)
 
 Prompt `concept_cards/v1`, strict `json_schema`, one repair attempt, 4 golden concepts
 (Gradient Descent, K-Means Clustering, Backpropagation, ROC & AUC), judge = generator model.
@@ -37,6 +37,18 @@ n = 4, self-judged, so treat as a strong signal, not proof).
 - The 180 s client timeout does not bound total time: OpenRouter keep-alive bytes reset the
   read timer (one call ran 352 s). A total deadline belongs in Stage 11 hardening.
 
-## Curriculum re-check on the new model (interrupted)
+## Curriculum re-check on the new model
 
-Machine Learning: valid. Remaining topics not run (stopped on request).
+Run `curriculum-20261021T113855Z`: Machine Learning valid (30 leaves, coverage 1.0, 185 s).
+Deep Learning and French Cooking: NVIDIA returned 502 "Failed to generate completions" (the free
+endpoint is flaky under concurrent load); the runner stopped early as designed. Re-run when
+convenient: `uv run python -m evals.curriculum --topics 3`.
+
+## Live check through the app (exit criteria)
+
+| Step | Result |
+|---|---|
+| Open PCA (no cards yet) | Generation started; skeleton shown; cards ready after 196 s (1 LLM call, 221 s, 18.8k output tokens) |
+| Card 3 (how_it_works) | Generated LaTeX formula rendered and scaled to fit |
+| Explore in Depth on card 3 | Generated on first open (1 LLM call, 173 s, 13.9k tokens), KaTeX and headings rendered |
+| Reopen card and detail | Feed 0.32 s, detail 0.26 s, **no new LLM call** (llm_calls 3 → 3) |

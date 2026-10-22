@@ -99,16 +99,11 @@ migration check; live model comparison and judged baseline stored
 
 ## Stage 4 — Lazy card generation
 
-**Progress (2026-10-21, paused):** implemented and tested offline: context builder, async card
-generation with a database claim and background task, lazy card detail with single-flight,
-visual validation, card evals; 65 backend tests, lint, migration check, frontend lint/build.
-Default model moved to `nvidia/nemotron-3.5-super-vl:free` (old endpoint gone) and reasoning
-effort to `low` (see `docs/evals/stage-4-cards-baseline.md`).
-To resume: (1) curriculum re-check on the new model, `uv run python -m evals.curriculum --topics 3`;
-(2) live app check: open an ungenerated concept (e.g. PCA) and one card's Explore in Depth;
-(3) user review.
-
-**Goal:** Opening a concept generates (once) and serves its card set.
+**Progress (2026-10-21):** implementation complete and verified. 65 backend tests, lint,
+migration check, frontend lint/build; card eval baseline and live app check recorded in
+`docs/evals/stage-4-cards-baseline.md` (first open generates and stores; reopening uses the
+database with no LLM call). Default model `nvidia/nemotron-3.5-super-vl:free`, reasoning `low`.
+Awaiting user review.
 
 **Deliverables**
 - Card generator producing ~6 facet cards + detail + quick check + visual spec per concept.

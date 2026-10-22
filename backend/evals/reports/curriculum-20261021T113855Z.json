@@ -1,0 +1,99 @@
+{
+  "created_at": "2026-10-21T11:38:55.599872+00:00",
+  "prompt_version": "v1",
+  "judge_model": null,
+  "judge_prompt_version": null,
+  "requests": 3,
+  "summary": [
+    {
+      "model": "nvidia/nemotron-3.5-super-vl:free",
+      "topics": 3,
+      "valid_rate": 0.333,
+      "first_try_rate": 0.333,
+      "scope_accuracy": 0.333,
+      "mean_coverage": 1.0,
+      "median_latency_ms": 185060,
+      "mean_leaves": 30,
+      "errors": [
+        "llm_unavailable"
+      ],
+      "judge_pass_rate": null
+    }
+  ],
+  "results": {
+    "nvidia/nemotron-3.5-super-vl:free": [
+      {
+        "topic": "Machine Learning",
+        "expect_in_scope": true,
+        "valid": true,
+        "first_try": true,
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3.5-super-vl:free",
+            "prompt_ref": "curriculum/v1",
+            "status": "ok",
+            "error_code": null,
+            "error_detail": null,
+            "response_excerpt": null,
+            "input_tokens": 604,
+            "output_tokens": 9019,
+            "latency_ms": 185060
+          }
+        ],
+        "latency_ms": 185060,
+        "output_tokens": 9019,
+        "in_scope": true,
+        "scope_correct": true,
+        "coverage": 1.0,
+        "missing": [],
+        "leaves": 30,
+        "max_depth": 2,
+        "tree": "- Machine Learning — Teaching computers to learn patterns from data.\n  - Linear Algebra — Study of vectors, matrices, and linear transformations.\n    - Vectors — Ordered lists of numbers representing data points.\n    - Matrices — Rectangular arrays of numbers used for linear transformations.\n    - Matrix Multiplication — Combining matrices to transform data or compose operations.\n    - Eigen Decomposition — Breaking a matrix into eigenvectors and eigenvalues.\n  - Probability and Statistics — Mathematical framework for uncertainty and data analysis.\n    - Probability Distributions — Functions describing the likelihood of different outcomes.\n    - Bayes Theorem — Updating probabilities using new evidence and priors.\n    - Hypothesis Testing — Using sample data to evaluate claims about populations.\n  - Supervised Learning — Learning to predict outputs from labelled input data.\n    - Linear Regression — Predicting continuous values using a linear relationship.\n    - Logistic Regression — Classifying data using a sigmoid output function.\n    - Decision Trees — Splitting data by features to make predictions.\n    - Random Forest — Ensemble of decision trees that reduces overfitting.\n    - Gradient Boosting — Sequentially adding models to correct previous errors.\n    - Support Vector Machines — Finding the optimal boundary separating different classes.\n    - K-Nearest Neighbors — Classifying points based on their closest training examples.\n  - Unsupervised Learning — Finding hidden structure in unlabelled data.\n    - K-Means Clustering — Grouping data into k clusters by centroid distance.\n    - Principal Component Analysis — Reducing dimensions while preserving maximum variance.\n    - Hierarchical Clustering — Building a tree of nested clusters from data.\n  - Model Evaluation — Assessing how well models generalize to new data.\n    - Train-Test Split — Dividing data into training and evaluation sets.\n    - Cross-Validation — Rotating data folds to estimate generalization error.\n    - Precision and Recall — Metrics for evaluating classification performance on imbalanced data.\n    - ROC AUC — Measuring ranking ability across classification thresholds.\n    - Bias-Variance Tradeoff — Balancing model underfitting and overfitting.\n  - Deep Learning — Multi-layered neural networks for complex pattern recognition.\n    - Neural Networks — Layers of interconnected neurons learning data representations.\n    - Backpropagation — Computing gradients through a network using the chain rule.\n    - Convolutional Neural Networks — Processing grid-like data such as images with filters.\n    - Recurrent Neural Networks — Handling sequential data using internal memory states.\n  - ML Engineering — Building, deploying, and maintaining machine learning systems.\n    - Feature Engineering — Creating input variables that improve model performance.\n    - Hyperparameter Tuning — Searching for optimal model configuration settings.\n    - Model Deployment — Serving trained models to production applications.\n    - MLOps — Automating machine learning workflows and monitoring."
+      },
+      {
+        "topic": "Deep Learning",
+        "expect_in_scope": true,
+        "valid": false,
+        "error": "llm_unavailable",
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3.5-super-vl:free",
+            "prompt_ref": "curriculum/v1",
+            "status": "provider_error",
+            "error_code": "llm_unavailable",
+            "error_detail": "Error code: 502 - {'error': {'message': 'Provider returned error', 'code': 502, 'metadata': {'raw': '{\"message\":\"Failed to generate completions\",\"type\":\"Internal Server Error\",\"code\":500}', 'provider_name': 'Nvidia', 'is_byok': False}}, 'user_id': 'user_3FGnafcjn94slTfPxHW7DzqVP2h'}",
+            "response_excerpt": null,
+            "input_tokens": null,
+            "output_tokens": null,
+            "latency_ms": null
+          }
+        ]
+      },
+      {
+        "topic": "French Cooking",
+        "expect_in_scope": false,
+        "valid": false,
+        "error": "llm_unavailable",
+        "attempts": [
+          {
+            "attempt": 1,
+            "provider": "openrouter",
+            "model": "nvidia/nemotron-3.5-super-vl:free",
+            "prompt_ref": "curriculum/v1",
+            "status": "provider_error",
+            "error_code": "llm_unavailable",
+            "error_detail": "Error code: 502 - {'error': {'message': 'Provider returned error', 'code': 502, 'metadata': {'raw': '{\"message\":\"Failed to generate completions\",\"type\":\"Internal Server Error\",\"code\":500}', 'provider_name': 'Nvidia', 'is_byok': False}}, 'user_id': 'user_3FGnafcjn94slTfPxHW7DzqVP2h'}",
+            "response_excerpt": null,
+            "input_tokens": null,
+            "output_tokens": null,
+            "latency_ms": null
+          }
+        ]
+      }
+    ]
+  }
+}
